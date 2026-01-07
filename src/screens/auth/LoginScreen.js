@@ -214,21 +214,21 @@ const LoginScreen = ({ navigation }) => {
                 {/* Social Authentication Buttons */}
                 <View style={styles.socialContainer}>
                   <TouchableOpacity
-                    style={[styles.socialButton, { backgroundColor: '#FFFFFF' }]}
+                    style={[styles.socialButton, { backgroundColor: colors.background }]}
                     activeOpacity={0.7}
                     onPress={() => console.log('Google')}
                   >
                     <GoogleIcon />
-                    <Text style={[styles.socialButtonText, { color: '#1F2937' }]}>Continue with Google</Text>
+                    <Text style={[styles.socialButtonText, { color: colors.text }]}>Continue with Google</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                    style={[styles.socialButton, { backgroundColor: '#FFFFFF' }]}
+                    style={[styles.socialButton, { backgroundColor: colors.background }]}
                     activeOpacity={0.7}
                     onPress={() => console.log('Facebook')}
                   >
                     <FacebookIcon />
-                    <Text style={[styles.socialButtonText, { color: '#212121ff' }]}>Continue with Facebook</Text>
+                    <Text style={[styles.socialButtonText, { color: colors.text }]}>Continue with Facebook</Text>
                   </TouchableOpacity>
                 </View>
 

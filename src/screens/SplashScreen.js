@@ -40,7 +40,7 @@ const SplashScreen = ({ navigation }) => {
   }, [navigation, scaleValue]);
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={[styles.container, ]}>
       <Animated.View 
         style={[
           styles.logoContainer, 
@@ -51,7 +51,7 @@ const SplashScreen = ({ navigation }) => {
       >
         <Image 
           source={require('../assets/images/Icon.png')} 
-          style={[styles.logo, { tintColor: colors.primary }]}
+          style={[styles.logo, ]}
           resizeMode="contain"
         />
       </Animated.View>

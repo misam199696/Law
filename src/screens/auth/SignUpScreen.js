@@ -487,25 +487,25 @@ const SignUpScreen = ({ navigation }) => {
                 {/* Social Authentication Buttons */}
                 <View style={styles.socialContainer}>
                   <TouchableOpacity
-                    style={[styles.socialButton, { backgroundColor: '#FFFFFF' }]}
+                    style={[styles.socialButton, { backgroundColor: colors.background }]}
                     activeOpacity={0.7}
                     onPress={() => console.log('Google')}
                   >
                     <View style={[styles.iconWrapper, { backgroundColor: 'white' }]}>
                       <Text style={[styles.socialIconText, { color: '#4285F4', fontSize: 16, fontWeight: 'bold' }]}>G</Text>
                     </View>
-                    <Text style={[styles.socialButtonText, { color: '#1F2937' }]}>Continue with Google</Text>
+                    <Text style={[styles.socialButtonText, { color: colors.text }]}>Continue with Google</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                    style={[styles.socialButton, { backgroundColor: '#FFFFFF' }]}
+                    style={[styles.socialButton, { backgroundColor: colors.background }]}
                     activeOpacity={0.7}
                     onPress={() => console.log('Facebook')}
                   >
                     <View style={[styles.iconWrapper, { backgroundColor: '#1877F2' }]}>
                       <Text style={[styles.socialIconText, { color: 'white', fontSize: 16, fontWeight: 'bold' }]}>f</Text>
                     </View>
-                    <Text style={[styles.socialButtonText, { color: '#212121ff' }]}>Continue with Facebook</Text>
+                    <Text style={[styles.socialButtonText, { color: colors.text }]}>Continue with Facebook</Text>
                   </TouchableOpacity>
                 </View>
 
