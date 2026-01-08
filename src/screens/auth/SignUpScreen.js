@@ -19,6 +19,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { Picker } from '@react-native-picker/picker';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import CountryPicker from 'react-native-country-picker-modal'
 
 const { width } = Dimensions.get('window');
 
@@ -119,7 +120,14 @@ const SignUpScreen = ({ navigation }) => {
   const { colors } = useTheme();
   const [secure, setSecure] = useState(true);
   const isDesktop = width > 600;
+   const [countryCode, setCountryCode] = useState('PK');
+  const [country, setCountry] = useState(null);
+  const [countryPickerVisible, setCountryPickerVisible] = useState(false);
 
+  const onSelect = (country) => {
+    setCountryCode(country.cca2);
+    setCountry(country);
+  };
   // Validation Schema
   const validationSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -151,7 +159,11 @@ const SignUpScreen = ({ navigation }) => {
         'Must contain at least one uppercase, one lowercase, and one number'
       ),
     country: Yup.string()
-      .required('Country is required'),
+      .required('Country is required')
+      .nullable()
+      .test('is-valid-country', 'Please select a valid country', (value) => {
+        return value !== 'Select your country';
+      }),
     profession: Yup.string()
       .required('Profession is required'),
     agree: Yup.boolean()
@@ -173,13 +185,30 @@ const SignUpScreen = ({ navigation }) => {
     }
   };
 
-  // Define picker options
-  const countryOptions = [
-    { label: 'Pakistan', value: 'Pakistan' },
-    { label: 'India', value: 'India' },
-    { label: 'USA', value: 'USA' },
-    { label: 'United Kingdom', value: 'UK' },
-  ];
+  // Country picker configuration
+  const countryPickerProps = {
+    withFilter: true,
+    withFlag: false,
+    withCountryNameButton: false,
+    withAlphaFilter: true,
+    withCallingCode: true,
+    withEmoji: true,
+    onSelect,
+    countryCode,
+    containerButtonStyle: {
+      flex: 1,
+      justifyContent: 'flex-start',
+    },
+    theme: {
+      primaryColor: colors.primary,
+      primaryColorVariant: colors.primary,
+      backgroundColor: colors.background,
+      onBackgroundTextColor: colors.text,
+      filterPlaceholderTextColor: colors.text,
+      letterSpacing: 0,
+      fontFamily: 'System',
+    },
+  };
 
   const professionOptions = [
     { label: 'Lawyer', value: 'Lawyer' },
@@ -415,17 +444,42 @@ const SignUpScreen = ({ navigation }) => {
                   </View>
                 </View>
 
-                {/* Country Dropdown */}
-                <CustomPicker
-                  label="Country"
-                  selectedValue={values.country}
-                  onValueChange={v => setFieldValue('country', v)}
-                  items={countryOptions}
-                  placeholder="Select country"
-                />
-                {errors.country && touched.country && (
-                  <Text style={[styles.errorText, { marginTop: -8, marginBottom: 8,color: colors.error  }]}>{errors.country}</Text>
-                )}
+                {/* Country Picker */}
+                <View style={[styles.inputGroup, { marginTop: 10 }]}>
+                  <Text style={[styles.label, { color: colors.text }]}>Country<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                  <TouchableOpacity
+                    style={[
+                      styles.inputContainer,
+                      {
+                        backgroundColor: colors.card,
+                        borderColor: errors.country && touched.country ? colors.error : colors.border,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        paddingRight: 15
+                      }
+                    ]}
+                    onPress={() => setCountryPickerVisible(true)}
+                  >
+                    <Text style={[styles.inputStyle, { color: values.country ? colors.text : colors.secondary }]}>
+                      {values.country || 'Select your country'}
+                    </Text>
+                    <Text style={{ color: colors.text }}>▼</Text>
+                  </TouchableOpacity>
+                  {errors.country && touched.country && (
+                    <Text style={[styles.errorText, { color: colors.error }]}>{errors.country}</Text>
+                  )}
+                  <CountryPicker
+                    {...countryPickerProps}
+                    visible={countryPickerVisible}
+                    onClose={() => setCountryPickerVisible(false)}
+                    onSelect={(selectedCountry) => {
+                      onSelect(selectedCountry);
+                      setFieldValue('country', selectedCountry.name);
+                      setCountryPickerVisible(false);
+                    }}
+                  />
+                </View>
 
                 {/* Profession Dropdown */}
                 <CustomPicker
@@ -491,7 +545,7 @@ const SignUpScreen = ({ navigation }) => {
                     activeOpacity={0.7}
                     onPress={() => console.log('Google')}
                   >
-                    <View style={[styles.iconWrapper, { backgroundColor: 'white' }]}>
+                    <View style={[styles.iconWrapper, { backgroundColor: colors.background }]}>
                       <Text style={[styles.socialIconText, { color: '#4285F4', fontSize: 16, fontWeight: 'bold' }]}>G</Text>
                     </View>
                     <Text style={[styles.socialButtonText, { color: colors.text }]}>Continue with Google</Text>
@@ -813,6 +867,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#6B7280',
     fontWeight: '400',
+  },
+
+   
+  label: {
+    fontSize: 14,
+    color: '#374151',
+    marginBottom: 6,
+  },
+  input: {
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    borderRadius: 10,
+    justifyContent: 'center',
+    paddingHorizontal: 12,
+  },
+  text: {
+    fontSize: 16,
+    color: '#111827',
   },
 });
 
