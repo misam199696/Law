@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
 import {
   View,
   Text,
@@ -21,8 +23,36 @@ const { width } = Dimensions.get('window');
 
 const LoginScreen = ({ navigation }) => {
   const { colors } = useTheme();
+  const { t, i18n } = useTranslation();
   const [secure, setSecure] = useState(true);
+  const [currentLanguage, setCurrentLanguage] = useState('en');
   const isDesktop = width > 600;
+
+  // Load saved language on component mount
+  useEffect(() => {
+    const loadLanguage = async () => {
+      try {
+        const savedLanguage = await AsyncStorage.getItem('userLanguage');
+        if (savedLanguage) {
+          i18n.changeLanguage(savedLanguage);
+          setCurrentLanguage(savedLanguage);
+        }
+      } catch (error) {
+        console.error('Error loading language:', error);
+      }
+    };
+    loadLanguage();
+  }, []);
+
+  const changeLanguage = async (language) => {
+    try {
+      await AsyncStorage.setItem('userLanguage', language);
+      i18n.changeLanguage(language);
+      setCurrentLanguage(language);
+    } catch (error) {
+      console.error('Error saving language:', error);
+    }
+  };
 
   // Validation Schema
   const validationSchema = Yup.object().shape({
@@ -101,20 +131,51 @@ const LoginScreen = ({ navigation }) => {
               ]}>
                 <View style={styles.headerContainer}>
                   <View>
-                    <Text style={[styles.title, { color: colors.text }]}>Welcome back,</Text>
-                    <Text style={[styles.title, { color: colors.text }]}>Advocate</Text>
+                    <Text style={[styles.title, { color: colors.text }]}>{t('welcomeBack')},</Text>
+                    <Text style={[styles.title, { color: colors.text }]}>{t('advocate')}</Text>
                   </View>
-                  <ThemeToggleButton style={styles.themeButton} />
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <TouchableOpacity 
+                      style={[
+                        styles.languageButton, 
+                        currentLanguage === 'en' && styles.languageButtonActive,
+                        { marginRight: 8 }
+                      ]}
+                      onPress={() => changeLanguage('en')}
+                    >
+                      <Text style={[
+                        styles.languageButtonText,
+                        { color: currentLanguage === 'en' ? '#FFFFFF' : colors.text }
+                      ]}>
+                        EN
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                      style={[
+                        styles.languageButton,
+                        currentLanguage === 'ur' && styles.languageButtonActive
+                      ]}
+                      onPress={() => changeLanguage('ur')}
+                    >
+                      <Text style={[
+                        styles.languageButtonText,
+                        { color: currentLanguage === 'ur' ? '#FFFFFF' : colors.text }
+                      ]}>
+                        اردو
+                      </Text>
+                    </TouchableOpacity>
+                    <ThemeToggleButton style={[styles.themeButton, { marginLeft: 8 }]} />
+                  </View>
                 </View>
                 <Text style={[styles.subtitle, { color: colors.secondary }]}>
-                  Enter your credentials to access your dashboard
+                  {t('enterCredentials')}
                 </Text>
 
                 {/* Email and Phone Number Row */}
                 <View style={styles.row}>
                   {/* Email */}
                   <View style={[styles.halfInputWrapper, { marginRight: 8 }]}>
-                    <Text style={[styles.label, { color: colors.text }]}>Email<Text style={styles.required}>*</Text></Text>
+                    <Text style={[styles.label, { color: colors.text }]}>{t('email')}<Text style={styles.required}>*</Text></Text>
                     <View style={[
                       styles.inputContainer,
                       {
@@ -129,7 +190,7 @@ const LoginScreen = ({ navigation }) => {
                         value={values.email}
                         onChangeText={handleChange('email')}
                         onBlur={handleBlur('email')}
-                        placeholder="advocate@legalassist.pro"
+                        placeholder={t('emailPlaceholder')}
                         placeholderTextColor="#9CA3AF"
                         keyboardType="email-address"
                         autoCapitalize="none"
@@ -143,7 +204,7 @@ const LoginScreen = ({ navigation }) => {
 
                   {/* Phone Number */}
                   <View style={[styles.halfInputWrapper, { marginLeft: 0 }]}>
-                    <Text style={[styles.label, { color: colors.text }]}>Password<Text style={styles.required}>*</Text></Text>
+                    <Text style={[styles.label, { color: colors.text }]}>{t('password')}<Text style={styles.required}>*</Text></Text>
                     <View style={[
                       styles.inputContainer,
                       {
@@ -158,7 +219,7 @@ const LoginScreen = ({ navigation }) => {
                         value={values.password}
                         onChangeText={handleChange('password')}
                         onBlur={handleBlur('password')}
-                        placeholder="••••••••"
+                        placeholder={t('passwordPlaceholder')}
                         placeholderTextColor="#9CA3AF"
                         secureTextEntry={secure}
                         style={[styles.inputStyle, { flex: 1 }]}
@@ -187,14 +248,14 @@ const LoginScreen = ({ navigation }) => {
                     ]}>
                       {values.rememberMe && <Text style={styles.checkIcon}>✓</Text>}
                     </View>
-                    <Text style={[styles.termsText, { color: colors.text }]}>Remember me</Text>
+                    <Text style={[styles.termsText, { color: colors.text }]}>{t('rememberMe')}</Text>
                   </TouchableOpacity>
 
                   {/* Forgot Password Link */}
                   <TouchableOpacity
                     onPress={() => navigation.navigate('ForgotPassword')}
                   >
-                    <Text style={[styles.forgotPasswordText, { color: colors.primary }]}>Forgot Password?</Text>
+                    <Text style={[styles.forgotPasswordText, { color: colors.primary }]}>{t('forgotPassword')}</Text>
                   </TouchableOpacity>
                 </View>
                 {/* Submit Button */}
@@ -207,7 +268,7 @@ const LoginScreen = ({ navigation }) => {
                   disabled={isSubmitting}
                 >
                   <Text style={styles.submitButtonText}>
-                    {isSubmitting ? 'Creating Account...' : 'Sign In'}
+                    {isSubmitting ? t('signingIn') : t('signIn')}
                   </Text>
                 </TouchableOpacity>
 
@@ -219,7 +280,7 @@ const LoginScreen = ({ navigation }) => {
                     onPress={() => console.log('Google')}
                   >
                     <GoogleIcon />
-                    <Text style={[styles.socialButtonText, { color: colors.text }]}>Continue with Google</Text>
+                    <Text style={[styles.socialButtonText, { color: colors.text }]}>{t('continueWithGoogle')}</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
@@ -228,16 +289,16 @@ const LoginScreen = ({ navigation }) => {
                     onPress={() => console.log('Facebook')}
                   >
                     <FacebookIcon />
-                    <Text style={[styles.socialButtonText, { color: colors.text }]}>Continue with Facebook</Text>
+                    <Text style={[styles.socialButtonText, { color: colors.text }]}>{t('continueWithFacebook')}</Text>
                   </TouchableOpacity>
                 </View>
 
                 {/* Sign Up Link */}
                 <View style={styles.footer}>
                   <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-                    <Text style={[styles.footerLink, { color: colors.primary }]}>Sign up</Text>
+                    <Text style={[styles.footerLink, { color: colors.primary }]}>{t('signUp')}</Text>
                   </TouchableOpacity>
-                  <Text style={[styles.footerText, { color: colors.text }]}>  Don't have an account? </Text>
+                  <Text style={[styles.footerText, { color: colors.text }]}>  {t('dontHaveAccount')} </Text>
                   
                 </View>
               </View>
@@ -250,6 +311,22 @@ const LoginScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  languageButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+  },
+  languageButtonActive: {
+    backgroundColor: '#3B82F6',
+    borderColor: '#3B82F6',
+  },
+  languageButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
   errorText: {
     color: '#EF4444',
     fontSize: 12,

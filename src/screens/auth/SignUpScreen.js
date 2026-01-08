@@ -1,12 +1,15 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { I18nManager, Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
+import { useLanguage } from '../../context/LanguageContext';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   KeyboardAvoidingView,
-  Platform,
   TouchableOpacity,
   Dimensions,
   TextInput,
@@ -129,8 +132,45 @@ const CustomPicker = ({ label, selectedValue, onValueChange, items, placeholder 
 
 const SignUpScreen = ({ navigation }) => {
   const { colors } = useTheme();
+  const { t, i18n } = useTranslation();
+  const { currentLanguage, changeLanguage } = useLanguage();
   const [secure, setSecure] = useState(true);
   const isDesktop = width > 600;
+  const isRTL = i18n.language === 'ur';
+
+  // Load saved language on component mount
+  useEffect(() => {
+    const loadLanguage = async () => {
+      try {
+        const savedLanguage = await AsyncStorage.getItem('userLanguage');
+        if (savedLanguage) {
+          changeLanguage(savedLanguage);
+        }
+      } catch (error) {
+        console.error('Error loading language:', error);
+      }
+    };
+    loadLanguage();
+  }, [changeLanguage]);
+
+  const handleLanguageChange = async (language) => {
+    try {
+      await AsyncStorage.setItem('userLanguage', language);
+      changeLanguage(language);
+    } catch (error) {
+      console.error('Error saving language:', error);
+    }
+  };
+  
+  // Set RTL direction when language changes
+  useEffect(() => {
+    I18nManager.forceRTL(isRTL);
+    // On Android, we need to restart the app for RTL changes to take effect
+    if (Platform.OS === 'android') {
+      // You might want to show a message to the user to restart the app
+      console.log('Please restart the app to apply RTL changes');
+    }
+  }, [isRTL]);
   const [countryCode, setCountryCode] = useState('PK');
   const [country, setCountry] = useState({
     cca2: 'PK',
@@ -148,57 +188,57 @@ const SignUpScreen = ({ navigation }) => {
     setCountryCode(selectedCountry.cca2);
   };
 
-  // Validation Schema
+  // Validation Schema with translations
   const validationSchema = Yup.object().shape({
     firstName: Yup.string()
-      .required('First name is required')
-      .min(2, 'Too short')
-      .max(50, 'Too long'),
+      .required(t('validation.firstName.required'))
+      .min(2, t('validation.firstName.tooShort'))
+      .max(50, t('validation.firstName.tooLong')),
     lastName: Yup.string()
-      .required('Last name is required')
-      .min(2, 'Too short')
-      .max(50, 'Too long'),
+      .required(t('validation.lastName.required'))
+      .min(2, t('validation.lastName.tooShort'))
+      .max(50, t('validation.lastName.tooLong')),
     email: Yup.string()
-      .email('Invalid email')
-      .required('Email is required'),
+      .email(t('validation.email.invalid'))
+      .required(t('validation.email.required')),
     phone: Yup.string()
-      .required('Phone number is required')
-      .matches(/^[0-9+\-\s()]*$/, 'Invalid phone number')
-      .min(10, 'Too short')
-      .max(15, 'Too long'),
+      .required(t('validation.phone.required'))
+      .matches(/^[0-9+\-\s()]*$/, t('validation.phone.invalid'))
+      .min(10, t('validation.phone.tooShort'))
+      .max(15, t('validation.phone.tooLong')),
     username: Yup.string()
-      .required('Username is required')
-      .min(3, 'Must be at least 3 characters')
-      .max(20, 'Must be less than 20 characters')
-      .matches(/^[a-zA-Z0-9_]+$/, 'Only letters, numbers, and underscores'),
+      .required(t('validation.username.required'))
+      .min(3, t('validation.username.tooShort'))
+      .max(20, t('validation.username.tooLong'))
+      .matches(/^[a-zA-Z0-9_]+$/, t('validation.username.invalid')),
     password: Yup.string()
-      .required('Password is required')
-      .min(8, 'Password must be at least 8 characters')
+      .required(t('validation.password.required'))
+      .min(8, t('validation.password.tooShort'))
       .matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-        'Must contain at least one uppercase, one lowercase, and one number'
+        t('validation.password.requirements')
       ),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Passwords must match')
-      .required('Please confirm your password'),
+      .oneOf([Yup.ref('password'), null], t('validation.confirmPassword.mismatch'))
+      .required(t('validation.confirmPassword.required')),
     country: Yup.string()
-      .required('Country is required')
+      .required(t('validation.country.required'))
       .nullable()
-      .test('is-valid-country', 'Please select a valid country', (value) => {
-        return value !== 'Select your country';
+      .test('is-valid-country', t('validation.country.invalid'), (value) => {
+        return value && value !== t('form.selectCountry');
       }),
     city: Yup.string()
-      .required('City is required'),
+      .required(t('validation.city.required')),
     province: Yup.string()
-      .required('Province is required'),
+      .required(t('validation.province.required')),
     firmName: Yup.string()
-      .required('Firm name is required'),
+      .required(t('validation.firmName.required')),
     profession: Yup.string()
-      .required('Profession is required'),
+      .required(t('validation.profession.required')),
     source: Yup.string()
-      .required('Please tell us where you heard about us'),
+      .required(t('validation.source.required')),
     agree: Yup.boolean()
-      .oneOf([true], 'You must accept the terms and conditions')
+      .oneOf([true], t('validation.agree.required'))
   });
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -246,26 +286,27 @@ const SignUpScreen = ({ navigation }) => {
     },
   };
 
+  // Use translations for options
   const professionOptions = [
-    { label: 'Lawyer', value: 'Lawyer' },
-    { label: 'Legal Assistant', value: 'Assistant' },
-    { label: 'Law Student', value: 'Student' },
+    { label: t('profession.lawyer'), value: 'Lawyer' },
+    { label: t('profession.assistant'), value: 'Assistant' },
+    { label: t('profession.student'), value: 'Student' },
   ];
 
   const sourceOptions = [
-    { label: 'Google Search', value: 'Google' },
-    { label: 'LinkedIn', value: 'LinkedIn' },
-    { label: 'Referral', value: 'Referral' },
+    { label: t('source.google'), value: 'Google' },
+    { label: t('source.linkedin'), value: 'LinkedIn' },
+    { label: t('source.referral'), value: 'Referral' },
   ];
 
   const provinceOptions = [
-    { label: 'Punjab', value: 'Punjab' },
-    { label: 'Sindh', value: 'Sindh' },
-    { label: 'Khyber Pakhtunkhwa', value: 'KPK' },
-    { label: 'Balochistan', value: 'Balochistan' },
-    { label: 'Islamabad Capital Territory', value: 'ICT' },
-    { label: 'Gilgit-Baltistan', value: 'GB' },
-    { label: 'Azad Jammu and Kashmir', value: 'AJK' },
+    { label: t('province.punjab'), value: 'Punjab' },
+    { label: t('province.sindh'), value: 'Sindh' },
+    { label: t('province.kpk'), value: 'KPK' },
+    { label: t('province.balochistan'), value: 'Balochistan' },
+    { label: t('province.ict'), value: 'ICT' },
+    { label: t('province.gb'), value: 'GB' },
+    { label: t('province.ajk'), value: 'AJK' },
   ];
 
   const [initialValues] = useState({
@@ -287,8 +328,50 @@ const SignUpScreen = ({ navigation }) => {
 
   const insets = useSafeAreaInsets();
 
+  // Add language selector UI similar to LoginScreen
+  const renderLanguageSelector = () => (
+    <View style={[styles.languageContainer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+      <TouchableOpacity 
+        onPress={() => handleLanguageChange('en')}
+        style={[
+          styles.languageButton,
+          currentLanguage === 'en' && styles.activeLanguageButton,
+          { marginRight: isRTL ? 0 : 10, marginLeft: isRTL ? 10 : 0 }
+        ]}
+      >
+        <Text style={[
+          styles.languageText,
+          currentLanguage === 'en' && styles.activeLanguageText,
+          { color: colors.text }
+        ]}>
+          EN
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity 
+        onPress={() => handleLanguageChange('ur')}
+        style={[
+          styles.languageButton,
+          currentLanguage === 'ur' && styles.activeLanguageButton
+        ]}
+      >
+        <Text style={[
+          styles.languageText,
+          currentLanguage === 'ur' && styles.activeLanguageText,
+          { color: colors.text }
+        ]}>
+          اردو
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      {/* Add language selector at the top */}
+      <View style={styles.headerContainer}>
+        <View style={{ flex: 1 }} />
+        {renderLanguageSelector()}
+      </View>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -315,12 +398,16 @@ const SignUpScreen = ({ navigation }) => {
                 isDesktop && styles.cardDesktop,
                 { backgroundColor: colors.background }
               ]}>
-                <Text style={[styles.title, { color: colors.text }]}>Create your account</Text>
+                <Text style={[styles.title, { 
+                  color: colors.text,
+                  textAlign: isRTL ? 'right' : 'left'
+                }]}>{t('signup.title')}</Text>
                 <Text style={[styles.subtitle, {
                   color: colors.text,
-                  opacity: 0.8
+                  opacity: 0.8,
+                  textAlign: isRTL ? 'right' : 'left'
                 }]}>
-                  Welcome, Advocate — let's get you set up.
+                  {t('signup.subtitle')}
                 </Text>
 
                 {/* First + Last Name Row */}
@@ -724,6 +811,33 @@ const SignUpScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: 16,
+  },
+  languageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  languageButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+  activeLanguageButton: {
+    backgroundColor: '#007AFF',
+    borderColor: '#007AFF',
+  },
+  languageText: {
+    fontSize: 14,
+  },
+  activeLanguageText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
   keyboardAvoidingView: {
     flex: 1,
