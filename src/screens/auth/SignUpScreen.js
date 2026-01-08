@@ -19,7 +19,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { Picker } from '@react-native-picker/picker';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import CountryPicker from 'react-native-country-picker-modal'
+import CountryPicker from 'react-native-country-picker-modal';
 
 const { width } = Dimensions.get('window');
 
@@ -70,7 +70,6 @@ const CustomPicker = ({ label, selectedValue, onValueChange, items, placeholder 
             backgroundColor: colors.card
           }]}>
             <TouchableOpacity 
-              onPress={() => setModalVisible(false)}
               style={{ padding: 12 }}
             >
               <Text style={[styles.pickerButton, { color: colors.primary }]}>Done</Text>
@@ -82,18 +81,28 @@ const CustomPicker = ({ label, selectedValue, onValueChange, items, placeholder 
               onValueChange(itemValue);
               setModalVisible(false);
             }}
-            style={[styles.picker, { backgroundColor: colors.background }]}
-            dropdownIconColor={colors.text}
+            style={[styles.picker, { 
+              backgroundColor: colors.background,
+            }]}
+            dropdownIconColor={colors.primary}
             dropdownIconRippleColor={colors.primary}
             itemStyle={[styles.pickerItem, { 
               color: colors.text,
-              backgroundColor: colors.background
+              backgroundColor: colors.background,
+              fontSize: 16,
+              height: 50,
             }]}
+            themeVariant={isDark ? 'dark' : 'light'}
           >
             <Picker.Item 
               label={placeholder || 'Select an option...'} 
               value="" 
-              color={colors.secondary}
+              color={colors.text}
+              style={{
+                backgroundColor: colors.background,
+                fontSize: 16,
+                opacity: 0.7,
+              }}
             />
             {items.map((item, index) => (
               <Picker.Item
@@ -102,10 +111,12 @@ const CustomPicker = ({ label, selectedValue, onValueChange, items, placeholder 
                 value={item.value}
                 color={item.value === selectedValue ? colors.primary : colors.text}
                 style={{ 
-                  backgroundColor: item.value === selectedValue ? 
-                    (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)') : 'transparent',
-                  padding: 8,
-                  fontSize: 16
+                  backgroundColor: isDark ? colors.card : colors.background,
+                  color: item.value === selectedValue ? colors.primary : colors.text,
+                  padding: 15,
+                  fontSize: 16,
+                  borderBottomWidth: 1,
+                  borderBottomColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
                 }}
               />
             ))}
@@ -120,14 +131,23 @@ const SignUpScreen = ({ navigation }) => {
   const { colors } = useTheme();
   const [secure, setSecure] = useState(true);
   const isDesktop = width > 600;
-   const [countryCode, setCountryCode] = useState('PK');
-  const [country, setCountry] = useState(null);
+  const [countryCode, setCountryCode] = useState('PK');
+  const [country, setCountry] = useState({
+    cca2: 'PK',
+    name: 'Pakistan',
+    callingCode: '92',
+    region: 'Asia',
+    subregion: 'Southern Asia',
+    flag: 'flag-pk',
+    currency: ['PKR']
+  });
   const [countryPickerVisible, setCountryPickerVisible] = useState(false);
 
-  const onSelect = (country) => {
-    setCountryCode(country.cca2);
-    setCountry(country);
+  const onSelect = (selectedCountry) => {
+    setCountry(selectedCountry);
+    setCountryCode(selectedCountry.cca2);
   };
+
   // Validation Schema
   const validationSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -158,14 +178,25 @@ const SignUpScreen = ({ navigation }) => {
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
         'Must contain at least one uppercase, one lowercase, and one number'
       ),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Passwords must match')
+      .required('Please confirm your password'),
     country: Yup.string()
       .required('Country is required')
       .nullable()
       .test('is-valid-country', 'Please select a valid country', (value) => {
         return value !== 'Select your country';
       }),
+    city: Yup.string()
+      .required('City is required'),
+    province: Yup.string()
+      .required('Province is required'),
+    firmName: Yup.string()
+      .required('Firm name is required'),
     profession: Yup.string()
       .required('Profession is required'),
+    source: Yup.string()
+      .required('Please tell us where you heard about us'),
     agree: Yup.boolean()
       .oneOf([true], 'You must accept the terms and conditions')
   });
@@ -188,13 +219,18 @@ const SignUpScreen = ({ navigation }) => {
   // Country picker configuration
   const countryPickerProps = {
     withFilter: true,
-    withFlag: false,
+    withFlag: true,
     withCountryNameButton: false,
-    withAlphaFilter: true,
+    countryCode: countryCode,
+    preferredCountries: ['PK'], // Only PK in preferred to keep it at top
+    // Remove countryCodes to show all countries
     withCallingCode: true,
     withEmoji: true,
-    onSelect,
-    countryCode,
+    withAlphaFilter: true,
+    withFlagButton: false,
+    withCurrency: true,
+    // Remove countryCodes to show all countries
+    // This will show all available countries while keeping PK at the top
     containerButtonStyle: {
       flex: 1,
       justifyContent: 'flex-start',
@@ -222,18 +258,32 @@ const SignUpScreen = ({ navigation }) => {
     { label: 'Referral', value: 'Referral' },
   ];
 
-  const initialValues = {
+  const provinceOptions = [
+    { label: 'Punjab', value: 'Punjab' },
+    { label: 'Sindh', value: 'Sindh' },
+    { label: 'Khyber Pakhtunkhwa', value: 'KPK' },
+    { label: 'Balochistan', value: 'Balochistan' },
+    { label: 'Islamabad Capital Territory', value: 'ICT' },
+    { label: 'Gilgit-Baltistan', value: 'GB' },
+    { label: 'Azad Jammu and Kashmir', value: 'AJK' },
+  ];
+
+  const [initialValues] = useState({
     firstName: '',
     lastName: '',
     email: '',
     phone: '',
     username: '',
     password: '',
-    country: 'Pakistan',
+    confirmPassword: '',
+    country: '',
+    city: '',
+    province: '',
+    firmName: '',
     profession: '',
     source: '',
     agree: false,
-  };
+  });
 
   const insets = useSafeAreaInsets();
 
@@ -471,36 +521,128 @@ const SignUpScreen = ({ navigation }) => {
                   )}
                   <CountryPicker
                     {...countryPickerProps}
+                    countryCode={countryCode}
                     visible={countryPickerVisible}
                     onClose={() => setCountryPickerVisible(false)}
                     onSelect={(selectedCountry) => {
-                      onSelect(selectedCountry);
                       setFieldValue('country', selectedCountry.name);
+                      onSelect(selectedCountry);
                       setCountryPickerVisible(false);
                     }}
                   />
                 </View>
 
+                {/* City and Province Row */}
+                <View style={{ marginTop: 10, marginBottom: 16 }}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    {/* City Input */}
+                    <View style={{ width: '40%' }}>
+                      <Text style={[styles.label, { color: colors.text }]}>City<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                      <View style={[
+                        styles.inputContainer,
+                        {
+                          backgroundColor: colors.card,
+                          borderColor: errors.city && touched.city ? colors.error : colors.border,
+                          marginRight: 8
+                        }
+                      ]}>
+                        <TextInput
+                          value={values.city}
+                          onChangeText={handleChange('city')}
+                          onBlur={handleBlur('city')}
+                          placeholder="Enter city"
+                          placeholderTextColor={colors.secondary}
+                          style={[styles.textInput, { color: colors.text, backgroundColor: 'transparent' }]}
+                        />
+                      </View>
+                      {errors.city && touched.city && (
+                        <Text style={[styles.errorText, { color: colors.error }]}>{errors.city}</Text>
+                      )}
+                    </View>
+
+                    {/* Province Picker */}
+                    <View style={{ width: '63%' }}>
+                      <Text style={[styles.label, { color: colors.text }]}>Province<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                      <View style={[
+                        styles.inputContainer, 
+                        { 
+                          backgroundColor: colors.background,
+                          borderColor: (errors.province && touched.province) ? colors.error : colors.background
+                        }
+                      ]}>
+                        <CustomPicker
+                          selectedValue={values.province}
+                          onValueChange={v => setFieldValue('province', v)}
+                          items={provinceOptions}
+                          placeholder="Select province"
+                        />
+                      </View>
+                      {errors.province && touched.province && (
+                        <Text style={[styles.errorText, { color: colors.error }]}>{errors.province}</Text>
+                      )}
+                    </View>
+                  </View>
+                </View>
+
+                {/* Firm Name Input */}
+                <View style={styles.inputGroup}>
+                  <Text style={[styles.label, { color: colors.text }]}>Firm Name<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                  <View style={[
+                    styles.inputContainer,
+                    {
+                      backgroundColor: colors.card,
+                      borderColor: errors.firmName && touched.firmName ? colors.error : colors.border,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      paddingLeft: 15,
+                    }
+                  ]}>
+                    <Text style={[styles.icon, { color: colors.primary }]}>🏢</Text>
+                    <TextInput
+                      value={values.firmName}
+                      onChangeText={handleChange('firmName')}
+                      onBlur={handleBlur('firmName')}
+                      placeholder="Legal Associates LL.P"
+                      placeholderTextColor={colors.secondary}
+                      style={[styles.textInput, { 
+                        color: colors.text, 
+                        backgroundColor: 'transparent',
+                        flex: 1,
+                      }]}
+                    />
+                  </View>
+                  {errors.firmName && touched.firmName && (
+                    <Text style={[styles.errorText, { color: colors.error }]}>{errors.firmName}</Text>
+                  )}
+                </View>
+
                 {/* Profession Dropdown */}
-                <CustomPicker
-                  label="Your Profession"
-                  selectedValue={values.profession}
-                  onValueChange={v => setFieldValue('profession', v)}
-                  items={professionOptions}
-                  placeholder="Select your profession"
-                />
-                {errors.profession && touched.profession && (
-                  <Text style={[styles.errorText, { marginTop: -8, marginBottom: 8 ,color: colors.error  }]}>{errors.profession}</Text>
-                )}
+                <View style={styles.inputGroup}>
+                  <Text style={[styles.label, { color: colors.text }]}>Your Profession<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                  <CustomPicker
+                    selectedValue={values.profession}
+                    onValueChange={v => setFieldValue('profession', v)}
+                    items={professionOptions}
+                    placeholder="Select your profession"
+                  />
+                  {errors.profession && touched.profession && (
+                    <Text style={[styles.errorText, { color: colors.error }]}>{errors.profession}</Text>
+                  )}
+                </View>
 
                 {/* Source Dropdown */}
-                <CustomPicker
-                  label="Where did you hear about us?"
-                  selectedValue={values.source}
-                  onValueChange={v => setFieldValue('source', v)}
-                  items={sourceOptions}
-                  placeholder="Select an option"
-                />
+                <View style={styles.inputGroup}>
+                  <Text style={[styles.label, { color: colors.text }]}>Where did you hear about us?<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                  <CustomPicker
+                    selectedValue={values.source}
+                    onValueChange={v => setFieldValue('source', v)}
+                    items={sourceOptions}
+                    placeholder="Select an option"
+                  />
+                  {errors.source && touched.source && (
+                    <Text style={[styles.errorText, { color: colors.error }]}>{errors.source}</Text>
+                  )}
+                </View>
 
                 {/* Terms Agreement (Custom Circular Checkbox) */}
                 <TouchableOpacity
@@ -621,72 +763,36 @@ const styles = StyleSheet.create({
   },
   halfInputWrapper: {
     width: '48%',
-
   },
   inputGroup: {
     marginBottom: 16,
+    width: '100%',
   },
   label: {
     fontSize: 14,
     fontWeight: '500',
-    marginBottom: 8,
+    marginBottom: 6,
+    color: '#F3F4F6',
+    width: '100%',
   },
   required: {
     color: '#EF4444',
   },
-  inputStyle: {
-    flex: 1,
-    fontSize: 14,
-    paddingLeft: 0,
-    paddingRight: 0,
-    margin: 0,
-    borderWidth: 0,
-    textAlign: 'left',
-    paddingVertical: 0,
-    color: '#000000', // Default text color, will be overridden by style prop
-  },
-  dropdownIcon: {
-    marginLeft: 8,
-    fontSize: 10,
-    opacity: 0.7,
-  },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    backgroundColor: '#1F2937',
     borderWidth: 1,
-    borderRadius: 10,
+    borderColor: '#374151',
+    borderRadius: 8,
     height: 40,
     paddingHorizontal: 12,
-    marginBottom: 8,
-    width: '100%'
-  },
-  textInput: {
-    flex: 1,
-    fontSize: 14,
-    paddingLeft: 0,
-    paddingRight: 0,
-    margin: 0,
-    borderWidth: 0,
-    textAlign: 'left',
-    height: '100%',
-    paddingVertical: 0
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-    borderRadius: 10,
-    height: 40,
-    paddingHorizontal: 12,
-    marginBottom: 8,
+    marginBottom: 4,
   },
   icon: {
-    marginRight: 8,
-    fontSize: 18,
+    marginRight: 10,
+    fontSize: 20,
+    color: '#60A5FA',
   },
   eyeIcon: {
     position: 'absolute',
@@ -709,15 +815,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    backgroundColor: '#fff',
+    maxHeight: '60%',
+    width: '100%',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    padding: 20,
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    maxHeight: '60%',
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+    backgroundColor: 'transparent',
   },
   pickerHeader: {
     flexDirection: 'row',
@@ -874,6 +982,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#374151',
     marginBottom: 6,
+  },
+  inputStyle: {
+    flex: 1,
+    fontSize: 14,
+    color: '#F3F4F6',
+    paddingVertical: 8,
+    height: '100%',
+    paddingLeft: 4,
   },
   input: {
     height: 50,
