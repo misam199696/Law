@@ -129,15 +129,15 @@ const LoginScreen = ({ navigation }) => {
                 isDesktop && styles.cardDesktop,
                 { backgroundColor: colors.background }
               ]}>
-                <View style={styles.headerContainer}>
-                  <View>
+                <View style={[styles.headerContainer ,{ flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }]}>
+                  <View >
                     <Text style={[styles.title, { color: colors.text }]}>{t('welcomeBack')},</Text>
                     <Text style={[styles.title, { color: colors.text }]}>{t('advocate')}</Text>
                   </View>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <TouchableOpacity 
+                  <View style={{ flexDirection:  'row', alignItems: 'center' }}>
+                    <TouchableOpacity
                       style={[
-                        styles.languageButton, 
+                        styles.languageButton,
                         currentLanguage === 'en' && styles.languageButtonActive,
                         { marginRight: 8 }
                       ]}
@@ -150,7 +150,7 @@ const LoginScreen = ({ navigation }) => {
                         EN
                       </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                       style={[
                         styles.languageButton,
                         currentLanguage === 'ur' && styles.languageButtonActive
@@ -167,21 +167,31 @@ const LoginScreen = ({ navigation }) => {
                     <ThemeToggleButton style={[styles.themeButton, { marginLeft: 8 }]} />
                   </View>
                 </View>
-                <Text style={[styles.subtitle, { color: colors.secondary }]}>
+                <Text style={[styles.subtitle, { color: colors.secondary , textAlign: currentLanguage === 'en' ? 'left' : 'right' }]}>
                   {t('enterCredentials')}
                 </Text>
 
-                {/* Email and Phone Number Row */}
+                {/* Email and password */}
                 <View style={styles.row}>
                   {/* Email */}
                   <View style={[styles.halfInputWrapper, { marginRight: 8 }]}>
-                    <Text style={[styles.label, { color: colors.text }]}>{t('email')}<Text style={styles.required}>*</Text></Text>
+                    <Text style={[styles.label, { 
+                      color: colors.text,
+                      textAlign: currentLanguage === 'en' ? 'left' : 'right',
+                      writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
+                    }]}>
+                      {t('email')}<Text style={styles.required}>*</Text>
+                    </Text>
                     <View style={[
                       styles.inputContainer,
                       {
                         width: '100%',
                         backgroundColor: colors.card,
                         borderColor: colors.border,
+                        flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        paddingHorizontal: 12
                       },
                       errors.email && touched.email && styles.inputError
                     ]}>
@@ -194,7 +204,16 @@ const LoginScreen = ({ navigation }) => {
                         placeholderTextColor="#9CA3AF"
                         keyboardType="email-address"
                         autoCapitalize="none"
-                        style={styles.inputStyle}
+                        style={[
+                          styles.inputStyle,
+                          {
+                            textAlign: currentLanguage === 'en' ? 'left' : 'right',
+                            writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl',
+                            flex: 1,
+                            marginLeft: currentLanguage === 'en' ? 8 : 0,
+                            marginRight: currentLanguage === 'en' ? 0 : 8
+                          }
+                        ]}
                       />
                     </View>
                     {errors.email && touched.email && (
@@ -202,18 +221,37 @@ const LoginScreen = ({ navigation }) => {
                     )}
                   </View>
 
-                  {/* Phone Number */}
+                  {/* Password */}
                   <View style={[styles.halfInputWrapper, { marginLeft: 0 }]}>
-                    <Text style={[styles.label, { color: colors.text }]}>{t('password')}<Text style={styles.required}>*</Text></Text>
+                    <Text style={[{
+                      color: colors.text,
+                      textAlign: currentLanguage === 'en' ? 'left' : 'right',
+                      writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl',
+                      marginBottom: 4
+                    }]}>
+                      {t('password')}<Text style={styles.required}>*</Text>
+                    </Text>
                     <View style={[
                       styles.inputContainer,
                       {
                         width: '100%',
                         backgroundColor: colors.card,
                         borderColor: colors.border,
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        paddingHorizontal: 12
                       },
                       errors.password && touched.password && styles.inputError
                     ]}>
+                      {currentLanguage === 'ur' && (
+                        <TouchableOpacity 
+                          onPress={() => setSecure(!secure)} 
+                          style={styles.eyeIcon}
+                        >
+                          <Text>{secure ? '👁️' : '👁️‍🗨️'}</Text>
+                        </TouchableOpacity>
+                      )}
                       <Text style={styles.icon}>🔒</Text>
                       <TextInput
                         value={values.password}
@@ -222,11 +260,25 @@ const LoginScreen = ({ navigation }) => {
                         placeholder={t('passwordPlaceholder')}
                         placeholderTextColor="#9CA3AF"
                         secureTextEntry={secure}
-                        style={[styles.inputStyle, { flex: 1 }]}
+                        style={[
+                          styles.inputStyle,
+                          {
+                            textAlign: currentLanguage === 'en' ? 'left' : 'right',
+                            writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl',
+                            flex: 1,
+                            marginLeft: currentLanguage === 'en' ? 8 : 8,
+                            marginRight: currentLanguage === 'en' ? 8 : 20
+                          }
+                        ]}
                       />
-                      <TouchableOpacity onPress={() => setSecure(!secure)} style={styles.eyeIcon}>
-                        <Text>{secure ? '👁️' : '👁️‍🗨️'}</Text>
-                      </TouchableOpacity>
+                      {currentLanguage === 'en' && (
+                        <TouchableOpacity 
+                          onPress={() => setSecure(!secure)} 
+                          style={styles.eyeIcon}
+                        >
+                          <Text>{secure ? '👁️' : '👁️‍🗨️'}</Text>
+                        </TouchableOpacity>
+                      )}
                     </View>
                     {errors.password && touched.password && (
                       <Text style={styles.errorText}>{errors.password}</Text>
@@ -299,7 +351,7 @@ const LoginScreen = ({ navigation }) => {
                     <Text style={[styles.footerLink, { color: colors.primary }]}>{t('signUp')}</Text>
                   </TouchableOpacity>
                   <Text style={[styles.footerText, { color: colors.text }]}>  {t('dontHaveAccount')} </Text>
-                  
+
                 </View>
               </View>
             </ScrollView>
@@ -340,7 +392,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerContainer: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 8,
@@ -428,7 +479,7 @@ const styles = StyleSheet.create({
   },
   eyeIcon: {
     position: 'absolute',
-    right: 12,
+    right: 1,
     top: 12,
   },
   termsContainer: {
