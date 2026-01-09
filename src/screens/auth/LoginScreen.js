@@ -53,6 +53,7 @@ const LoginScreen = ({ navigation }) => {
       console.error('Error saving language:', error);
     }
   };
+console.log();
 
   // Validation Schema
   const validationSchema = Yup.object().shape({
