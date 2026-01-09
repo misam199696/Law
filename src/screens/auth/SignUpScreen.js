@@ -191,54 +191,40 @@ const SignUpScreen = ({ navigation }) => {
   // Validation Schema with translations
   const validationSchema = Yup.object().shape({
     firstName: Yup.string()
-      .required(t('validation.firstName.required'))
-      .min(2, t('validation.firstName.tooShort'))
-      .max(50, t('validation.firstName.tooLong')),
+      .required(t('form.errors.required'))
+      .min(2, t('form.errors.minLength', { min: 2 })),
     lastName: Yup.string()
-      .required(t('validation.lastName.required'))
-      .min(2, t('validation.lastName.tooShort'))
-      .max(50, t('validation.lastName.tooLong')),
+      .required(t('form.errors.required'))
+      .min(2, t('form.errors.minLength', { min: 2 })),
     email: Yup.string()
-      .email(t('validation.email.invalid'))
-      .required(t('validation.email.required')),
-    phone: Yup.string()
-      .required(t('validation.phone.required'))
-      .matches(/^[0-9+\-\s()]*$/, t('validation.phone.invalid'))
-      .min(10, t('validation.phone.tooShort'))
-      .max(15, t('validation.phone.tooLong')),
+      .email(t('form.errors.invalidEmail'))
+      .required(t('form.errors.required')),
+    phoneNumber: Yup.string()
+      .required(t('form.errors.required'))
+      .matches(/^[0-9+\-\s()]*$/, t('form.errors.invalidPhone')),
     username: Yup.string()
-      .required(t('validation.username.required'))
-      .min(3, t('validation.username.tooShort'))
-      .max(20, t('validation.username.tooLong'))
-      .matches(/^[a-zA-Z0-9_]+$/, t('validation.username.invalid')),
+      .required(t('form.errors.required'))
+      .min(3, t('form.errors.minLength', { min: 3 })),
     password: Yup.string()
-      .required(t('validation.password.required'))
-      .min(8, t('validation.password.tooShort'))
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-        t('validation.password.requirements')
-      ),
+      .required(t('form.errors.required'))
+      .min(8, t('form.errors.minLength', { min: 8 })),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], t('validation.confirmPassword.mismatch'))
-      .required(t('validation.confirmPassword.required')),
+      .oneOf([Yup.ref('password'), null], t('form.errors.passwordMismatch'))
+      .required(t('form.errors.required')),
     country: Yup.string()
-      .required(t('validation.country.required'))
-      .nullable()
-      .test('is-valid-country', t('validation.country.invalid'), (value) => {
-        return value && value !== t('form.selectCountry');
-      }),
+      .required(t('form.errors.required')),
     city: Yup.string()
-      .required(t('validation.city.required')),
+      .required(t('form.errors.required')),
     province: Yup.string()
-      .required(t('validation.province.required')),
+      .required(t('form.errors.required')),
     firmName: Yup.string()
-      .required(t('validation.firmName.required')),
+      .required(t('form.errors.required')),
     profession: Yup.string()
-      .required(t('validation.profession.required')),
+      .required(t('form.errors.required')),
     source: Yup.string()
-      .required(t('validation.source.required')),
+      .required(t('form.errors.required')),
     agree: Yup.boolean()
-      .oneOf([true], t('validation.agree.required'))
+      .oneOf([true], t('form.errors.required'))
   });
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -328,50 +314,10 @@ const SignUpScreen = ({ navigation }) => {
 
   const insets = useSafeAreaInsets();
 
-  // Add language selector UI similar to LoginScreen
-  const renderLanguageSelector = () => (
-    <View style={[styles.languageContainer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-      <TouchableOpacity 
-        onPress={() => handleLanguageChange('en')}
-        style={[
-          styles.languageButton,
-          currentLanguage === 'en' && styles.activeLanguageButton,
-          { marginRight: isRTL ? 0 : 10, marginLeft: isRTL ? 10 : 0 }
-        ]}
-      >
-        <Text style={[
-          styles.languageText,
-          currentLanguage === 'en' && styles.activeLanguageText,
-          { color: colors.text }
-        ]}>
-          EN
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity 
-        onPress={() => handleLanguageChange('ur')}
-        style={[
-          styles.languageButton,
-          currentLanguage === 'ur' && styles.activeLanguageButton
-        ]}
-      >
-        <Text style={[
-          styles.languageText,
-          currentLanguage === 'ur' && styles.activeLanguageText,
-          { color: colors.text }
-        ]}>
-          اردو
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
+  // Language selector removed from SignUpScreen as per requirement
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-      {/* Add language selector at the top */}
-      <View style={styles.headerContainer}>
-        <View style={{ flex: 1 }} />
-        {renderLanguageSelector()}
-      </View>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -396,24 +342,36 @@ const SignUpScreen = ({ navigation }) => {
               <View style={[
                 styles.card,
                 isDesktop && styles.cardDesktop,
-                { backgroundColor: colors.background }
+                { 
+                  backgroundColor: colors.background,
+                  alignItems: currentLanguage === 'en' ? 'flex-start' : 'flex-end'
+                }
               ]}>
-                <Text style={[styles.title, { 
-                  color: colors.text,
-                  textAlign: isRTL ? 'right' : 'left'
-                }]}>{t('signup.title')}</Text>
-                <Text style={[styles.subtitle, {
-                  color: colors.text,
-                  opacity: 0.8,
-                  textAlign: isRTL ? 'right' : 'left'
-                }]}>
-                  {t('signup.subtitle')}
-                </Text>
+                <View style={{ 
+                  width: '100%',
+                  alignItems: currentLanguage === 'en' ? 'flex-start' : 'flex-end'
+                }}>
+                  <Text style={[styles.title, { 
+                    color: colors.text,
+                    textAlign: currentLanguage === 'en' ? 'left' : 'left',
+                    width: '100%',
+                    writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
+                  }]}>{t('signup.title')}</Text>
+                  <Text style={[styles.subtitle, {
+                    color: colors.text,
+                    opacity: 0.8,
+                    textAlign: currentLanguage === 'en' ? 'left' : 'left',
+                    width: '100%',
+                    writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
+                  }]}>
+                    {t('signup.subtitle')}
+                  </Text>
+                </View>
 
                 {/* First + Last Name Row */}
                 <View style={styles.row}>
-                  <View style={styles.halfInputWrapper}>
-                    <Text style={[styles.label, { color: colors.text }]}>First Name<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                  <View style={[styles.halfInputWrapper, { marginRight: 16 }]}>
+                    <Text style={[styles.label, { color: colors.text }]}>{t('form.firstName')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                     <View style={[
                       styles.inputContainer,
                       {
@@ -436,7 +394,7 @@ const SignUpScreen = ({ navigation }) => {
                     )}
                   </View>
                   <View style={styles.halfInputWrapper}>
-                    <Text style={[styles.label, { color: colors.text }]}>Last Name<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                    <Text style={[styles.label, { color: colors.text }]}>{t('form.lastName')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                     <View style={[
                       styles.inputContainer,
                       {
@@ -464,7 +422,7 @@ const SignUpScreen = ({ navigation }) => {
                 <View style={styles.row}>
                   {/* Email */}
                   <View style={[styles.halfInputWrapper, { marginRight: 8 }]}>
-                    <Text style={[styles.label, { color: colors.text }]}>Email<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                    <Text style={[styles.label, { color: colors.text }]}>{t('form.email')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                     <View style={[
                       styles.inputContainer,
                       {
@@ -491,7 +449,7 @@ const SignUpScreen = ({ navigation }) => {
 
                   {/* Phone Number */}
                   <View style={[styles.halfInputWrapper, { marginLeft: 8 }]}>
-                    <Text style={[styles.label, { color: colors.text }]}>Phone Number<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                    <Text style={[styles.label, { color: colors.text }]}>{t('form.phoneNumber')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                     <View style={[
                       styles.inputContainer,
                       {
@@ -520,7 +478,7 @@ const SignUpScreen = ({ navigation }) => {
                 <View style={styles.row}>
                   {/* Username */}
                   <View style={[styles.halfInputWrapper, { marginRight: 8 }]}>
-                    <Text style={[styles.label, { color: colors.text }]}>Username<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                    <Text style={[styles.label, { color: colors.text }]}>{t('username')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                     <View style={[
                       styles.inputContainer,
                       {
@@ -547,7 +505,7 @@ const SignUpScreen = ({ navigation }) => {
 
                   {/* Password */}
                   <View style={[styles.halfInputWrapper, { marginLeft: 8 }]}>
-                    <Text style={[styles.label, { color: colors.text }]}>Password<Text style={styles.required}>*</Text></Text>
+                    <Text style={[styles.label, { color: colors.text }]}>{t('form.password')}<Text style={styles.required}>*</Text></Text>
                     <View style={[
                       styles.inputContainer,
                       {
@@ -583,7 +541,7 @@ const SignUpScreen = ({ navigation }) => {
 
                 {/* Country Picker */}
                 <View style={[styles.inputGroup, { marginTop: 10 }]}>
-                  <Text style={[styles.label, { color: colors.text }]}>Country<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                  <Text style={[styles.label, { color: colors.text }]}>{t('country')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                   <TouchableOpacity
                     style={[
                       styles.inputContainer,
@@ -624,7 +582,7 @@ const SignUpScreen = ({ navigation }) => {
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     {/* City Input */}
                     <View style={{ width: '40%' }}>
-                      <Text style={[styles.label, { color: colors.text }]}>City<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                      <Text style={[styles.label, { color: colors.text }]}>{t('city')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                       <View style={[
                         styles.inputContainer,
                         {
@@ -649,7 +607,7 @@ const SignUpScreen = ({ navigation }) => {
 
                     {/* Province Picker */}
                     <View style={{ width: '63%' }}>
-                      <Text style={[styles.label, { color: colors.text }]}>Province<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                      <Text style={[styles.label, { color: colors.text }]}>{t('province')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                       <View style={[
                         styles.inputContainer, 
                         { 
@@ -673,7 +631,7 @@ const SignUpScreen = ({ navigation }) => {
 
                 {/* Firm Name Input */}
                 <View style={styles.inputGroup}>
-                  <Text style={[styles.label, { color: colors.text }]}>Firm Name<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                  <Text style={[styles.label, { color: colors.text }]}>{t('form.firmName')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                   <View style={[
                     styles.inputContainer,
                     {
@@ -705,7 +663,7 @@ const SignUpScreen = ({ navigation }) => {
 
                 {/* Profession Dropdown */}
                 <View style={styles.inputGroup}>
-                  <Text style={[styles.label, { color: colors.text }]}>Your Profession<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                  <Text style={[styles.label, { color: colors.text }]}>{t('yourProfession')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                   <CustomPicker
                     selectedValue={values.profession}
                     onValueChange={v => setFieldValue('profession', v)}
@@ -719,7 +677,7 @@ const SignUpScreen = ({ navigation }) => {
 
                 {/* Source Dropdown */}
                 <View style={styles.inputGroup}>
-                  <Text style={[styles.label, { color: colors.text }]}>Where did you hear about us?<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                  <Text style={[styles.label, { color: colors.text }]}>{t('whereDidYouHear')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                   <CustomPicker
                     selectedValue={values.source}
                     onValueChange={v => setFieldValue('source', v)}
@@ -730,8 +688,7 @@ const SignUpScreen = ({ navigation }) => {
                     <Text style={[styles.errorText, { color: colors.error }]}>{errors.source}</Text>
                   )}
                 </View>
-
-                {/* Terms Agreement (Custom Circular Checkbox) */}
+ {/* Terms Agreement (Custom Circular Checkbox) */}
                 <TouchableOpacity
                   style={styles.termsContainer}
                   activeOpacity={0.8}
@@ -762,7 +719,7 @@ const SignUpScreen = ({ navigation }) => {
                   onPress={handleSubmit}
                   disabled={isSubmitting}
                 >
-                  <Text style={[styles.submitButtonText, { color: '#FFFFFF' }]}>
+                  <Text style={styles.submitButtonText}>
                     {isSubmitting ? 'Creating Account...' : 'Create Account'}
                   </Text>
                 </TouchableOpacity>
@@ -1002,8 +959,20 @@ const styles = StyleSheet.create({
     height: 52,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 24,
+    marginTop: 16,
     marginBottom: 16,
+    width: '100%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  submitButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '700',
+    letterSpacing: 0.5,
   },
   submitButtonDisabled: {
     backgroundColor: '#9CA3AF',

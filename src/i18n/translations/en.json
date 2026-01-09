@@ -32,5 +32,47 @@
   "requiredField": "This field is required",
   "invalidEmail": "Please enter a valid email address",
   "passwordMismatch": "Passwords do not match",
-  "passwordRequirements": "Password must be at least 8 characters long"
+  "passwordRequirements": "Password must be at least 8 characters long",
+  "iAgreeToTerms": "I agree to the Terms of Service and Privacy Policy",
+  "selectCountry": "Select a country",
+  "selectProfession": "Select a profession",
+  "selectSource": "How did you hear about us?",
+  "username": "Username",
+  "usernamePlaceholder": "Choose a username",
+  "form": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phoneNumber": "Phone Number",
+    "firmName": "Firm Name",
+    "profession": "Profession",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "errors": {
+      "required": "This field is required",
+      "invalidEmail": "Please enter a valid email address",
+      "passwordMismatch": "Passwords do not match",
+      "invalidPhone": "Please enter a valid phone number",
+      "minLength": "Must be at least {{min}} characters"
+    }
+  },
+  "iAgreeToTerms1": "I agree to the",
+  "privacyPolicy": "Privacy Policy",
+  "terms": "Terms",
+  "and": "and",
+  "profession": {
+    "lawyer": "Lawyer",
+    "assistant": "Legal Assistant",
+    "student": "Law Student"
+  },
+  "source": {
+    "google": "Google Search",
+    "friend": "Friend/Family",
+    "social": "Social Media",
+    "other": "Other"
+  },
+  "signup": {
+    "title": "Create Your Account",
+    "subtitle": "Join our community of legal professionals"
+  }
 }

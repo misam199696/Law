@@ -207,6 +207,7 @@ const LoginScreen = ({ navigation }) => {
                         style={[
                           styles.inputStyle,
                           {
+                            color: colors.text,
                             textAlign: currentLanguage === 'en' ? 'left' : 'right',
                             writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl',
                             flex: 1,
@@ -263,6 +264,7 @@ const LoginScreen = ({ navigation }) => {
                         style={[
                           styles.inputStyle,
                           {
+                            color:  colors.text,
                             textAlign: currentLanguage === 'en' ? 'left' : 'right',
                             writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl',
                             flex: 1,
@@ -287,29 +289,66 @@ const LoginScreen = ({ navigation }) => {
                 </View>
 
                 {/* Remember Me and Forgot Password Row */}
-                <View style={styles.rememberMeRow}>
+
+                <View style={[styles.rememberMeRow, { 
+                  flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }]}>
                   {/* Remember Me Checkbox */}
                   <TouchableOpacity
-                    style={styles.termsContainer}
+                    style={[
+                      styles.termsContainer,
+                      {
+                        flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse',
+                        alignItems: 'center'
+                      }
+                    ]}
                     activeOpacity={0.8}
                     onPress={() => setFieldValue('rememberMe', !values.rememberMe)}
                   >
                     <View style={[
                       styles.circularCheckbox,
                       values.rememberMe && styles.circularCheckboxChecked,
+                      { 
+                        marginRight: currentLanguage === 'en' ? 8 : 0,
+                        marginLeft: currentLanguage === 'en' ? 0 : 8 
+                      }
                     ]}>
                       {values.rememberMe && <Text style={styles.checkIcon}>✓</Text>}
                     </View>
-                    <Text style={[styles.termsText, { color: colors.text }]}>{t('rememberMe')}</Text>
+                    <Text style={[styles.termsText, { 
+                      color: colors.text,
+                      textAlign: currentLanguage === 'en' ? 'left' : 'right',
+                      writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
+                    }]}>
+                      {t('rememberMe')}
+                    </Text>
                   </TouchableOpacity>
 
                   {/* Forgot Password Link */}
                   <TouchableOpacity
                     onPress={() => navigation.navigate('ForgotPassword')}
+                    style={{
+                      marginStart: currentLanguage === 'en' ? -110 : 0,
+                      marginEnd: currentLanguage === 'en' ? 0 : -200
+                    }}
                   >
-                    <Text style={[styles.forgotPasswordText, { color: colors.primary }]}>{t('forgotPassword')}</Text>
+                    <Text 
+                      style={[
+                        styles.forgotPasswordText, 
+                        { 
+                          color: colors.primary,
+                          textAlign: currentLanguage === 'en' ? 'right' : 'left',
+                          writingDirection: currentLanguage === 'en' ? 'right' : 'left'
+                        }
+                      ]}
+                    >
+                      {t('forgotPassword')}
+                    </Text>
                   </TouchableOpacity>
                 </View>
+
                 {/* Submit Button */}
                 <TouchableOpacity
                   style={[
@@ -433,12 +472,31 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   rememberMeRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    width: '100%',
     marginBottom: 16,
-    width: '68%',
-    paddingHorizontal: 4,
+  },
+  termsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  circularCheckbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#12B7A6',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  circularCheckboxChecked: {
+    backgroundColor: '#12B7A6',
+  },
+  termsText: {
+    fontSize: 14,
+  },
+  forgotPasswordText: {
+    fontSize: 14,
+    fontWeight: '500',
   },
   halfInputWrapper: {
     width: '100%',
@@ -460,7 +518,7 @@ const styles = StyleSheet.create({
     margin: 0,
     borderWidth: 0,
     textAlign: 'left',
-    color: '#000',
+    
   },
   inputContainer: {
     flexDirection: 'row',
@@ -548,7 +606,7 @@ const styles = StyleSheet.create({
   },
   socialButton: {
     width: '100%',
-    height: 52,
+    height: 65,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
