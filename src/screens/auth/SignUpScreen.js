@@ -314,10 +314,50 @@ const SignUpScreen = ({ navigation }) => {
 
   const insets = useSafeAreaInsets();
 
-  // Language selector removed from SignUpScreen as per requirement
+  // Add language selector UI similar to LoginScreen
+  const renderLanguageSelector = () => (
+    <View style={[styles.languageContainer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+      <TouchableOpacity 
+        onPress={() => handleLanguageChange('en')}
+        style={[
+          styles.languageButton,
+          currentLanguage === 'en' && styles.activeLanguageButton,
+          { marginRight: isRTL ? 0 : 10, marginLeft: isRTL ? 10 : 0 }
+        ]}
+      >
+        <Text style={[
+          styles.languageText,
+          currentLanguage === 'en' && styles.activeLanguageText,
+          { color: colors.text }
+        ]}>
+          EN
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity 
+        onPress={() => handleLanguageChange('ur')}
+        style={[
+          styles.languageButton,
+          currentLanguage === 'ur' && styles.activeLanguageButton
+        ]}
+      >
+        <Text style={[
+          styles.languageText,
+          currentLanguage === 'ur' && styles.activeLanguageText,
+          { color: colors.text }
+        ]}>
+          اردو
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      {/* Add language selector at the top */}
+      <View style={styles.headerContainer}>
+        <View style={{ flex: 1 }} />
+        {renderLanguageSelector()}
+      </View>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
