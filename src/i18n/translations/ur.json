@@ -41,6 +41,9 @@
   "usernamePlaceholder": "صارف نام منتخب کریں",
   "yourProfession": "آپ کا پیشہ",
   "whereDidYouHear": "آپ نے ہمارے بارے میں کیسے سنا؟",
+  "agree": "",
+  "privacyPolicy": "میں سروس کی شرائط اور رازداری کی پالیسی سےمتفق ہوں",
+  "terms": "",
   "form": {
     "firstName": "پہلا نام",
     "lastName": "آخری نام",
@@ -49,25 +52,7 @@
     "firmName": "فرم کا نام",
     "profession": "پیشہ",
     "password": "پاس ورڈ",
-    "confirmPassword": "پاس ورڈ کی تصدیق کریں",
-    "errors": {
-      "required": "یہ فیلڈ درکار ہے",
-      "invalidEmail": "براہ کرم درست ای میل ایڈریس درج کریں",
-      "passwordMismatch": "پاس ورڈز مماثل نہیں ہیں",
-      "invalidPhone": "براہ کرم درست فون نمبر درج کریں",
-      "minLength": "کم از کم {{min}} حروف ہونے چاہئیں"
-    }
-  },
-  "profession": {
-    "lawyer": "وکیل",
-    "assistant": "قانونی معاون",
-    "student": "قانون کا طالب علم"
-  },
-  "source": {
-    "google": "گوگل سرچ",
-    "friend": "دوست/خاندان",
-    "social": "سوشل میڈیا",
-    "other": "دوسرا"
+    "confirmPassword": "پاس ورڈ کی تصدیق کریں"
   },
   "signup": {
     "title": "اپنا اکاؤنٹ بنائیں",

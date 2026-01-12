@@ -43,8 +43,8 @@ const CustomPicker = ({ label, selectedValue, onValueChange, items, placeholder 
     <View style={styles.inputGroup}>
       <Text style={[styles.label, { color: colors.text }]}>{label}</Text>
       <TouchableOpacity
-        style={[styles.inputContainer, { 
-          backgroundColor: colors.card, 
+        style={[styles.inputContainer, {
+          backgroundColor: colors.card,
           borderColor: colors.border,
           justifyContent: 'space-between',
           paddingRight: 12
@@ -67,12 +67,12 @@ const CustomPicker = ({ label, selectedValue, onValueChange, items, placeholder 
           <View style={[styles.modalOverlay, { backgroundColor: 'rgba(0,0,0,0.5)' }]} />
         </TouchableWithoutFeedback>
         <View style={[styles.modalContent, { backgroundColor: colors.background }]}>
-          <View style={[styles.pickerHeader, { 
-            borderBottomWidth: 1, 
+          <View style={[styles.pickerHeader, {
+            borderBottomWidth: 1,
             borderBottomColor: colors.border,
             backgroundColor: colors.card
           }]}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={{ padding: 12 }}
             >
               <Text style={[styles.pickerButton, { color: colors.primary }]}>Done</Text>
@@ -84,12 +84,12 @@ const CustomPicker = ({ label, selectedValue, onValueChange, items, placeholder 
               onValueChange(itemValue);
               setModalVisible(false);
             }}
-            style={[styles.picker, { 
+            style={[styles.picker, {
               backgroundColor: colors.background,
             }]}
             dropdownIconColor={colors.primary}
             dropdownIconRippleColor={colors.primary}
-            itemStyle={[styles.pickerItem, { 
+            itemStyle={[styles.pickerItem, {
               color: colors.text,
               backgroundColor: colors.background,
               fontSize: 16,
@@ -97,9 +97,9 @@ const CustomPicker = ({ label, selectedValue, onValueChange, items, placeholder 
             }]}
             themeVariant={isDark ? 'dark' : 'light'}
           >
-            <Picker.Item 
-              label={placeholder || 'Select an option...'} 
-              value="" 
+            <Picker.Item
+              label={placeholder || 'Select an option...'}
+              value=""
               color={colors.text}
               style={{
                 backgroundColor: colors.background,
@@ -113,7 +113,7 @@ const CustomPicker = ({ label, selectedValue, onValueChange, items, placeholder 
                 label={item.label}
                 value={item.value}
                 color={item.value === selectedValue ? colors.primary : colors.text}
-                style={{ 
+                style={{
                   backgroundColor: isDark ? colors.card : colors.background,
                   color: item.value === selectedValue ? colors.primary : colors.text,
                   padding: 15,
@@ -161,7 +161,7 @@ const SignUpScreen = ({ navigation }) => {
       console.error('Error saving language:', error);
     }
   };
-  
+
   // Set RTL direction when language changes
   useEffect(() => {
     I18nManager.forceRTL(isRTL);
@@ -317,7 +317,7 @@ const SignUpScreen = ({ navigation }) => {
   // Add language selector UI similar to LoginScreen
   const renderLanguageSelector = () => (
     <View style={[styles.languageContainer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-      <TouchableOpacity 
+      <TouchableOpacity
         onPress={() => handleLanguageChange('en')}
         style={[
           styles.languageButton,
@@ -333,7 +333,7 @@ const SignUpScreen = ({ navigation }) => {
           EN
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity 
+      <TouchableOpacity
         onPress={() => handleLanguageChange('ur')}
         style={[
           styles.languageButton,
@@ -382,16 +382,16 @@ const SignUpScreen = ({ navigation }) => {
               <View style={[
                 styles.card,
                 isDesktop && styles.cardDesktop,
-                { 
+                {
                   backgroundColor: colors.background,
                   alignItems: currentLanguage === 'en' ? 'flex-start' : 'flex-end'
                 }
               ]}>
-                <View style={{ 
+                <View style={{
                   width: '100%',
                   alignItems: currentLanguage === 'en' ? 'flex-start' : 'flex-end'
                 }}>
-                  <Text style={[styles.title, { 
+                  <Text style={[styles.title, {
                     color: colors.text,
                     textAlign: currentLanguage === 'en' ? 'left' : 'left',
                     width: '100%',
@@ -479,8 +479,17 @@ const SignUpScreen = ({ navigation }) => {
                         placeholderTextColor={colors.secondary}
                         keyboardType="email-address"
                         autoCapitalize="none"
-                        style={[styles.textInput, { color: colors.text, backgroundColor: 'transparent' }]}
+                        style={[
+                          styles.textInput,
+                          {
+                            color: colors.text,
+                            backgroundColor: 'transparent',
+                            fontSize: 12,   // 👈 placeholder + text size
+                            width: '80%',
+                          }
+                        ]}
                       />
+
                     </View>
                     {errors.email && touched.email && (
                       <Text style={[styles.errorText, { color: colors.error }]}>{errors.email}</Text>
@@ -505,7 +514,10 @@ const SignUpScreen = ({ navigation }) => {
                         placeholder="+92 300 1234567"
                         placeholderTextColor={colors.secondary}
                         keyboardType="phone-pad"
-                        style={[styles.textInput, { color: colors.text, backgroundColor: 'transparent' }]}
+                        style={[styles.textInput, {
+                          color: colors.text, backgroundColor: 'transparent', fontSize: 12,   // 👈 placeholder + text size
+                          width: '80%',
+                        }]}
                       />
                     </View>
                     {errors.phone && touched.phone && (
@@ -621,14 +633,14 @@ const SignUpScreen = ({ navigation }) => {
                 <View style={{ marginTop: 10, marginBottom: 16 }}>
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     {/* City Input */}
-                    <View style={{ width: '40%' }}>
+                    <View style={{ width: '50%' }}>
                       <Text style={[styles.label, { color: colors.text }]}>{t('city')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                       <View style={[
                         styles.inputContainer,
                         {
                           backgroundColor: colors.card,
                           borderColor: errors.city && touched.city ? colors.error : colors.border,
-                          marginRight: 8
+                          marginRight: 10
                         }
                       ]}>
                         <TextInput
@@ -646,13 +658,14 @@ const SignUpScreen = ({ navigation }) => {
                     </View>
 
                     {/* Province Picker */}
-                    <View style={{ width: '63%' }}>
+                  <View style={{ width: '50%' }}>
                       <Text style={[styles.label, { color: colors.text }]}>{t('province')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                       <View style={[
-                        styles.inputContainer, 
-                        { 
+                        styles.inputContainer,
+                        {
                           backgroundColor: colors.background,
-                          borderColor: (errors.province && touched.province) ? colors.error : colors.background
+                          borderColor: (errors.province && touched.province) ? colors.error : colors.background,
+                          marginLeft: 0
                         }
                       ]}>
                         <CustomPicker
@@ -665,7 +678,7 @@ const SignUpScreen = ({ navigation }) => {
                       {errors.province && touched.province && (
                         <Text style={[styles.errorText, { color: colors.error }]}>{errors.province}</Text>
                       )}
-                    </View>
+                   </View>
                   </View>
                 </View>
 
@@ -689,8 +702,8 @@ const SignUpScreen = ({ navigation }) => {
                       onBlur={handleBlur('firmName')}
                       placeholder="Legal Associates LL.P"
                       placeholderTextColor={colors.secondary}
-                      style={[styles.textInput, { 
-                        color: colors.text, 
+                      style={[styles.textInput, {
+                        color: colors.text,
                         backgroundColor: 'transparent',
                         flex: 1,
                       }]}
@@ -702,8 +715,8 @@ const SignUpScreen = ({ navigation }) => {
                 </View>
 
                 {/* Profession Dropdown */}
-                <View style={styles.inputGroup}>
-                  <Text style={[styles.label, { color: colors.text }]}>{t('yourProfession')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                <View style={[styles.professionInputGroup, { backgroundColor: colors.background }]}>
+                  <Text style={[styles.professionLabel, { color: colors.text }]}>{t('selectProfession')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                   <CustomPicker
                     selectedValue={values.profession}
                     onValueChange={v => setFieldValue('profession', v)}
@@ -716,19 +729,20 @@ const SignUpScreen = ({ navigation }) => {
                 </View>
 
                 {/* Source Dropdown */}
-                <View style={styles.inputGroup}>
-                  <Text style={[styles.label, { color: colors.text }]}>{t('whereDidYouHear')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                <View style={styles.sourceInputGroup}>
+                  <Text style={[styles.sourceLabel, { color: colors.text }]}>{t('selectSource')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                   <CustomPicker
                     selectedValue={values.source}
                     onValueChange={v => setFieldValue('source', v)}
                     items={sourceOptions}
                     placeholder="Select an option"
+                    customStyles={styles.sourcePicker}
                   />
                   {errors.source && touched.source && (
                     <Text style={[styles.errorText, { color: colors.error }]}>{errors.source}</Text>
                   )}
                 </View>
- {/* Terms Agreement (Custom Circular Checkbox) */}
+                {/* Terms Agreement (Custom Circular Checkbox) */}
                 <TouchableOpacity
                   style={styles.termsContainer}
                   activeOpacity={0.8}
@@ -742,7 +756,7 @@ const SignUpScreen = ({ navigation }) => {
                     {values.agree && <Text style={styles.checkIcon}>✓</Text>}
                   </View>
                   <Text style={styles.termsText}>
-                    I agree to the <Text style={styles.link}>Privacy Policy</Text> & <Text style={styles.link}>Terms</Text>.<Text style={styles.required}>*</Text>
+                    {t('agree')} <Text style={styles.link}>{t('privacyPolicy')}</Text> {changeLanguage === 'en' ? `&` : ''} <Text style={styles.link}>{t('terms')}</Text><Text style={styles.required}>*</Text>
                   </Text>
                 </TouchableOpacity>
                 {errors.agree && touched.agree && (
@@ -760,40 +774,17 @@ const SignUpScreen = ({ navigation }) => {
                   disabled={isSubmitting}
                 >
                   <Text style={styles.submitButtonText}>
-                    {isSubmitting ? 'Creating Account...' : 'Create Account'}
+                    {isSubmitting ? 'Creating Account...' : t('createAccount')}
                   </Text>
                 </TouchableOpacity>
 
-                {/* Social Authentication Buttons */}
-                <View style={styles.socialContainer}>
-                  <TouchableOpacity
-                    style={[styles.socialButton, { backgroundColor: colors.background }]}
-                    activeOpacity={0.7}
-                    onPress={() => console.log('Google')}
-                  >
-                    <View style={[styles.iconWrapper, { backgroundColor: colors.background }]}>
-                      <Text style={[styles.socialIconText, { color: '#4285F4', fontSize: 16, fontWeight: 'bold' }]}>G</Text>
-                    </View>
-                    <Text style={[styles.socialButtonText, { color: colors.text }]}>Continue with Google</Text>
-                  </TouchableOpacity>
 
-                  <TouchableOpacity
-                    style={[styles.socialButton, { backgroundColor: colors.background }]}
-                    activeOpacity={0.7}
-                    onPress={() => console.log('Facebook')}
-                  >
-                    <View style={[styles.iconWrapper, { backgroundColor: '#1877F2' }]}>
-                      <Text style={[styles.socialIconText, { color: 'white', fontSize: 16, fontWeight: 'bold' }]}>f</Text>
-                    </View>
-                    <Text style={[styles.socialButtonText, { color: colors.text }]}>Continue with Facebook</Text>
-                  </TouchableOpacity>
-                </View>
 
                 {/* Login Link */}
                 <View style={[styles.footer, { borderTopColor: colors.border }]}>
-                  <Text style={[styles.footerText, { color: colors.text }]}>Already have an account? </Text>
+                  <Text style={[styles.footerText, { color: colors.text }]}>{t('alreadyHaveAccount')} </Text>
                   <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                    <Text style={[styles.footerLink, { color: colors.primary }]}>Sign in instead</Text>
+                    <Text style={[styles.footerLink, { color: colors.primary }]}>{t('signInInstead')}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -884,7 +875,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     marginBottom: 6,
     color: '#F3F4F6',
-    width: '100%',
+    // width: '100%',
   },
   required: {
     color: '#EF4444',
@@ -898,7 +889,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 40,
     paddingHorizontal: 12,
-    marginBottom: 4,
+
   },
   icon: {
     marginRight: 10,
@@ -984,11 +975,53 @@ const styles = StyleSheet.create({
     backgroundColor: '#12B7A6',
   },
   termsText: {
-    fontSize: 13,
+    fontSize: 12,
     color: '#4B5563',
     fontWeight: '500',
     flex: 1,
   },
+  // Profession Dropdown Styles
+  professionInputGroup: {
+    marginBottom: -10,
+    width: '100%',
+    borderRadius: 8,
+    padding: 5,
+    // borderLeftWidth: 3,
+  },
+  professionLabel: {
+    fontSize: 14,
+    // fontWeight: '600',
+    marginBottom: -10,
+    color: '#10B981',
+  },
+  professionPicker: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#D1FAE5',
+    borderRadius: 6,
+    padding: 5,
+  },
+  // Source Dropdown Styles
+  sourceInputGroup: {
+    marginBottom: -10,
+    width: '100%',
+    borderRadius: 8,
+    padding: 5,
+  },
+  sourceLabel: {
+    fontSize: 14,
+    // fontWeight: '600',
+    marginBottom: -10,
+    color: '#6366F1',
+  },
+  sourcePicker: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E0E7FF',
+    borderRadius: 6,
+    padding: 0,
+  },
+
   link: {
     color: '#12B7A6',
     fontWeight: '700',
@@ -1100,11 +1133,11 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
 
-   
+
   label: {
-    fontSize: 14,
-    color: '#374151',
-    marginBottom: 6,
+    fontSize: 13,
+    color: '#9CA3AF',
+    marginBottom: 0,
   },
   inputStyle: {
     flex: 1,
