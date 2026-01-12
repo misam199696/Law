@@ -71,14 +71,15 @@ console.log();
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      console.log('Form submitted:', values);
-      // Add your form submission logic here
-      // await yourApiCall(values);
-      // navigation.navigate('Home');
-      Alert.alert('Success', 'Account created successfully!');
+      console.log('Login attempt with:', values);
+      // In a real app, you would verify credentials here first
+      // Then navigate to OTP verification
+      navigation.navigate('OTPVerification', { 
+        phoneNumber: values.email // Using email as phone number for demo
+      });
     } catch (error) {
-      console.error('Submission error:', error);
-      Alert.alert('Error', 'Failed to create account. Please try again.');
+      console.error('Login error:', error);
+      Alert.alert('Error', 'Failed to sign in. Please try again.');
     } finally {
       setSubmitting(false);
     }

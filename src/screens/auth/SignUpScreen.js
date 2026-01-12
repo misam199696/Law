@@ -196,28 +196,17 @@ const SignUpScreen = ({ navigation }) => {
     lastName: Yup.string()
       .required(t('form.errors.required'))
       .min(2, t('form.errors.minLength', { min: 2 })),
-    email: Yup.string()
-      .email(t('form.errors.invalidEmail'))
-      .required(t('form.errors.required')),
-    phoneNumber: Yup.string()
+    phone: Yup.string()
       .required(t('form.errors.required'))
       .matches(/^[0-9+\-\s()]*$/, t('form.errors.invalidPhone')),
-    username: Yup.string()
+    cnic: Yup.string()
       .required(t('form.errors.required'))
-      .min(3, t('form.errors.minLength', { min: 3 })),
-    password: Yup.string()
-      .required(t('form.errors.required'))
-      .min(8, t('form.errors.minLength', { min: 8 })),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], t('form.errors.passwordMismatch'))
-      .required(t('form.errors.required')),
+      .matches(/^[0-9]{5}-[0-9]{7}-[0-9]$|^[A-Za-z]-\d{4}-\d{4}$/, 'Invalid CNIC or Bar Council format'),
     country: Yup.string()
       .required(t('form.errors.required')),
     city: Yup.string()
       .required(t('form.errors.required')),
     province: Yup.string()
-      .required(t('form.errors.required')),
-    firmName: Yup.string()
       .required(t('form.errors.required')),
     profession: Yup.string()
       .required(t('form.errors.required')),
@@ -298,15 +287,11 @@ const SignUpScreen = ({ navigation }) => {
   const [initialValues] = useState({
     firstName: '',
     lastName: '',
-    email: '',
     phone: '',
-    username: '',
-    password: '',
-    confirmPassword: '',
+    cnic: '',
     country: '',
     city: '',
     province: '',
-    firmName: '',
     profession: '',
     source: '',
     agree: false,
@@ -458,46 +443,10 @@ const SignUpScreen = ({ navigation }) => {
                   </View>
                 </View>
 
-                {/* Email and Phone Number Row */}
+                {/* Phone Number and CNIC Row */}
                 <View style={styles.row}>
-                  {/* Email */}
-                  <View style={[styles.halfInputWrapper, { marginRight: 8 }]}>
-                    <Text style={[styles.label, { color: colors.text }]}>{t('form.email')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
-                    <View style={[
-                      styles.inputContainer,
-                      {
-                        backgroundColor: colors.card,
-                        borderColor: errors.email && touched.email ? colors.error : colors.border
-                      }
-                    ]}>
-                      <Text style={[styles.icon, { color: colors.primary }]}>✉️</Text>
-                      <TextInput
-                        value={values.email}
-                        onChangeText={handleChange('email')}
-                        onBlur={handleBlur('email')}
-                        placeholder="advocate@legalassist.pro"
-                        placeholderTextColor={colors.secondary}
-                        keyboardType="email-address"
-                        autoCapitalize="none"
-                        style={[
-                          styles.textInput,
-                          {
-                            color: colors.text,
-                            backgroundColor: 'transparent',
-                            fontSize: 12,   // 👈 placeholder + text size
-                            width: '80%',
-                          }
-                        ]}
-                      />
-
-                    </View>
-                    {errors.email && touched.email && (
-                      <Text style={[styles.errorText, { color: colors.error }]}>{errors.email}</Text>
-                    )}
-                  </View>
-
                   {/* Phone Number */}
-                  <View style={[styles.halfInputWrapper, { marginLeft: 8 }]}>
+                  <View style={[styles.halfInputWrapper, { marginRight: 8 }]}>
                     <Text style={[styles.label, { color: colors.text }]}>{t('form.phoneNumber')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                     <View style={[
                       styles.inputContainer,
@@ -515,7 +464,7 @@ const SignUpScreen = ({ navigation }) => {
                         placeholderTextColor={colors.secondary}
                         keyboardType="phone-pad"
                         style={[styles.textInput, {
-                          color: colors.text, backgroundColor: 'transparent', fontSize: 12,   // 👈 placeholder + text size
+                          color: colors.text, backgroundColor: 'transparent', fontSize: 12,
                           width: '80%',
                         }]}
                       />
@@ -524,72 +473,43 @@ const SignUpScreen = ({ navigation }) => {
                       <Text style={[styles.errorText, { color: colors.error }]}>{errors.phone}</Text>
                     )}
                   </View>
-                </View>
 
-                {/* Username and Password Row */}
-                <View style={styles.row}>
-                  {/* Username */}
-                  <View style={[styles.halfInputWrapper, { marginRight: 8 }]}>
-                    <Text style={[styles.label, { color: colors.text }]}>{t('username')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
-                    <View style={[
-                      styles.inputContainer,
-                      {
-                        backgroundColor: colors.card,
-                        borderColor: errors.username && touched.username ? colors.error : colors.border
-                      }
-                    ]}>
-                      <Text style={[styles.icon, { color: colors.primary }]}>👤</Text>
-                      <TextInput
-                        value={values.username}
-                        onChangeText={handleChange('username')}
-                        onBlur={handleBlur('username')}
-                        placeholder="john_advocate"
-                        placeholderTextColor={colors.secondary}
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        style={[styles.textInput, { color: colors.text, backgroundColor: 'transparent' }]}
-                      />
-                    </View>
-                    {errors.username && touched.username && (
-                      <Text style={[styles.errorText, { color: colors.error }]}>{errors.username}</Text>
-                    )}
-                  </View>
-
-                  {/* Password */}
+                  {/* CNIC / Bar Council */}
                   <View style={[styles.halfInputWrapper, { marginLeft: 8 }]}>
-                    <Text style={[styles.label, { color: colors.text }]}>{t('form.password')}<Text style={styles.required}>*</Text></Text>
+                    <Text style={[styles.label, { color: colors.text }]}>
+                      CNIC / Bar Council
+                      <Text style={[styles.required, { color: colors.error }]}>*</Text>
+                    </Text>
                     <View style={[
                       styles.inputContainer,
                       {
                         backgroundColor: colors.card,
-                        borderColor: errors.password && touched.password ? colors.error : colors.border
+                        borderColor: errors.cnic && touched.cnic ? colors.error : colors.border
                       }
                     ]}>
-                      <Text style={[styles.icon, { color: colors.primary }]}>🔒</Text>
+                      {/* <Text style={[styles.icon, { color: colors.primary }]}>🆔</Text> */}
                       <TextInput
-                        value={values.password}
-                        onChangeText={handleChange('password')}
-                        onBlur={handleBlur('password')}
-                        placeholder="••••••••"
+                        value={values.cnic}
+                        onChangeText={handleChange('cnic')}
+                        onBlur={handleBlur('cnic')}
+                        placeholder="1234578900"
                         placeholderTextColor={colors.secondary}
-                        secureTextEntry={secure}
-                        style={[styles.textInput, { color: colors.text, backgroundColor: 'transparent' }]}
+                        keyboardType="default"
+                        autoCapitalize="characters"
+                        style={[styles.textInput, {
+                          color: colors.text,
+                          backgroundColor: 'transparent',
+                          fontSize: 12,
+                          width: '80%',
+                        }]}
                       />
-                      <TouchableOpacity
-                        onPress={() => setSecure(!secure)}
-                        style={{
-                          padding: 8,
-                          marginRight: -8
-                        }}
-                      >
-                        <Text style={{ color: colors.primary }}>{secure ? '👁️' : '👁️‍🗨️'}</Text>
-                      </TouchableOpacity>
                     </View>
-                    {errors.password && touched.password && (
-                      <Text style={[styles.errorText, { color: colors.error }]}>{errors.password}</Text>
+                    {errors.cnic && touched.cnic && (
+                      <Text style={[styles.errorText, { color: colors.error }]}>{errors.cnic}</Text>
                     )}
                   </View>
                 </View>
+
 
                 {/* Country Picker */}
                 <View style={[styles.inputGroup, { marginTop: 10 }]}>
@@ -630,17 +550,15 @@ const SignUpScreen = ({ navigation }) => {
                 </View>
 
                 {/* City and Province Row */}
-                <View style={{ marginTop: 10, marginBottom: 16 }}>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     {/* City Input */}
-                    <View style={{ width: '50%' }}>
+                    <View style={{ width: '100%' }}>
                       <Text style={[styles.label, { color: colors.text }]}>{t('city')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                       <View style={[
                         styles.inputContainer,
                         {
                           backgroundColor: colors.card,
                           borderColor: errors.city && touched.city ? colors.error : colors.border,
-                          marginRight: 10
+                          // marginRight: 10
                         }
                       ]}>
                         <TextInput
@@ -658,16 +576,9 @@ const SignUpScreen = ({ navigation }) => {
                     </View>
 
                     {/* Province Picker */}
-                  <View style={{ width: '50%' }}>
-                      <Text style={[styles.label, { color: colors.text }]}>{t('province')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
-                      <View style={[
-                        styles.inputContainer,
-                        {
-                          backgroundColor: colors.background,
-                          borderColor: (errors.province && touched.province) ? colors.error : colors.background,
-                          marginLeft: 0
-                        }
-                      ]}>
+                  <View style={[styles.professionInputGroup, { backgroundColor: colors.background }]}>
+                       <Text style={[styles.professionLabel, { color: colors.text }]}>{t('province')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                    
                         <CustomPicker
                           selectedValue={values.province}
                           onValueChange={v => setFieldValue('province', v)}
@@ -678,41 +589,8 @@ const SignUpScreen = ({ navigation }) => {
                       {errors.province && touched.province && (
                         <Text style={[styles.errorText, { color: colors.error }]}>{errors.province}</Text>
                       )}
-                   </View>
-                  </View>
-                </View>
+                  
 
-                {/* Firm Name Input */}
-                <View style={styles.inputGroup}>
-                  <Text style={[styles.label, { color: colors.text }]}>{t('form.firmName')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
-                  <View style={[
-                    styles.inputContainer,
-                    {
-                      backgroundColor: colors.card,
-                      borderColor: errors.firmName && touched.firmName ? colors.error : colors.border,
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      paddingLeft: 15,
-                    }
-                  ]}>
-                    <Text style={[styles.icon, { color: colors.primary }]}>🏢</Text>
-                    <TextInput
-                      value={values.firmName}
-                      onChangeText={handleChange('firmName')}
-                      onBlur={handleBlur('firmName')}
-                      placeholder="Legal Associates LL.P"
-                      placeholderTextColor={colors.secondary}
-                      style={[styles.textInput, {
-                        color: colors.text,
-                        backgroundColor: 'transparent',
-                        flex: 1,
-                      }]}
-                    />
-                  </View>
-                  {errors.firmName && touched.firmName && (
-                    <Text style={[styles.errorText, { color: colors.error }]}>{errors.firmName}</Text>
-                  )}
-                </View>
 
                 {/* Profession Dropdown */}
                 <View style={[styles.professionInputGroup, { backgroundColor: colors.background }]}>
@@ -873,7 +751,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '500',
-    marginBottom: 6,
+    // marginBottom: 10,
     color: '#F3F4F6',
     // width: '100%',
   },
@@ -889,6 +767,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 40,
     paddingHorizontal: 12,
+    marginTop: 5,
 
   },
   icon: {
@@ -985,7 +864,8 @@ const styles = StyleSheet.create({
     marginBottom: -10,
     width: '100%',
     borderRadius: 8,
-    padding: 5,
+    marginTop:10
+    // padding: 5,
     // borderLeftWidth: 3,
   },
   professionLabel: {

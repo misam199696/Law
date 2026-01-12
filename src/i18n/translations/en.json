@@ -25,7 +25,6 @@
   "city": "City",
   "province": "Province",
   "firmName": "Firm Name",
-  "profession": "Profession",
   "confirmPassword": "Confirm Password",
   "alreadyHaveAccount": "Already have an account?",
   "signInInstead": "Sign in instead",
@@ -60,7 +59,7 @@
   "privacyPolicy": "Privacy Policy",
   "terms": "Terms",
   "and": "and",
-  "profession": {
+  "professionTypes": {
     "lawyer": "Lawyer",
     "assistant": "Legal Assistant",
     "student": "Law Student"
@@ -74,5 +73,13 @@
   "signup": {
     "title": "Create Your Account",
     "subtitle": "Join our community of legal professionals"
+  },
+  "otpVerification": {
+    "title": "Verification Login",
+    "subtitle": "We've sent a 6-digit code to",
+    "verificationTitle": "Enter verification code",
+    "verifyButton": "Verify",
+    "didntReceive": "Didn't receive the code?",
+    "resend": "Resend Code"
   }
 }

@@ -6,6 +6,7 @@ import HomeScreen from '../screens/HomeScreen';
 import DetailsScreen from '../screens/DetailsScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
+import OTPVerificationScreen from '../screens/auth/OTPVerificationScreen';
 import SplashScreen from '../screens/SplashScreen';
 
 const Stack = createNativeStackNavigator();
@@ -65,6 +66,15 @@ const AppNavigator = () => {
           name="Details" 
           component={DetailsScreen} 
           options={{ title: 'Details' }}
+        />
+        <Stack.Screen 
+          name="OTPVerification" 
+          component={OTPVerificationScreen}
+          options={{ 
+            title: 'OTP Verification',
+            headerShown: false,
+            headerBackTitle: 'Back'
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>
