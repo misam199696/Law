@@ -26,6 +26,7 @@ export const ThemeProvider = ({ children }) => {
       success: '#10B981',
       warning: '#F59E0B',
       info: '#3B82F6',
+      lightBlue: isDarkMode ? '#121212' : '#E6F8FA'
     },
   };
 

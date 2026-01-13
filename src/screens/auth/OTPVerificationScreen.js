@@ -2,20 +2,31 @@ import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform, SafeAreaView, Dimensions } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLanguage } from '../../context/LanguageContext';
 
 const { width } = Dimensions.get('window');
 
 const OTPVerificationScreen = ({ navigation, route }) => {
   const { colors } = useTheme();
-  const { t } = useTranslation();
-  const { currentLanguage } = useLanguage();
+  const { t, i18n } = useTranslation();
+   const [currentLanguage, setCurrentLanguage] = useState();
   const [isRTL, setIsRTL] = useState(false);
 
-  useEffect(() => {
-    // Update RTL status when language changes
-    setIsRTL(currentLanguage === 'ur');
-  }, [currentLanguage]);
+ useEffect(() => {
+    const loadLanguage = async () => {
+      try {
+        const savedLanguage = await AsyncStorage.getItem('userLanguage');
+        if (savedLanguage) {
+          i18n.changeLanguage(savedLanguage);
+          setCurrentLanguage(savedLanguage);
+        }
+      } catch (error) {
+        console.error('Error loading language:', error);
+      }
+    };
+    loadLanguage();
+  }, []);
 
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const { phoneNumber } = route.params || {};

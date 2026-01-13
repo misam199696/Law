@@ -388,10 +388,10 @@ console.log();
 
                 {/* Sign Up Link */}
                 <View style={styles.footer}>
-                  <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+                  <Text style={[styles.footerText, { color: colors.text }]}>{t('dontHaveAccount')} </Text>
+                  <TouchableOpacity onPress={() => navigation.navigate('SignupType')}>
                     <Text style={[styles.footerLink, { color: colors.primary }]}>{t('signUp')}</Text>
                   </TouchableOpacity>
-                  <Text style={[styles.footerText, { color: colors.text }]}>  {t('dontHaveAccount')} </Text>
 
                 </View>
               </View>

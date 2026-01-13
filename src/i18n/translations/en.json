@@ -71,8 +71,21 @@
     "other": "Other"
   },
   "signup": {
-    "title": "Create Your Account",
-    "subtitle": "Join our community of legal professionals"
+    "selectAccountType": "Select Your Account Type",
+    "chooseAccountType": "Choose your account type",
+    "publicUser": "Public User",
+    "publicUserDesc": "Ideal for users who need legal help and assistance",
+    "individualUser": "Individual User",
+    "individualUserDesc": "For legal professionals and individual practitioners",
+    "lawFirm": "Law Firm",
+    "lawFirmDesc": "For law firms and legal organizations",
+    "trustedLegalAssistant": "Your Most Trusted Legal Assistant",
+    "legalMarketplace": "Pakistan First Legal Marketplace & AI-powered legal Assistance",
+    "aiLegalAnswers": "AI Legal Answers",
+    "legalConsultations": "Legal Consultations",
+    "legalResearch": "Legal Research",
+    "pickAccountType": "Pick the option that best matches how you'll use LawSuite.",
+    "createAccount": "Create your account"
   },
   "otpVerification": {
     "title": "Verification Login",
