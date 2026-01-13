@@ -71,8 +71,18 @@
     "other": "Other"
   },
   "signup": {
-    "title": "Create Your Account",
-    "subtitle": "Join our community of legal professionals"
+    "selectAccountType": "Select Your Account Type",
+    "chooseAccountType": "Choose the type of account you want to create",
+    "publicUser": "Public User",
+    "publicUserDesc": "For general users who want to access basic features",
+    "individualUser": "Individual User",
+    "individualUserDesc": "For legal professionals and individual practitioners",
+    "lawFirm": "Law Firm",
+    "lawFirmDesc": "For law firms and legal organizations",
+    "createAccount": "Create Your Account",
+    "alreadyHaveAccount": "Already have an account?",
+    "signIn": "Sign In",
+    "continue": "Continue"
   },
   "otpVerification": {
     "title": "Verification Login",

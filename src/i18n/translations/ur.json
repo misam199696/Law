@@ -55,8 +55,18 @@
     "confirmPassword": "پاس ورڈ کی تصدیق کریں"
   },
   "signup": {
-    "title": "اپنا اکاؤنٹ بنائیں",
-    "subtitle": "قانونی پیشہ ور افراد کی ہماری کمیونٹی میں شامل ہوں"
+    "selectAccountType": "اپنے اکاؤنٹ کی قسم منتخب کریں",
+    "chooseAccountType": "وہ اکاؤنٹ کی قسم منتخب کریں جو آپ بنانا چاہتے ہیں",
+    "publicUser": "عوامی صارف",
+    "publicUserDesc": "بنیادی خصوصیات تک رسائی کے خواہاں عام صارفین کے لیے",
+    "individualUser": "انفرادی صارف",
+    "individualUserDesc": "قانونی پیشہ ور افراد اور انفرادی پریکٹیشنرز کے لیے",
+    "lawFirm": "لا فرم",
+    "lawFirmDesc": "لا فرمز اور قانونی تنظیموں کے لیے",
+    "createAccount": "اپنا اکاؤنٹ بنائیں",
+    "alreadyHaveAccount": "پہلے سے ہی ایک اکاؤنٹ ہے؟",
+    "signIn": "سائن ان کریں",
+    "continue": "جاری رکھیں"
   },
   "otpVerification": {
      "title": "او ٹی پی کی تصدیق",
