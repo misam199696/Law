@@ -5,6 +5,7 @@ import { useTheme } from '../context/ThemeContext';
 import HomeScreen from '../screens/HomeScreen';
 import DetailsScreen from '../screens/DetailsScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
+import SignupTypeScreen from '../screens/auth/SignupTypeScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 import OTPVerificationScreen from '../screens/auth/OTPVerificationScreen';
 import SplashScreen from '../screens/SplashScreen';
@@ -54,8 +55,21 @@ const AppNavigator = () => {
           options={{ gestureEnabled: false }}
         />
         <Stack.Screen 
+          name="SignupType" 
+          component={SignupTypeScreen}
+          options={{ 
+            title: 'Sign Up',
+            headerShown: false
+          }}
+        />
+        <Stack.Screen 
           name="SignUp" 
           component={SignUpScreen}
+          options={{ 
+            title: 'Create Account',
+            headerShown: true,
+            headerBackTitle: 'Back'
+          }}
         />
         <Stack.Screen 
           name="Home" 

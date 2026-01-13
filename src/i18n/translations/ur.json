@@ -56,17 +56,20 @@
   },
   "signup": {
     "selectAccountType": "اپنے اکاؤنٹ کی قسم منتخب کریں",
-    "chooseAccountType": "وہ اکاؤنٹ کی قسم منتخب کریں جو آپ بنانا چاہتے ہیں",
+    "chooseAccountType": " اکاؤنٹ کی قسم منتخب کریں جو آپ بنانا چاہتے ہیں",
     "publicUser": "عوامی صارف",
-    "publicUserDesc": "بنیادی خصوصیات تک رسائی کے خواہاں عام صارفین کے لیے",
+    "publicUserDesc": "ان صارفین کے لیے موزوں ہے جنہیں قانونی مدد اور معاونت درکار ہو",
     "individualUser": "انفرادی صارف",
     "individualUserDesc": "قانونی پیشہ ور افراد اور انفرادی پریکٹیشنرز کے لیے",
     "lawFirm": "لا فرم",
     "lawFirmDesc": "لا فرمز اور قانونی تنظیموں کے لیے",
-    "createAccount": "اپنا اکاؤنٹ بنائیں",
-    "alreadyHaveAccount": "پہلے سے ہی ایک اکاؤنٹ ہے؟",
-    "signIn": "سائن ان کریں",
-    "continue": "جاری رکھیں"
+    "trustedLegalAssistant": "آپ کا سب سے قابل اعتماد قانونی معاون",
+    "legalMarketplace": "پاکستان کی پہلی قانونی مارکیٹ پلیس اور اے آئی سے چلنے والی قانونی مدد",
+    "aiLegalAnswers": "اے آئی قانونی جوابات",
+    "legalConsultations": "قانونی مشاورت",
+    "legalResearch": "قانونی تحقیق",
+    "pickAccountType": "وہ اختیار منتخب کریں جو آپ کے لیے موزوں ہے کہ آپ لاء سوٹ کو کیسے استعمال کریں گے۔",
+    "createAccount": "اپنا اکاؤنٹ بنائیں"
   },
   "otpVerification": {
      "title": "او ٹی پی کی تصدیق",
