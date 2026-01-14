@@ -85,14 +85,20 @@
     "legalConsultations": "Legal Consultations",
     "legalResearch": "Legal Research",
     "pickAccountType": "Pick the option that best matches how you'll use LawSuite.",
-    "createAccount": "Create your account"
+    "createAccount": "Create your account",
+    "privacyPolicyAndTerms": "Privacy Policy & Terms",
+    "agreeToTerms": "I agree to the"
   },
   "otpVerification": {
     "title": "Verification Login",
     "subtitle": "We've sent a 6-digit code to",
     "verificationTitle": "Enter verification code",
     "verifyButton": "Verify",
-    "didntReceive": "Didn't receive the code?",
-    "resend": "Resend Code"
-  }
+    "didntReceive": "Didn't receive code?",
+    "resend": "Resend Code",
+    "onlyNumbersAllowed": "Only numbers are allowed"
+  },
+  "accountType": "Account Type",
+  "selectAccountType": "Select Account Type",
+  "orContinueWith": "or continue with"
 }

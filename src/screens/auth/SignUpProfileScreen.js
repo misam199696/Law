@@ -130,7 +130,7 @@ const CustomPicker = ({ label, selectedValue, onValueChange, items, placeholder 
   );
 };
 
-const SignUpScreen = ({ navigation }) => {
+const SignUpProfileScreen = ({ navigation }) => {
   const { colors } = useTheme();
   const { t, i18n } = useTranslation();
   const { currentLanguage, changeLanguage } = useLanguage();
@@ -1041,4 +1041,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUpScreen;
+export default SignUpProfileScreen;

@@ -69,14 +69,20 @@
     "legalConsultations": "قانونی مشاورت",
     "legalResearch": "قانونی تحقیق",
     "pickAccountType": "وہ اختیار منتخب کریں جو آپ کے لیے موزوں ہے کہ آپ لاء سوٹ کو کیسے استعمال کریں گے۔",
-    "createAccount": "اپنا اکاؤنٹ بنائیں"
+    "createAccount": "سائن اپ کریں",
+    "privacyPolicyAndTerms": "رازداری کی پالیسی اور شرائط",
+    "agreeToTerms": "میں اس سے متفق ہوں"
   },
   "otpVerification": {
      "title": "او ٹی پی کی تصدیق",
-    "subtitle": "ہم نے ایک 6 ہندسوں کا کوڈ بھیجا ہے",
+    "subtitle": "ہم نے 6 ہندسوں کا کوڈ بھیجا ہے",
     "verificationTitle": "تصدیقی کوڈ درج کریں",
     "verifyButton": "تصدیق کریں",
     "didntReceive": "کوڈ موصول نہیں ہوا؟",
-    "resend": "دوبارہ بھیجیں"
-  }
+    "resend": "کوڈ دوبارہ بھیجیں",
+    "onlyNumbersAllowed": "صرف اعداد کی اجازت ہے"
+  },
+  "accountType": "اکاؤنٹ کی قسم",
+  "selectAccountType": "اکاؤنٹ کی قسم منتخب کریں",
+  "orContinueWith": "یا اس کے ساتھ جاری رکھیں"
 }
