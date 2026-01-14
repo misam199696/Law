@@ -13,7 +13,6 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { scale, gavel, gavel2 } from '../../assets/images';
 import { ThemeContext } from '../../context/ThemeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -133,7 +132,7 @@ const SignupTypeScreen = () => {
             backgroundColor: colors.lightBlue,
             borderRadius: 20,
             padding: 20,    
-            marginBottom: 20,
+            // marginBottom: 20,
             borderWidth: 1,
             borderColor: colors.border,
             
@@ -199,8 +198,8 @@ const SignupTypeScreen = () => {
             shadowOpacity: 0.3,
             shadowRadius: 8,
             elevation: 5,
-            marginTop: 30,
-            paddingHorizontal: 100
+            marginTop: 50,
+            
         },
         continueButtonDisabled: {
             backgroundColor: isDarkMode ? '#2D3E4D' : '#56928dff',
@@ -215,7 +214,7 @@ const SignupTypeScreen = () => {
 
     const handleContinue = () => {
         if (selectedType) {
-            navigation.navigate('SignUp', { userType: selectedType });
+            navigation.navigate('SignupCreateAccount', { userType: selectedType });
         }
     };
 
@@ -311,6 +310,7 @@ const SignupTypeScreen = () => {
                                 </TouchableOpacity>
                             ))}
                         </View>
+                        <View style={{paddingBottom:100}} >
                          <TouchableOpacity
                         style={[
                             dynamicStyles.continueButton,
@@ -322,6 +322,7 @@ const SignupTypeScreen = () => {
                     >
                         <Text style={dynamicStyles.continueButtonText}>{t('signup.createAccount')}</Text>
                     </TouchableOpacity>
+                    </View>
                     </View>
                 </ScrollView>
             </View>
@@ -351,10 +352,7 @@ const styles = StyleSheet.create({
     },
     cardContent: {
         alignItems: 'center',
-        
-       
-        
-        
+        width: '100%'
     },
     iconContainer: {
         width: 34,

@@ -4,11 +4,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from '../context/ThemeContext';
 import HomeScreen from '../screens/HomeScreen';
 import DetailsScreen from '../screens/DetailsScreen';
-import SignUpScreen from '../screens/auth/SignUpScreen';
+import SignUpProfileScreen from '../screens/auth/SignUpProfileScreen';
 import SignupTypeScreen from '../screens/auth/SignupTypeScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 import OTPVerificationScreen from '../screens/auth/OTPVerificationScreen';
 import SplashScreen from '../screens/SplashScreen';
+import SignupCreateAccount from '../screens/auth/SignupCreateAccount';
 
 const Stack = createNativeStackNavigator();
 
@@ -62,9 +63,17 @@ const AppNavigator = () => {
             headerShown: false
           }}
         />
+         <Stack.Screen 
+          name="SignupCreateAccount" 
+          component={SignupCreateAccount}
+          options={{ 
+            title: 'Sign Up',
+            headerShown: false
+          }}
+        />
         <Stack.Screen 
-          name="SignUp" 
-          component={SignUpScreen}
+          name="SignupProfile" 
+          component={SignUpProfileScreen}
           options={{ 
             title: 'Create Account',
             headerShown: true,

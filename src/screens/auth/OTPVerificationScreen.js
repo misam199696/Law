@@ -12,6 +12,7 @@ const OTPVerificationScreen = ({ navigation, route }) => {
   const { t, i18n } = useTranslation();
    const [currentLanguage, setCurrentLanguage] = useState();
   const [isRTL, setIsRTL] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
  useEffect(() => {
     const loadLanguage = async () => {
@@ -34,7 +35,8 @@ const OTPVerificationScreen = ({ navigation, route }) => {
 
   const handleVerifyOTP = () => {
     // TODO: Implement OTP verification logic
-    navigation.navigate('Home');
+    navigation.navigate('SignupProfile');
+    
   };
 
   const handleResendOTP = () => {
@@ -42,13 +44,22 @@ const OTPVerificationScreen = ({ navigation, route }) => {
   };
 
   const handleOtpChange = (value, index) => {
+    // Only allow numbers
+    const numericValue = value.replace(/[^0-9]/g, '');
     const newOtp = [...otp];
-    newOtp[index] = value;
+    newOtp[index] = numericValue;
     setOtp(newOtp);
     
+    // Show error if non-numeric characters were entered
+    if (value !== numericValue) {
+      setErrorMessage(t('otpVerification.onlyNumbersAllowed'));
+    } else {
+      setErrorMessage('');
+    }
+    
     // Auto focus next input if there's a value and not the last input
-    if (value && index < 5) {
-      // Focus the next input
+    if (numericValue && index < 5) {
+      // Focus next input
       const nextInput = index + 1;
       otpInputs.current[nextInput]?.focus();
     }
@@ -63,6 +74,18 @@ const OTPVerificationScreen = ({ navigation, route }) => {
 
   const isOtpComplete = otp.every(digit => digit !== '');
 console.log("currentLanguage//////////",currentLanguage);
+
+  // Auto-navigate to Home when 6 digits are entered
+  useEffect(() => {
+    if (isOtpComplete) {
+      // Add a small delay to show the completed OTP before navigation
+      const timer = setTimeout(() => {
+         navigation.navigate('SignupProfile');
+      }, 500);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isOtpComplete, navigation]);
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -129,9 +152,20 @@ console.log("currentLanguage//////////",currentLanguage);
                 onChangeText={(value) => handleOtpChange(value, index)}
                 onKeyPress={(e) => handleKeyPress(e, index)}
                 selectTextOnFocus
+                secureTextEntry={false}
+                autoComplete="off"
+                autoCorrect={false}
+                spellCheck={false}
               />
             ))}
           </View>
+
+          {/* Error Message */}
+          {errorMessage ? (
+            <Text style={[styles.errorMessage, { color: '#EF4444' }]}>
+              {errorMessage}
+            </Text>
+          ) : null}
 
           <TouchableOpacity 
             style={[
@@ -142,7 +176,7 @@ console.log("currentLanguage//////////",currentLanguage);
               }
             ]}
             onPress={handleVerifyOTP}
-            disabled={!isOtpComplete}
+            disabled={!isOtpComplete }
           >
             <Text style={styles.verifyButtonText}>{t('otpVerification.verifyButton')}</Text>
           </TouchableOpacity>
@@ -237,6 +271,11 @@ const styles = StyleSheet.create({
   resendButton: {
     fontSize: 14,
     fontWeight: '600',
+  },
+  errorMessage: {
+    fontSize: 14,
+    marginBottom: 16,
+    textAlign: 'center',
   },
 });
 

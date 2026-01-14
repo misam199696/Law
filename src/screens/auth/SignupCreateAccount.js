@@ -12,20 +12,25 @@ import {
   Dimensions,
   TextInput,
   Alert,
+  useColorScheme,
+  Modal
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../context/ThemeContext';
-import ThemeToggleButton from '../../components/ThemeToggleButton';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
 
 const { width } = Dimensions.get('window');
 
-const LoginScreen = ({ navigation }) => {
+const SignupCreateAccount = ({ navigation, route }) => {
   const { colors } = useTheme();
   const { t, i18n } = useTranslation();
   const [secure, setSecure] = useState(true);
+  const [selectedType, setSelectedType] = useState(route?.params?.userType || null);
   const [currentLanguage, setCurrentLanguage] = useState('en');
+  const [showAccountTypeModal, setShowAccountTypeModal] = useState(false);
   const isDesktop = width > 600;
 
   // Load saved language on component mount
@@ -44,16 +49,6 @@ const LoginScreen = ({ navigation }) => {
     loadLanguage();
   }, []);
 
-  const changeLanguage = async (language) => {
-    try {
-      await AsyncStorage.setItem('userLanguage', language);
-      i18n.changeLanguage(language);
-      setCurrentLanguage(language);
-    } catch (error) {
-      console.error('Error saving language:', error);
-    }
-  };
-console.log();
 
   // Validation Schema
   const validationSchema = Yup.object().shape({
@@ -74,7 +69,7 @@ console.log();
       console.log('Login attempt with:', values);
       // In a real app, you would verify credentials here first
       // Then navigate to OTP verification
-      navigation.navigate('OTPVerification', { 
+      navigation.navigate('OTPVerification', {
         phoneNumber: values.email // Using email as phone number for demo
       });
     } catch (error) {
@@ -95,12 +90,72 @@ console.log();
 
   // --- Icons using react-native-vector-icons ---
   const GoogleIcon = () => (
-      <Text style={[styles.socialIconText, { color: '#4285F4', fontSize: 16, fontWeight: 'bold' }]}>G</Text>
+    <Text style={[styles.socialIconText, { color: '#4285F4', fontSize: 16, fontWeight: 'bold' }]}>G</Text>
   );
 
   const FacebookIcon = () => (
-      <Text style={[styles.socialIconText, { color: 'white', fontSize: 16, fontWeight: 'bold' }]}>f</Text>
+    <Text style={[styles.socialIconText, { color: 'white', fontSize: 16, fontWeight: 'bold' }]}>f</Text>
   );
+
+
+  const accountTypes = [
+    {
+      id: 'public',
+      title: t('signup.publicUser'),
+      description: t('signup.publicUserDesc'),
+      icon: 'person-outline',
+      iconColor: '#FFA500',
+      iconBg: '#FFF5E6'
+    },
+    {
+      id: 'individual',
+      title: t('signup.individualUser'),
+      description: t('signup.individualUserDesc'),
+      icon: 'business',
+      iconColor: '#00BFA5',
+      iconBg: '#E6F7F5'
+    },
+    {
+      id: 'lawFirm',
+      title: t('signup.lawFirm'),
+      description: t('signup.lawFirmDesc'),
+      icon: 'gavel',
+      iconColor: '#FF5252',
+      iconBg: '#FFEBEE'
+    }
+  ];
+
+
+  const isDarkMode = useColorScheme() === 'dark';
+
+  const dynamicStyles = StyleSheet.create({
+    card: {
+      height: 50,
+      width: 164,
+      borderRadius: 12,
+      padding: 10,
+      borderWidth: 1,
+      borderColor: colors.border,
+      backgroundColor: colors.card,
+    },
+    cardSelected: {
+      borderColor: colors.primary,
+      backgroundColor: colors.lightBlue
+    },
+    cardTitle: {
+        fontSize: 12,
+        fontWeight: '700',
+        color: isDarkMode === 'dark' ? '#020202ff' : colors.text,
+        marginBottom: 4,
+    },
+    dropdown: {
+        fontSize: 12,
+        fontWeight: '700',
+        color: isDarkMode === 'dark' ? '#020202ff' : colors.text,
+        marginBottom: 4,
+        
+    }
+  });
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background, paddingTop: 10 }]}>
@@ -127,53 +182,18 @@ console.log();
                 isDesktop && styles.cardDesktop,
                 { backgroundColor: colors.background }
               ]}>
-                <View style={[styles.headerContainer ,{ flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }]}>
-                  <View >
-                    <Text style={[styles.title, { color: colors.text }]}>{t('welcomeBack')},</Text>
-                    <Text style={[styles.title, { color: colors.text }]}>{t('advocate')}</Text>
-                  </View>
-                  <View style={{ flexDirection:  'row', alignItems: 'center' }}>
-                    <TouchableOpacity
-                      style={[
-                        styles.languageButton,
-                        currentLanguage === 'en' && styles.languageButtonActive,
-                        { marginRight: 8 }
-                      ]}
-                      onPress={() => changeLanguage('en')}
-                    >
-                      <Text style={[
-                        styles.languageButtonText,
-                        { color: currentLanguage === 'en' ? '#FFFFFF' : colors.text }
-                      ]}>
-                        EN
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[
-                        styles.languageButton,
-                        currentLanguage === 'ur' && styles.languageButtonActive
-                      ]}
-                      onPress={() => changeLanguage('ur')}
-                    >
-                      <Text style={[
-                        styles.languageButtonText,
-                        { color: currentLanguage === 'ur' ? '#FFFFFF' : colors.text }
-                      ]}>
-                        اردو
-                      </Text>
-                    </TouchableOpacity>
-                    <ThemeToggleButton style={[styles.themeButton, { marginLeft: 8 }]} />
-                  </View>
-                </View>
-                <Text style={[styles.subtitle, { color: colors.secondary , textAlign: currentLanguage === 'en' ? 'left' : 'right' }]}>
-                  {t('enterCredentials')}
+
+                    <Text style={[styles.title, { color: colors.text, alignSelf: currentLanguage === 'en' ? 'flex-start' : 'flex-end' }]}>{t('createAccount')}</Text>
+
+                <Text style={[styles.subtitle, { color: colors.secondary, textAlign: currentLanguage === 'en' ? 'left' : 'right' }]}>
+                  {t('welcomeSubtitle')}
                 </Text>
 
                 {/* Email and password */}
                 <View style={styles.row}>
                   {/* Email */}
                   <View style={[styles.halfInputWrapper, { marginRight: 8 }]}>
-                    <Text style={[styles.label, { 
+                    <Text style={[styles.label, {
                       color: colors.text,
                       textAlign: currentLanguage === 'en' ? 'left' : 'right',
                       writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
@@ -244,8 +264,8 @@ console.log();
                       errors.password && touched.password && styles.inputError
                     ]}>
                       {currentLanguage === 'ur' && (
-                        <TouchableOpacity 
-                          onPress={() => setSecure(!secure)} 
+                        <TouchableOpacity
+                          onPress={() => setSecure(!secure)}
                           style={styles.eyeIcon}
                         >
                           <Text>{secure ? '👁️' : '👁️‍🗨️'}</Text>
@@ -262,7 +282,7 @@ console.log();
                         style={[
                           styles.inputStyle,
                           {
-                            color:  colors.text,
+                            color: colors.text,
                             textAlign: currentLanguage === 'en' ? 'left' : 'right',
                             writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl',
                             flex: 1,
@@ -272,8 +292,8 @@ console.log();
                         ]}
                       />
                       {currentLanguage === 'en' && (
-                        <TouchableOpacity 
-                          onPress={() => setSecure(!secure)} 
+                        <TouchableOpacity
+                          onPress={() => setSecure(!secure)}
                           style={styles.eyeIcon}
                         >
                           <Text>{secure ? '👁️' : '👁️‍🗨️'}</Text>
@@ -288,7 +308,7 @@ console.log();
 
                 {/* Remember Me and Forgot Password Row */}
 
-                <View style={[styles.rememberMeRow, { 
+                <View style={[styles.rememberMeRow, {
                   flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse',
                   justifyContent: 'space-between',
                   alignItems: 'center'
@@ -308,58 +328,77 @@ console.log();
                     <View style={[
                       styles.circularCheckbox,
                       values.rememberMe && styles.circularCheckboxChecked,
-                      { 
+                      {
                         marginRight: currentLanguage === 'en' ? 8 : 0,
-                        marginLeft: currentLanguage === 'en' ? 0 : 8 
+                        marginLeft: currentLanguage === 'en' ? 0 : 8
                       }
                     ]}>
                       {values.rememberMe && <Text style={styles.checkIcon}>✓</Text>}
                     </View>
-                    <Text style={[styles.termsText, { 
+                    <Text style={[styles.termsText, {
                       color: colors.text,
                       textAlign: currentLanguage === 'en' ? 'left' : 'right',
                       writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
                     }]}>
-                      {t('rememberMe')}
+                      I agree to privacyPolicy & Terms *
                     </Text>
                   </TouchableOpacity>
 
-                  {/* Forgot Password Link */}
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate('ForgotPassword')}
-                    style={{
-                      marginStart: currentLanguage === 'en' ? -110 : 0,
-                      marginEnd: currentLanguage === 'en' ? 0 : -200
-                    }}
-                  >
-                    <Text 
-                      style={[
-                        styles.forgotPasswordText, 
-                        { 
-                          color: colors.primary,
-                          textAlign: currentLanguage === 'en' ? 'right' : 'left',
-                          writingDirection: currentLanguage === 'en' ? 'right' : 'left'
-                        }
-                      ]}
-                    >
-                      {t('forgotPassword')}
-                    </Text>
-                  </TouchableOpacity>
                 </View>
 
-                {/* Submit Button */}
-                <TouchableOpacity
-                  style={[
-                    styles.submitButton,
-                    (isSubmitting || Object.keys(errors).length > 0) && styles.submitButtonDisabled
-                  ]}
-                  onPress={handleSubmit}
-                  disabled={isSubmitting}
-                >
-                  <Text style={styles.submitButtonText}>
-                    {isSubmitting ? t('signingIn') : t('signIn')}
-                  </Text>
-                </TouchableOpacity>
+                {/* Sign In Button */}
+                <View style={{ alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row-reverse', height:60, width:'100%' }}>
+                  <TouchableOpacity
+                    style={[
+                      styles.submitButton,
+                      (isSubmitting || Object.keys(errors).length > 0) && styles.submitButtonDisabled
+                    ]}
+                    onPress={handleSubmit}
+                    disabled={isSubmitting}
+                  >
+                    <Text style={styles.submitButtonText}>
+                      {isSubmitting ? t('signingIn') : t('signIn')}
+                    </Text>
+                  </TouchableOpacity>
+
+                  {/* Selected Type Display */}
+                  <View style={styles.cardsContainer}>
+                    {selectedType && accountTypes.map((type) => (
+                      type.id === selectedType && (
+                        <TouchableOpacity
+                          key={type.id}
+                          style={[
+                            dynamicStyles.card,
+                            dynamicStyles.cardSelected
+                          ]}
+                          onPress={() => setShowAccountTypeModal(true)}
+                          activeOpacity={0.8}
+                        >
+                          <View style={[styles.cardContent, { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }]}>
+                            <View style={[styles.iconContainer, { backgroundColor: type.iconBg }]}>
+                              <Icon
+                                name={type.icon}
+                                size={20}
+                                color={type.iconColor}
+                              />
+                            </View>
+                            <View style={styles.textContainer}>
+                              <Text style={[dynamicStyles.cardTitle, { alignSelf: currentLanguage === 'en' ? 'flex-start' : 'flex-end' }]}>
+                                {type.id === 'public'
+                                  ? t('signup.publicUser')
+                                  : type.id === 'individual'
+                                    ? t('signup.individualUser')
+                                    : t('signup.lawFirm')}
+                              </Text>
+                              <Text style={[dynamicStyles.dropdown, {}]}>   ⌄ </Text>
+                            </View>
+                            
+                          </View>
+                        </TouchableOpacity>
+                      )
+                    ))}
+                  </View>
+                </View>
 
                 {/* Divider */}
                 <View style={styles.dividerContainer}>
@@ -402,27 +441,71 @@ console.log();
           </KeyboardAvoidingView>
         )}
       </Formik>
+
+      {/* Account Type Selection Modal */}
+      <Modal
+        visible={showAccountTypeModal}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setShowAccountTypeModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
+            <View style={[styles.modalHeader, { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }]}>
+              <Text style={[styles.modalTitle, { color: colors.text }]}>{t('signup.chooseAccountType')}</Text>
+              <TouchableOpacity onPress={() => setShowAccountTypeModal(false)}>
+                <Icon name="close" size={24} color={colors.text} />
+              </TouchableOpacity>
+            </View>
+            
+            <View style={styles.modalBody}>
+              {accountTypes.map((type) => (
+                <TouchableOpacity
+                  key={type.id}
+                  style={[
+                    styles.accountTypeOption,
+                    { backgroundColor: colors.card, borderColor: colors.border },
+                    selectedType === type.id && { backgroundColor: colors.lightBlue, borderColor: colors.primary }
+                  ]}
+                  onPress={() => {
+                    setSelectedType(type.id);
+                    setShowAccountTypeModal(false);
+                  }}
+                  activeOpacity={0.8}
+                >
+                  <View style={[styles.optionContent, { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }]}>
+                    <View style={[styles.optionIcon, { backgroundColor: type.iconBg }]}>
+                      <Icon name={type.icon} size={24} color={type.iconColor} />
+                    </View>
+                    <View style={styles.optionText}>
+                      <Text style={[styles.optionTitle, { color: colors.text, alignSelf: currentLanguage === 'en' ?  'flex-start' : 'flex-end' }]}>
+                        {type.id === 'public'
+                          ? t('signup.publicUser')
+                          : type.id === 'individual'
+                            ? t('signup.individualUser')
+                            : t('signup.lawFirm')}
+                      </Text>
+                      <Text style={[styles.optionDescription, { color: colors.secondary , alignSelf: currentLanguage === 'en' ?  'flex-start' : 'flex-end' }]}>
+                        {type.id === 'public'
+                          ? t('signup.publicUserDesc')
+                          : type.id === 'individual'
+                            ? t('signup.individualUserDesc')
+                            : t('signup.lawFirmDesc')}
+                      </Text>
+                    </View>
+                   
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  languageButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-  },
-  languageButtonActive: {
-    backgroundColor: '#3B82F6',
-    borderColor: '#3B82F6',
-  },
-  languageButtonText: {
-    fontSize: 14,
-    fontWeight: '500',
-  },
   errorText: {
     color: '#EF4444',
     fontSize: 12,
@@ -435,14 +518,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  headerContainer: {
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  themeButton: {
-    marginLeft: 10,
-  },
   keyboardAvoidingView: {
     flex: 1,
   },
@@ -454,7 +529,7 @@ const styles = StyleSheet.create({
   },
   card: {
     // borderRadius: 32,
-    width: '95%',
+    width: '97%',
     padding: 24,
   },
   cardDesktop: {
@@ -464,8 +539,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: '800',
-    marginBottom: 4,
-    letterSpacing: -0.5,
+    marginBottom: 10,
   },
   subtitle: {
     fontSize: 14,
@@ -499,10 +573,6 @@ const styles = StyleSheet.create({
   termsText: {
     fontSize: 14,
   },
-  forgotPasswordText: {
-    fontSize: 14,
-    fontWeight: '500',
-  },
   halfInputWrapper: {
     width: '100%',
   },
@@ -523,7 +593,7 @@ const styles = StyleSheet.create({
     margin: 0,
     borderWidth: 0,
     textAlign: 'left',
-    
+
   },
   inputContainer: {
     flexDirection: 'row',
@@ -531,7 +601,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderWidth: 1,
     borderRadius: 10,
-    height: 40,
+    height: 50,
     paddingHorizontal: 12,
     marginBottom: 8,
   },
@@ -542,7 +612,7 @@ const styles = StyleSheet.create({
   },
   eyeIcon: {
     position: 'absolute',
-    right: 1,
+    right: 12,
     top: 12,
   },
   termsContainer: {
@@ -569,15 +639,11 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     flex: 1,
   },
-  forgotPasswordText: {
-    fontWeight: '600',
-    fontSize: 13,
-    marginTop: 8,
-  },
   submitButton: {
     backgroundColor: '#12B7A6',
     borderRadius: 12,
-    height: 52,
+    height: 50,
+    width: '50%',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 12,
@@ -606,7 +672,7 @@ const styles = StyleSheet.create({
   },
   socialContainer: {
     width: '100%',
-    marginTop: 24,
+    marginTop: 6,
     marginBottom: 16,
   },
   socialButton: {
@@ -619,7 +685,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: '#e5e7eb9a',
   },
   socialButtonText: {
     color: '#1F2937',
@@ -630,7 +696,7 @@ const styles = StyleSheet.create({
   dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: 30,
   },
   dividerLine: {
     flex: 1,
@@ -640,7 +706,100 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     fontSize: 14,
     fontWeight: '500',
-  }
+  },
+
+  cardsContainer: {
+    gap: 16,
+  },
+
+  cardContent: {
+    alignItems: 'center',
+  },
+  iconContainer: {
+    width: 30,
+    height: 30,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+
+  },
+  textContainer: {
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  // Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '90%',
+    maxHeight: '80%',
+    borderRadius: 20,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  modalHeader: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  modalTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  modalBody: {
+    gap: 12,
+  },
+  accountTypeOption: {
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 16,
+  },
+  optionContent: {
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  optionIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  optionText: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+  optionTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  optionDescription: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  radioButton: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  radioButtonSelected: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+  },
 });
 
-export default LoginScreen;
+export default SignupCreateAccount;
