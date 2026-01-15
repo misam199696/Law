@@ -5,7 +5,16 @@ import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLanguage } from '../../context/LanguageContext';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
+const isSmallScreen = width <= 375; // iPhone SE and similar small screens
+const isMediumScreen = width > 375 && width <= 414; // 6-inch and normal screens
+const isLargeScreen = width > 414; // Larger screens and tablets
+
+const getResponsiveValue = (small, medium, large) => {
+  if (isSmallScreen) return small;
+  if (isMediumScreen) return medium;
+  return large;
+};
 
 const OTPVerificationScreen = ({ navigation, route }) => {
   const { colors } = useTheme();
@@ -100,8 +109,8 @@ console.log("currentLanguage//////////",currentLanguage);
                 color: colors.text,
                 textAlign: currentLanguage === 'ur' ? 'right' : 'left',
                 alignSelf: currentLanguage === 'ur' ? 'flex-end' : 'flex-start',
-                marginLeft: currentLanguage === 'ur' ? 0 : 10,
-                marginRight: currentLanguage === 'ur' ? 10 : 0
+                marginLeft: currentLanguage === 'ur' ? 0 : getResponsiveValue(8, 9, 10),
+                marginRight: currentLanguage === 'ur' ? getResponsiveValue(8, 9, 10) : 0
               }
             ]}>
               {t('otpVerification.title')}
@@ -112,9 +121,9 @@ console.log("currentLanguage//////////",currentLanguage);
                 color: colors.text,
                 textAlign: currentLanguage === 'ur' ? 'right' : 'left',
                 alignSelf: currentLanguage === 'ur' ? 'flex-end' : 'flex-start',
-                marginLeft: currentLanguage === 'ur' ? 0 : 10,
-                marginRight: currentLanguage === 'ur' ? 10 : 0,
-                marginBottom: 8
+                marginLeft: currentLanguage === 'ur' ? 0 : getResponsiveValue(8, 9, 10),
+                marginRight: currentLanguage === 'ur' ? getResponsiveValue(8, 9, 10) : 0,
+                marginBottom: getResponsiveValue(6, 7, 8)
               }
             ]}>
               {t('otpVerification.subtitle')} {phoneNumber || 'your phone number'}
@@ -125,9 +134,9 @@ console.log("currentLanguage//////////",currentLanguage);
                 color: colors.text,
                 textAlign: currentLanguage === 'ur' ? 'right' : 'left',
                 alignSelf: currentLanguage === 'ur' ? 'flex-end' : 'flex-start',
-                marginLeft: currentLanguage === 'ur' ? 0 : 10,
-                marginRight: currentLanguage === 'ur' ? 10 : 0,
-                marginBottom: 24
+                marginLeft: currentLanguage === 'ur' ? 0 : getResponsiveValue(8, 9, 10),
+                marginRight: currentLanguage === 'ur' ? getResponsiveValue(8, 9, 10) : 0,
+                marginBottom: getResponsiveValue(20, 22, 24)
               }
             ]}>
               {t('otpVerification.verificationTitle')}
@@ -206,57 +215,57 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: 20,
-    paddingTop: 80,
+    padding: getResponsiveValue(16, 18, 20),
+    paddingTop: getResponsiveValue(60, 70, 80),
   },
   title: {
-    fontSize: 32,
+    fontSize: getResponsiveValue(24, 28, 32),
     fontWeight: '800',
     color: '#111827',
-    marginBottom: 12,
+    marginBottom: getResponsiveValue(10, 11, 12),
     letterSpacing: -0.5,
     fontFamily: 'sans-serif-medium',
-    marginLeft: 10,
+    marginLeft: getResponsiveValue(8, 9, 10),
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: getResponsiveValue(14, 15, 16),
     fontWeight: '500',
     opacity: 0.8,
     fontFamily: 'sans-serif-medium',
    
   },
   verificationTitle: {
-    fontSize: 16,
+    fontSize: getResponsiveValue(14, 15, 16),
     fontWeight: '700',
     fontFamily: 'sans-serif-medium',
     color: '#111827',
-     marginTop: 16,
+     marginTop: getResponsiveValue(14, 15, 16),
   },
   otpContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 40,
-    paddingHorizontal: 10,
+    marginBottom: getResponsiveValue(32, 36, 40),
+    paddingHorizontal: getResponsiveValue(8, 9, 10),
   },
   otpInput: {
-    width: 45,
-    height: 55,
+    width: getResponsiveValue(38, 42, 45),
+    height: getResponsiveValue(48, 52, 55),
     borderWidth: 1,
-    borderRadius: 50,
+    borderRadius: getResponsiveValue(45, 48, 50),
     textAlign: 'center',
-    fontSize: 22,
+    fontSize: getResponsiveValue(18, 20, 22),
     fontWeight: 'bold',
-    marginHorizontal: 5,
+    marginHorizontal: getResponsiveValue(4, 5, 5),
   },
   verifyButton: {
-    padding: 16,
-    borderRadius: 8,
+    padding: getResponsiveValue(14, 15, 16),
+    borderRadius: getResponsiveValue(6, 7, 8),
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: getResponsiveValue(16, 18, 20),
   },
   verifyButtonText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: getResponsiveValue(14, 15, 16),
     fontWeight: '600',
   },
   resendContainer: {
@@ -265,16 +274,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   resendText: {
-    marginRight: 5,
-    fontSize: 14,
+    marginRight: getResponsiveValue(4, 5, 5),
+    fontSize: getResponsiveValue(12, 13, 14),
   },
   resendButton: {
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
     fontWeight: '600',
   },
   errorMessage: {
-    fontSize: 14,
-    marginBottom: 16,
+    fontSize: getResponsiveValue(12, 13, 14),
+    marginBottom: getResponsiveValue(14, 15, 16),
     textAlign: 'center',
   },
 });

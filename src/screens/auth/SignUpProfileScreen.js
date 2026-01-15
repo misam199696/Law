@@ -24,7 +24,16 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import CountryPicker from 'react-native-country-picker-modal';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
+const isSmallScreen = width <= 375; // iPhone SE and similar small screens
+const isMediumScreen = width > 375 && width <= 414; // 6-inch and normal screens
+const isLargeScreen = width > 414; // Larger screens and tablets
+
+const getResponsiveValue = (small, medium, large) => {
+  if (isSmallScreen) return small;
+  if (isMediumScreen) return medium;
+  return large;
+};
 
 /**
  * SignUpScreen Component
@@ -47,7 +56,7 @@ const CustomPicker = ({ label, selectedValue, onValueChange, items, placeholder 
           backgroundColor: colors.card,
           borderColor: colors.border,
           justifyContent: 'space-between',
-          paddingRight: 12
+          paddingRight: getResponsiveValue(10, 11, 12)
         }]}
         onPress={() => setModalVisible(true)}
       >
@@ -73,7 +82,7 @@ const CustomPicker = ({ label, selectedValue, onValueChange, items, placeholder 
             backgroundColor: colors.card
           }]}>
             <TouchableOpacity
-              style={{ padding: 12 }}
+              style={{ padding: getResponsiveValue(10, 11, 12) }}
             >
               <Text style={[styles.pickerButton, { color: colors.primary }]}>Done</Text>
             </TouchableOpacity>
@@ -92,8 +101,8 @@ const CustomPicker = ({ label, selectedValue, onValueChange, items, placeholder 
             itemStyle={[styles.pickerItem, {
               color: colors.text,
               backgroundColor: colors.background,
-              fontSize: 16,
-              height: 50,
+              fontSize: getResponsiveValue(14, 15, 16),
+              height: getResponsiveValue(44, 47, 50),
             }]}
             themeVariant={isDark ? 'dark' : 'light'}
           >
@@ -103,7 +112,7 @@ const CustomPicker = ({ label, selectedValue, onValueChange, items, placeholder 
               color={colors.text}
               style={{
                 backgroundColor: colors.background,
-                fontSize: 16,
+                fontSize: getResponsiveValue(14, 15, 16),
                 opacity: 0.7,
               }}
             />
@@ -116,8 +125,8 @@ const CustomPicker = ({ label, selectedValue, onValueChange, items, placeholder 
                 style={{
                   backgroundColor: isDark ? colors.card : colors.background,
                   color: item.value === selectedValue ? colors.primary : colors.text,
-                  padding: 15,
-                  fontSize: 16,
+                  padding: getResponsiveValue(12, 14, 15),
+                  fontSize: getResponsiveValue(14, 15, 16),
                   borderBottomWidth: 1,
                   borderBottomColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
                 }}
@@ -136,6 +145,7 @@ const SignUpProfileScreen = ({ navigation, route }) => {
   const { currentLanguage, changeLanguage } = useLanguage();
   const [secure, setSecure] = useState(true);
   const isDesktop = width > 600;
+  const isTablet = width > 768;
   const isRTL = i18n.language === 'ur';
   const { accountType } = route.params || {};
 
@@ -359,6 +369,7 @@ const SignUpProfileScreen = ({ navigation, route }) => {
               <View style={[
                 styles.card,
                 isDesktop && styles.cardDesktop,
+                isTablet && styles.cardTablet,
                 {
                   backgroundColor: colors.background,
                   alignItems: currentLanguage === 'en' ? 'flex-start' : 'flex-end'
@@ -702,46 +713,50 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingTop: 10,
+    paddingTop: getResponsiveValue(5, 8, 10),
     paddingBottom: 40,
     alignItems: 'center',
   },
   card: {
-    width: '95%',
-    padding: 24,
+    width: getResponsiveValue('93%', '94%', '95%'),
+    padding: getResponsiveValue(16, 20, 24),
   },
   cardDesktop: {
     maxWidth: 480,
     padding: 40,
   },
+  cardTablet: {
+    maxWidth: 600,
+    padding: 32,
+  },
   title: {
-    fontSize: 18,
+    fontSize: getResponsiveValue(16, 17, 18),
     fontWeight: '800',
     color: '#111827',
-    marginBottom: 4,
+    marginBottom: getResponsiveValue(3, 4, 4),
 
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
     color: '#9CA3AF',
     fontWeight: '500',
-    marginBottom: 32,
+    marginBottom: getResponsiveValue(24, 28, 32),
     opacity: 0.8,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 16,
+    marginBottom: getResponsiveValue(12, 14, 16),
   },
   halfInputWrapper: {
     width: '48%',
   },
   inputGroup: {
-    marginBottom: 16,
+    marginBottom: getResponsiveValue(12, 14, 16),
     width: '100%',
   },
   label: {
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
     fontWeight: '500',
     // marginBottom: 10,
     color: '#F3F4F6',
@@ -756,31 +771,31 @@ const styles = StyleSheet.create({
     backgroundColor: '#1F2937',
     borderWidth: 1,
     borderColor: '#374151',
-    borderRadius: 8,
-    height: 40,
-    paddingHorizontal: 12,
+    borderRadius: getResponsiveValue(6, 7, 8),
+    height: getResponsiveValue(36, 38, 40),
+    paddingHorizontal: getResponsiveValue(10, 11, 12),
     marginTop: 5,
 
   },
   icon: {
-    marginRight: 10,
-    fontSize: 20,
+    marginRight: getResponsiveValue(8, 9, 10),
+    fontSize: getResponsiveValue(18, 19, 20),
     color: '#60A5FA',
   },
   eyeIcon: {
     position: 'absolute',
-    right: 12,
-    top: 12,
+    right: getResponsiveValue(10, 11, 12),
+    top: getResponsiveValue(10, 11, 12),
   },
   hint: {
-    fontSize: 10,
+    fontSize: getResponsiveValue(8, 9, 10),
     color: '#9CA3AF',
     marginTop: 6,
     marginLeft: 2,
   },
   dropdownIcon: {
-    fontSize: 10,
-    marginLeft: 8,
+    fontSize: getResponsiveValue(8, 9, 10),
+    marginLeft: getResponsiveValue(6, 7, 8),
     transform: [{ scaleY: 0.8 }],
   },
   modalOverlay: {
@@ -788,10 +803,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    maxHeight: '60%',
+    maxHeight: getResponsiveValue('55%', '58%', '60%'),
     width: '100%',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: getResponsiveValue(16, 18, 20),
+    borderTopRightRadius: getResponsiveValue(16, 18, 20),
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -2 },
@@ -803,67 +818,67 @@ const styles = StyleSheet.create({
   pickerHeader: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    paddingVertical: 8,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    paddingVertical: getResponsiveValue(6, 7, 8),
+    borderTopLeftRadius: getResponsiveValue(16, 18, 20),
+    borderTopRightRadius: getResponsiveValue(16, 18, 20),
     borderBottomWidth: 1,
     borderBottomColor: '#E5E7EB',
-    marginBottom: 10,
+    marginBottom: getResponsiveValue(8, 9, 10),
   },
   pickerButton: {
-    fontSize: 16,
+    fontSize: getResponsiveValue(14, 15, 16),
     fontWeight: '600',
-    paddingHorizontal: 16,
+    paddingHorizontal: getResponsiveValue(12, 14, 16),
   },
   picker: {
     width: '100%',
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
     color: '#374151',
     textAlign: 'left',
   },
   pickerItem: {
     textAlign: 'left',
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
   },
   termsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 8,
-    marginBottom: 24,
+    marginTop: getResponsiveValue(6, 7, 8),
+    marginBottom: getResponsiveValue(20, 22, 24),
   },
   circularCheckbox: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
+    width: getResponsiveValue(18, 20, 22),
+    height: getResponsiveValue(18, 20, 22),
+    borderRadius: getResponsiveValue(9, 10, 11),
     borderWidth: 2,
     borderColor: '#12B7A6',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
+    marginRight: getResponsiveValue(10, 11, 12),
     backgroundColor: '#FFF',
   },
   circularCheckboxChecked: {
     backgroundColor: '#12B7A6',
   },
   termsText: {
-    fontSize: 12,
+    fontSize: getResponsiveValue(10, 11, 12),
     color: '#4B5563',
     fontWeight: '500',
     flex: 1,
   },
   // Profession Dropdown Styles
   professionInputGroup: {
-    marginBottom: -10,
+    marginBottom: getResponsiveValue(-12, -11, -10),
     width: '100%',
-    borderRadius: 8,
-    marginTop:10
+    borderRadius: getResponsiveValue(6, 7, 8),
+    marginTop: getResponsiveValue(8, 9, 10)
     // padding: 5,
     // borderLeftWidth: 3,
   },
   professionLabel: {
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
     // fontWeight: '600',
-    marginBottom: -10,
+    marginBottom: getResponsiveValue(-12, -11, -10),
     color: '#10B981',
   },
   professionPicker: {
@@ -875,15 +890,15 @@ const styles = StyleSheet.create({
   },
   // Source Dropdown Styles
   sourceInputGroup: {
-    marginBottom: -10,
+    marginBottom: getResponsiveValue(-12, -11, -10),
     width: '100%',
-    borderRadius: 8,
-    padding: 5,
+    borderRadius: getResponsiveValue(6, 7, 8),
+    padding: getResponsiveValue(3, 4, 5),
   },
   sourceLabel: {
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
     // fontWeight: '600',
-    marginBottom: -10,
+    marginBottom: getResponsiveValue(-12, -11, -10),
     color: '#6366F1',
   },
   sourcePicker: {
@@ -900,12 +915,12 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     backgroundColor: '#12B7A6',
-    borderRadius: 12,
-    height: 52,
+    borderRadius: getResponsiveValue(10, 11, 12),
+    height: getResponsiveValue(48, 50, 52),
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 16,
-    marginBottom: 16,
+    marginTop: getResponsiveValue(14, 15, 16),
+    marginBottom: getResponsiveValue(14, 15, 16),
     width: '100%',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -915,7 +930,7 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: getResponsiveValue(14, 15, 16),
     fontWeight: '700',
     letterSpacing: 0.5,
   },
@@ -935,12 +950,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   footerText: {
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
     color: '#1F2937',
     fontWeight: '600',
   },
   footerLink: {
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
     color: '#12B7A6',
     fontWeight: '700',
   },
@@ -951,13 +966,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: '#2d2d2d',
-    borderRadius: 14,
-    paddingVertical: 15,
+    borderRadius: getResponsiveValue(12, 13, 14),
+    paddingVertical: getResponsiveValue(12, 14, 15),
     marginBottom: 16,
   },
   socialButtonText: {
     color: '#080808ff',
-    fontSize: 16,
+    fontSize: getResponsiveValue(14, 15, 16),
     fontWeight: '500',
   },
   socialContainer: {
@@ -1013,22 +1028,22 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     flex: 1,
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
     color: '#F3F4F6',
-    paddingVertical: 8,
+    paddingVertical: getResponsiveValue(6, 7, 8),
     height: '100%',
     paddingLeft: 4,
   },
   input: {
-    height: 50,
+    height: getResponsiveValue(44, 47, 50),
     borderWidth: 1,
     borderColor: '#E5E7EB',
-    borderRadius: 10,
+    borderRadius: getResponsiveValue(8, 9, 10),
     justifyContent: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: getResponsiveValue(10, 11, 12),
   },
   text: {
-    fontSize: 16,
+    fontSize: getResponsiveValue(14, 15, 16),
     color: '#111827',
   },
 });

@@ -22,7 +22,16 @@ import * as Yup from 'yup';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
+const isSmallScreen = width <= 375; // iPhone SE and similar small screens
+const isMediumScreen = width > 375 && width <= 414; // 6-inch and normal screens
+const isLargeScreen = width > 414; // Larger screens and tablets
+
+const getResponsiveValue = (small, medium, large) => {
+  if (isSmallScreen) return small;
+  if (isMediumScreen) return medium;
+  return large;
+};
 
 const SignupCreateAccount = ({ navigation, route }) => {
   const { colors } = useTheme();
@@ -32,6 +41,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
   const [currentLanguage, setCurrentLanguage] = useState('en');
   const [showAccountTypeModal, setShowAccountTypeModal] = useState(false);
   const isDesktop = width > 600;
+  const isTablet = width > 768;
 
   // Load saved language on component mount
   useEffect(() => {
@@ -131,10 +141,10 @@ const SignupCreateAccount = ({ navigation, route }) => {
 
   const dynamicStyles = StyleSheet.create({
     card: {
-      height: 50,
-      width: 164,
-      borderRadius: 12,
-      padding: 10,
+      height: getResponsiveValue(44, 48, 50),
+      width: getResponsiveValue(140, 152, 164),
+      borderRadius: getResponsiveValue(10, 11, 12),
+      padding: getResponsiveValue(8, 9, 10),
       borderWidth: 1,
       borderColor: colors.border,
       backgroundColor: colors.card,
@@ -144,16 +154,16 @@ const SignupCreateAccount = ({ navigation, route }) => {
       backgroundColor: colors.lightBlue
     },
     cardTitle: {
-        fontSize: 12,
+        fontSize: getResponsiveValue(10, 11, 12),
         fontWeight: '700',
         color: isDarkMode === 'dark' ? '#020202ff' : colors.text,
-        marginBottom: 4,
+        marginBottom: getResponsiveValue(3, 4, 4),
     },
     dropdown: {
-        fontSize: 12,
+        fontSize: getResponsiveValue(10, 11, 12),
         fontWeight: '700',
         color: isDarkMode === 'dark' ? '#020202ff' : colors.text,
-        marginBottom: 4,
+        marginBottom: getResponsiveValue(3, 4, 4),
         
     }
   });
@@ -181,6 +191,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
               <View style={[
                 styles.card,
                 isDesktop && styles.cardDesktop,
+                isTablet && styles.cardTablet,
                 { backgroundColor: colors.background }
               ]}>
 
@@ -348,7 +359,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
                 </View>
 
                 {/* Sign In Button */}
-                <View style={{ alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row-reverse', height:60, width:'100%' }}>
+                <View style={{ alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row-reverse', height: getResponsiveValue(54, 57, 60), width:'100%' }}>
                   <TouchableOpacity
                     style={[
                       styles.submitButton,
@@ -379,7 +390,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
                             <View style={[styles.iconContainer, { backgroundColor: type.iconBg }]}>
                               <Icon
                                 name={type.icon}
-                                size={20}
+                                size={getResponsiveValue(16, 18, 20)}
                                 color={type.iconColor}
                               />
                             </View>
@@ -455,7 +466,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
             <View style={[styles.modalHeader, { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }]}>
               <Text style={[styles.modalTitle, { color: colors.text }]}>{t('signup.chooseAccountType')}</Text>
               <TouchableOpacity onPress={() => setShowAccountTypeModal(false)}>
-                <Icon name="close" size={24} color={colors.text} />
+                <Icon name="close" size={getResponsiveValue(20, 22, 24)} color={colors.text} />
               </TouchableOpacity>
             </View>
             
@@ -476,7 +487,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
                 >
                   <View style={[styles.optionContent, { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }]}>
                     <View style={[styles.optionIcon, { backgroundColor: type.iconBg }]}>
-                      <Icon name={type.icon} size={24} color={type.iconColor} />
+                      <Icon name={type.icon} size={getResponsiveValue(20, 22, 24)} color={type.iconColor} />
                     </View>
                     <View style={styles.optionText}>
                       <Text style={[styles.optionTitle, { color: colors.text, alignSelf: currentLanguage === 'en' ?  'flex-start' : 'flex-end' }]}>
@@ -509,7 +520,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   errorText: {
     color: '#EF4444',
-    fontSize: 12,
+    fontSize: getResponsiveValue(10, 11, 12),
     marginTop: 4,
     marginLeft: 4,
   },
@@ -524,45 +535,49 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingTop: 10,
+    paddingTop: getResponsiveValue(5, 8, 10),
     paddingBottom: 40,
     alignItems: 'center',
   },
   card: {
     // borderRadius: 32,
-    width: '97%',
-    padding: 24,
+    width: getResponsiveValue('95%', '96%', '97%'),
+    padding: getResponsiveValue(16, 20, 24),
   },
   cardDesktop: {
     maxWidth: 480,
     padding: 40,
   },
+  cardTablet: {
+    maxWidth: 600,
+    padding: 32,
+  },
   title: {
-    fontSize: 32,
+    fontSize: getResponsiveValue(24, 28, 32),
     fontWeight: '800',
-    marginBottom: 10,
+    marginBottom: getResponsiveValue(8, 9, 10),
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
     fontWeight: '500',
-    marginBottom: 32,
+    marginBottom: getResponsiveValue(24, 28, 32),
   },
   row: {
     justifyContent: 'space-between',
-    marginBottom: 16,
+    marginBottom: getResponsiveValue(12, 14, 16),
   },
   rememberMeRow: {
     width: '100%',
-    marginBottom: 16,
+    marginBottom: getResponsiveValue(12, 14, 16),
   },
   termsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   circularCheckbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    width: getResponsiveValue(18, 20, 22),
+    height: getResponsiveValue(18, 20, 22),
+    borderRadius: getResponsiveValue(9, 10, 11),
     borderWidth: 2,
     borderColor: '#12B7A6',
     alignItems: 'center',
@@ -572,23 +587,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#12B7A6',
   },
   termsText: {
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
   },
   halfInputWrapper: {
     width: '100%',
   },
   label: {
-    fontSize: 12,
+    fontSize: getResponsiveValue(10, 11, 12),
     fontWeight: '700',
     color: '#374151',
-    marginBottom: 8,
+    marginBottom: getResponsiveValue(6, 7, 8),
   },
   required: {
     color: '#EF4444',
   },
   inputStyle: {
     flex: 1,
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
     paddingLeft: 0,
     paddingRight: 0,
     margin: 0,
@@ -602,19 +617,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderWidth: 1,
     borderRadius: 10,
-    height: 50,
-    paddingHorizontal: 12,
+    height: getResponsiveValue(44, 48, 50),
+    paddingHorizontal: getResponsiveValue(10, 11, 12),
     marginBottom: 8,
   },
   icon: {
-    marginRight: 8,
-    fontSize: 18,
+    marginRight: getResponsiveValue(6, 7, 8),
+    fontSize: getResponsiveValue(16, 17, 18),
     color: '#9CA3AF',
   },
   eyeIcon: {
     position: 'absolute',
-    right: 12,
-    top: 12,
+    right: getResponsiveValue(10, 11, 12),
+    top: getResponsiveValue(10, 11, 12),
   },
   termsContainer: {
     flexDirection: 'row',
@@ -636,7 +651,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#12B7A6',
   },
   termsText: {
-    fontSize: 13,
+    fontSize: getResponsiveValue(11, 12, 13),
     fontWeight: '500',
     flex: 1,
   },
@@ -646,7 +661,7 @@ const styles = StyleSheet.create({
   submitButton: {
     backgroundColor: '#12B7A6',
     borderRadius: 12,
-    height: 50,
+    height: getResponsiveValue(46, 48, 50),
     width: '50%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -658,7 +673,7 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: getResponsiveValue(14, 15, 16),
     fontWeight: '600',
   },
   footer: {
@@ -666,22 +681,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   footerText: {
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
     fontWeight: '400',
   },
   footerLink: {
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
     color: '#12B7A6',
     fontWeight: '700',
   },
   socialContainer: {
     width: '100%',
-    marginTop: 6,
+    marginTop: getResponsiveValue(4, 5, 6),
     marginBottom: 16,
   },
   socialButton: {
     width: '100%',
-    height: 40,
+    height: getResponsiveValue(36, 38, 40),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -693,42 +708,42 @@ const styles = StyleSheet.create({
   },
   socialButtonText: {
     color: '#1F2937',
-    fontSize: 16,
+    fontSize: getResponsiveValue(14, 15, 16),
     fontWeight: '500',
     marginLeft: 12,
   },
   dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 30,
+    marginVertical: getResponsiveValue(24, 27, 30),
   },
   dividerLine: {
     flex: 1,
     height: 1,
   },
   dividerText: {
-    paddingHorizontal: 16,
-    fontSize: 14,
+    paddingHorizontal: getResponsiveValue(12, 14, 16),
+    fontSize: getResponsiveValue(12, 13, 14),
     fontWeight: '500',
   },
 
   cardsContainer: {
-    gap: 16,
+    gap: getResponsiveValue(12, 14, 16),
   },
 
   cardContent: {
     alignItems: 'center',
   },
   iconContainer: {
-    width: 30,
-    height: 30,
-    borderRadius: 12,
+    width: getResponsiveValue(24, 27, 30),
+    height: getResponsiveValue(24, 27, 30),
+    borderRadius: getResponsiveValue(10, 11, 12),
     justifyContent: 'center',
     alignItems: 'center',
 
   },
   textContainer: {
-    paddingHorizontal: 10,
+    paddingHorizontal: getResponsiveValue(8, 9, 10),
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -740,10 +755,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContent: {
-    width: '90%',
-    maxHeight: '80%',
-    borderRadius: 20,
-    padding: 20,
+    width: getResponsiveValue('85%', '88%', '90%'),
+    maxHeight: getResponsiveValue('75%', '78%', '80%'),
+    borderRadius: getResponsiveValue(16, 18, 20),
+    padding: getResponsiveValue(16, 18, 20),
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
@@ -753,56 +768,56 @@ const styles = StyleSheet.create({
   modalHeader: {
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: getResponsiveValue(16, 18, 20),
   },
   modalTitle: {
-    fontSize: 16,
+    fontSize: getResponsiveValue(14, 15, 16),
     fontWeight: '700',
   },
   modalBody: {
-    gap: 12,
+    gap: getResponsiveValue(10, 11, 12),
   },
   accountTypeOption: {
-    borderRadius: 12,
+    borderRadius: getResponsiveValue(10, 11, 12),
     borderWidth: 1,
-    padding: 16,
+    padding: getResponsiveValue(12, 14, 16),
   },
   optionContent: {
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   optionIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
+    width: getResponsiveValue(40, 44, 48),
+    height: getResponsiveValue(40, 44, 48),
+    borderRadius: getResponsiveValue(10, 11, 12),
     justifyContent: 'center',
     alignItems: 'center',
   },
   optionText: {
     flex: 1,
-    paddingHorizontal: 16,
+    paddingHorizontal: getResponsiveValue(12, 14, 16),
   },
   optionTitle: {
-    fontSize: 16,
+    fontSize: getResponsiveValue(14, 15, 16),
     fontWeight: '700',
-    marginBottom: 4,
+    marginBottom: getResponsiveValue(3, 4, 4),
   },
   optionDescription: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: getResponsiveValue(12, 13, 14),
+    lineHeight: getResponsiveValue(16, 18, 20),
   },
   radioButton: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
+    width: getResponsiveValue(18, 20, 20),
+    height: getResponsiveValue(18, 20, 20),
+    borderRadius: getResponsiveValue(9, 10, 10),
     borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
   radioButtonSelected: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+    width: getResponsiveValue(8, 9, 10),
+    height: getResponsiveValue(8, 9, 10),
+    borderRadius: getResponsiveValue(4, 5, 5),
   },
 });
 
