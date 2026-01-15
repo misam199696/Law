@@ -16,7 +16,16 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { ThemeContext } from '../../context/ThemeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
+const isSmallScreen = width <= 375; // iPhone SE and similar small screens
+const isMediumScreen = width > 375 && width <= 414; // 6-inch and normal screens
+const isLargeScreen = width > 414; // Larger screens and tablets
+
+const getResponsiveValue = (small, medium, large) => {
+  if (isSmallScreen) return small;
+  if (isMediumScreen) return medium;
+  return large;
+};
 
 const SignupTypeScreen = () => {
     const navigation = useNavigation();
@@ -83,46 +92,46 @@ const SignupTypeScreen = () => {
         },
         scrollContainer: {
             flexGrow: 1,
-            paddingBottom: 30,
+            paddingBottom: getResponsiveValue(20, 25, 30),
         },
         logoContainer: {
             alignItems: 'center',
-            padding: 30,
-            paddingTop: 50,
-            paddingBottom: 20,
+            padding: getResponsiveValue(20, 25, 30),
+            paddingTop: getResponsiveValue(30, 40, 50),
+            paddingBottom: getResponsiveValue(15, 18, 20),
         },
         appTitle: {
-            fontSize: 20,
+            fontSize: getResponsiveValue(16, 18, 20),
             fontWeight: '700',
             color: colors.text,
             textAlign: 'center',
-            marginBottom: 8,
+            marginBottom: getResponsiveValue(6, 7, 8),
         },
         appSubtitle: {
-            fontSize: 12,
+            fontSize: getResponsiveValue(10, 11, 12),
             color: colors.secondary,
             textAlign: 'center',
-            lineHeight: 20,
-            paddingHorizontal:10
+            lineHeight: getResponsiveValue(16, 18, 20),
+            paddingHorizontal: getResponsiveValue(8, 9, 10)
         },
         serviceButtonsContainer: {
             flexDirection: 'row',
             justifyContent: 'space-between',
-            paddingHorizontal: 15,
-            marginBottom: 30,
+            paddingHorizontal: getResponsiveValue(10, 12, 15),
+            marginBottom: getResponsiveValue(20, 25, 30),
         },
         serviceButton: {
             backgroundColor: colors.lightBlue,
-            borderRadius: 10,
+            borderRadius: getResponsiveValue(8, 9, 10),
             alignItems: 'center',
             width: '32%',
             borderWidth: 1,
             borderColor: colors.border,
             justifyContent: 'space-evenly',
-            paddingVertical: 1
+            paddingVertical: getResponsiveValue(1, 1, 1)
         },
         serviceButtonText: {
-            fontSize: 9,
+            fontSize: getResponsiveValue(7, 8, 9),
             fontWeight:'500',
             marginLeft: 0,
             color: colors.primary,
@@ -130,28 +139,28 @@ const SignupTypeScreen = () => {
         },
         section: {
             backgroundColor: colors.lightBlue,
-            borderRadius: 20,
-            padding: 20,    
+            borderRadius: getResponsiveValue(16, 18, 20),
+            padding: getResponsiveValue(16, 18, 20),    
             // marginBottom: 20,
             borderWidth: 1,
             borderColor: colors.border,
             
         },
         sectionTitle: {
-            fontSize: 20,
+            fontSize: getResponsiveValue(16, 18, 20),
             fontWeight: '700',
             color: colors.text,
-            marginBottom: 8,
+            marginBottom: getResponsiveValue(6, 7, 8),
         },
         sectionSubtitle: {
-            fontSize: 14,
+            fontSize: getResponsiveValue(12, 13, 14),
             color: colors.secondary,
-            marginBottom: 20,
-            lineHeight: 20,
+            marginBottom: getResponsiveValue(16, 18, 20),
+            lineHeight: getResponsiveValue(16, 18, 20),
         },
         card: {
-            borderRadius: 12,
-            padding: 12,
+            borderRadius: getResponsiveValue(10, 11, 12),
+            padding: getResponsiveValue(10, 11, 12),
             borderWidth: 1,
             borderColor: colors.border,
             backgroundColor:   colors.card,
@@ -161,35 +170,35 @@ const SignupTypeScreen = () => {
             backgroundColor: colors.lightBlue
         },
         cardTitle: {
-            fontSize: 14,
+            fontSize: getResponsiveValue(12, 13, 14),
             fontWeight: '700',
             color: isDarkMode === 'dark' ? '#020202ff' : colors.text,
-            marginBottom: 4,
+            marginBottom: getResponsiveValue(3, 4, 4),
         },
         cardDescription: {
-            fontSize: 12,
+            fontSize: getResponsiveValue(10, 11, 12),
             color: isDarkMode === 'dark' ? colors.secondary : colors.secondary,
-            lineHeight: 20,
+            lineHeight: getResponsiveValue(16, 18, 20),
         },
         radioButton: {
-            width: 22,
-            height: 22,
-            borderRadius: 12,
+            width: getResponsiveValue(18, 20, 22),
+            height: getResponsiveValue(18, 20, 22),
+            borderRadius: getResponsiveValue(9, 10, 12),
             borderWidth: 2,
             borderColor: colors.border,
             justifyContent: 'center',
             alignItems: 'center',
         },
         footer: {
-            padding: 20,
-            paddingBottom: 30,
+            padding: getResponsiveValue(16, 18, 20),
+            paddingBottom: getResponsiveValue(20, 25, 30),
             backgroundColor: colors.card,
             borderTopWidth: 1,
             borderTopColor: colors.border,
         },
         continueButton: {
-            height: 56,
-            borderRadius: 12,
+            height: getResponsiveValue(48, 52, 56),
+            borderRadius: getResponsiveValue(10, 11, 12),
             justifyContent: 'center',
             alignItems: 'center',
             backgroundColor: colors.primary,
@@ -198,7 +207,7 @@ const SignupTypeScreen = () => {
             shadowOpacity: 0.3,
             shadowRadius: 8,
             elevation: 5,
-            marginTop: 50,
+            marginTop: getResponsiveValue(30, 40, 50),
             
         },
         continueButtonDisabled: {
@@ -207,7 +216,7 @@ const SignupTypeScreen = () => {
         },
         continueButtonText: {
             color: 'white',
-            fontSize: 16,
+            fontSize: getResponsiveValue(14, 15, 16),
             fontWeight: '600',
         },
     });
@@ -230,7 +239,7 @@ const SignupTypeScreen = () => {
                     <View style={dynamicStyles.logoContainer}>
                         <View style={[styles.logoCircle, { backgroundColor: isDarkMode ? '#1E2E3D' : '#E6F7F5' }]}>
                             <Image
-                                source={require('../../assets/images/Icon.png')}
+                                source={require('../../assets/images/icon.png')}
                                 style={[styles.logo,]}
                                 resizeMode="contain"
                             />
@@ -244,19 +253,19 @@ const SignupTypeScreen = () => {
                         <View style={[dynamicStyles.serviceButton, [
                             { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }
                         ]]}>
-                            <Icon name="help-outline" size={15} color={colors.primary} />
+                            <Icon name="help-outline" size={getResponsiveValue(12, 14, 15)} color={colors.primary} />
                             <Text style={[dynamicStyles.serviceButtonText, { color: colors.text }]}>{t('signup.aiLegalAnswers')}</Text>
                         </View>
                         <View style={[dynamicStyles.serviceButton, [
                             { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }
                         ]]}>
-                            <Icon name="chat-bubble-outline" size={15} color={colors.primary} />
+                            <Icon name="chat-bubble-outline" size={getResponsiveValue(12, 14, 15)} color={colors.primary} />
                             <Text style={[dynamicStyles.serviceButtonText, { color: colors.text }]}>{t('signup.legalConsultations')}</Text>
                         </View>
                         <View style={[dynamicStyles.serviceButton, [
                             { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }
                         ]]}>
-                            <Icon name="search" size={15} color={colors.primary} />
+                            <Icon name="search" size={getResponsiveValue(12, 14, 15)} color={colors.primary} />
                             <Text style={[dynamicStyles.serviceButtonText, { color: colors.text }]}>{t('signup.legalResearch')}</Text>
                         </View>
                     </View>
@@ -281,7 +290,7 @@ const SignupTypeScreen = () => {
                                         <View style={[styles.iconContainer, { backgroundColor: type.iconBg }]}>
                                             <Icon
                                                 name={type.icon}
-                                                size={20}
+                                                size={getResponsiveValue(16, 18, 20)}
                                                 color={type.iconColor}
                                             />
                                         </View>
@@ -310,7 +319,7 @@ const SignupTypeScreen = () => {
                                 </TouchableOpacity>
                             ))}
                         </View>
-                        <View style={{paddingBottom:100}} >
+                        <View style={{paddingBottom: getResponsiveValue(80, 90, 100)}} >
                          <TouchableOpacity
                         style={[
                             dynamicStyles.continueButton,
@@ -333,21 +342,21 @@ const SignupTypeScreen = () => {
 const styles = StyleSheet.create({
     // Static styles that don't need theme awareness
     logoCircle: {
-        width: 40,
-        height: 40,
-        borderRadius: 40,
+        width: getResponsiveValue(32, 36, 40),
+        height: getResponsiveValue(32, 36, 40),
+        borderRadius: getResponsiveValue(32, 36, 40),
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 24,
+        marginBottom: getResponsiveValue(18, 21, 24),
     },
     logo: {
-        width: 40,
-        height: 40,
+        width: getResponsiveValue(32, 36, 40),
+        height: getResponsiveValue(32, 36, 40),
         resizeMode: 'contain',
-        borderRadius: 10,
+        borderRadius: getResponsiveValue(8, 9, 10),
     },
     cardsContainer: {
-        gap: 16,
+        gap: getResponsiveValue(12, 14, 16),
         
     },
     cardContent: {
@@ -355,15 +364,15 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     iconContainer: {
-        width: 34,
-        height: 34,
-        borderRadius: 12,
+        width: getResponsiveValue(28, 31, 34),
+        height: getResponsiveValue(28, 31, 34),
+        borderRadius: getResponsiveValue(10, 11, 12),
         justifyContent: 'center',
         alignItems: 'center',
         
     },
     textContainer: {
-      paddingHorizontal:10
+      paddingHorizontal: getResponsiveValue(8, 9, 10)
     },
     // radioButtonSelected: {
     //     width: 12,

@@ -19,7 +19,16 @@ import ThemeToggleButton from '../../components/ThemeToggleButton';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
+const isSmallScreen = width <= 375; // iPhone SE and similar small screens
+const isMediumScreen = width > 375 && width <= 414; // 6-inch and normal screens
+const isLargeScreen = width > 414; // Larger screens and tablets
+
+const getResponsiveValue = (small, medium, large) => {
+  if (isSmallScreen) return small;
+  if (isMediumScreen) return medium;
+  return large;
+};
 
 const LoginScreen = ({ navigation }) => {
   const { colors } = useTheme();
@@ -27,6 +36,7 @@ const LoginScreen = ({ navigation }) => {
   const [secure, setSecure] = useState(true);
   const [currentLanguage, setCurrentLanguage] = useState('en');
   const isDesktop = width > 600;
+  const isTablet = width > 768;
 
   // Load saved language on component mount
   useEffect(() => {
@@ -125,6 +135,7 @@ console.log();
               <View style={[
                 styles.card,
                 isDesktop && styles.cardDesktop,
+                isTablet && styles.cardTablet,
                 { backgroundColor: colors.background }
               ]}>
                 <View style={[styles.headerContainer ,{ flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }]}>
@@ -328,8 +339,8 @@ console.log();
                   <TouchableOpacity
                     onPress={() => navigation.navigate('ForgotPassword')}
                     style={{
-                      marginStart: currentLanguage === 'en' ? -110 : 0,
-                      marginEnd: currentLanguage === 'en' ? 0 : -200
+                      marginStart: currentLanguage === 'en' ? getResponsiveValue(-80, -95, -110) : 0,
+                      marginEnd: currentLanguage === 'en' ? 0 : getResponsiveValue(-150, -175, -200)
                     }}
                   >
                     <Text 
@@ -408,8 +419,8 @@ console.log();
 
 const styles = StyleSheet.create({
   languageButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: getResponsiveValue(8, 10, 12),
+    paddingVertical: getResponsiveValue(4, 5, 6),
     borderRadius: 16,
     backgroundColor: 'transparent',
     borderWidth: 1,
@@ -420,12 +431,12 @@ const styles = StyleSheet.create({
     borderColor: '#3B82F6',
   },
   languageButtonText: {
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
     fontWeight: '500',
   },
   errorText: {
     color: '#EF4444',
-    fontSize: 12,
+    fontSize: getResponsiveValue(10, 11, 12),
     marginTop: 4,
     marginLeft: 4,
   },
@@ -438,7 +449,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: getResponsiveValue(6, 7, 8),
   },
   themeButton: {
     marginLeft: 10,
@@ -448,37 +459,40 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingTop: 10,
+    paddingTop: getResponsiveValue(5, 8, 10),
     paddingBottom: 40,
     alignItems: 'center',
   },
   card: {
-    // borderRadius: 32,
-    width: '95%',
-    padding: 24,
+    width: getResponsiveValue('92%', '94%', '95%'),
+    padding: getResponsiveValue(16, 20, 24),
   },
   cardDesktop: {
     maxWidth: 480,
     padding: 40,
   },
+  cardTablet: {
+    maxWidth: 600,
+    padding: 32,
+  },
   title: {
-    fontSize: 32,
+    fontSize: getResponsiveValue(24, 28, 32),
     fontWeight: '800',
     marginBottom: 4,
     letterSpacing: -0.5,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
     fontWeight: '500',
-    marginBottom: 32,
+    marginBottom: getResponsiveValue(20, 24, 32),
   },
   row: {
     justifyContent: 'space-between',
-    marginBottom: 16,
+    marginBottom: getResponsiveValue(12, 14, 16),
   },
   rememberMeRow: {
     width: '100%',
-    marginBottom: 16,
+    marginBottom: getResponsiveValue(12, 14, 16),
   },
   termsContainer: {
     flexDirection: 'row',
@@ -507,17 +521,17 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   label: {
-    fontSize: 12,
+    fontSize: getResponsiveValue(10, 11, 12),
     fontWeight: '700',
     color: '#374151',
-    marginBottom: 8,
+    marginBottom: getResponsiveValue(6, 7, 8),
   },
   required: {
     color: '#EF4444',
   },
   inputStyle: {
     flex: 1,
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
     paddingLeft: 0,
     paddingRight: 0,
     margin: 0,
@@ -531,13 +545,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderWidth: 1,
     borderRadius: 10,
-    height: 40,
-    paddingHorizontal: 12,
+    height: getResponsiveValue(36, 40, 44),
+    paddingHorizontal: getResponsiveValue(10, 12, 12),
     marginBottom: 8,
   },
   icon: {
-    marginRight: 8,
-    fontSize: 18,
+    marginRight: getResponsiveValue(6, 7, 8),
+    fontSize: getResponsiveValue(16, 17, 18),
     color: '#9CA3AF',
   },
   eyeIcon: {
@@ -565,19 +579,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#12B7A6',
   },
   termsText: {
-    fontSize: 13,
+    fontSize: getResponsiveValue(11, 12, 14),
     fontWeight: '500',
     flex: 1,
   },
   forgotPasswordText: {
     fontWeight: '600',
-    fontSize: 13,
+    fontSize: getResponsiveValue(11, 12, 13),
     marginTop: 8,
   },
   submitButton: {
     backgroundColor: '#12B7A6',
     borderRadius: 12,
-    height: 52,
+    height: getResponsiveValue(48, 50, 52),
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 12,
@@ -588,7 +602,7 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: getResponsiveValue(14, 15, 16),
     fontWeight: '600',
   },
   footer: {
@@ -596,22 +610,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   footerText: {
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
     fontWeight: '400',
   },
   footerLink: {
-    fontSize: 14,
+    fontSize: getResponsiveValue(12, 13, 14),
     color: '#12B7A6',
     fontWeight: '700',
   },
   socialContainer: {
     width: '100%',
-    marginTop: 24,
+    marginTop: getResponsiveValue(20, 22, 24),
     marginBottom: 16,
   },
   socialButton: {
     width: '100%',
-    height: 40,
+    height: getResponsiveValue(36, 40, 44),
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -623,22 +637,22 @@ const styles = StyleSheet.create({
   },
   socialButtonText: {
     color: '#1F2937',
-    fontSize: 16,
+    fontSize: getResponsiveValue(14, 15, 16),
     fontWeight: '500',
     marginLeft: 12,
   },
   dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: getResponsiveValue(16, 18, 20),
   },
   dividerLine: {
     flex: 1,
     height: 1,
   },
   dividerText: {
-    paddingHorizontal: 16,
-    fontSize: 14,
+    paddingHorizontal: getResponsiveValue(12, 14, 16),
+    fontSize: getResponsiveValue(12, 13, 14),
     fontWeight: '500',
   }
 });
