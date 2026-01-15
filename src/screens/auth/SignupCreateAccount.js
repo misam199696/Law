@@ -70,7 +70,8 @@ const SignupCreateAccount = ({ navigation, route }) => {
       // In a real app, you would verify credentials here first
       // Then navigate to OTP verification
       navigation.navigate('OTPVerification', {
-        phoneNumber: values.email // Using email as phone number for demo
+        phoneNumber: values.email, // Using email as phone number for demo
+        accountType: selectedType
       });
     } catch (error) {
       console.error('Login error:', error);
@@ -340,7 +341,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
                       textAlign: currentLanguage === 'en' ? 'left' : 'right',
                       writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
                     }]}>
-                      I agree to privacyPolicy & Terms *
+                      {t('signup.agreeToTerms')} <Text style={[styles.linkText, { color: colors.primary }]}>{t('signup.privacyPolicyAndTerms')}</Text> *
                     </Text>
                   </TouchableOpacity>
 
@@ -431,8 +432,8 @@ const SignupCreateAccount = ({ navigation, route }) => {
                 {/* Sign Up Link */}
                 <View style={styles.footer}>
                   <Text style={[styles.footerText, { color: colors.text }]}>{t('dontHaveAccount')} </Text>
-                  <TouchableOpacity onPress={() => navigation.navigate('SignupProfile')}>
-                    <Text style={[styles.footerLink, { color: colors.primary }]}>{t('signUp')}</Text>
+                  <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                    <Text style={[styles.footerLink, { color: colors.primary }]}>{t('signIn')}</Text>
                   </TouchableOpacity>
 
                 </View>
@@ -638,6 +639,9 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '500',
     flex: 1,
+  },
+  linkText: {
+    textDecorationLine: 'underline',
   },
   submitButton: {
     backgroundColor: '#12B7A6',

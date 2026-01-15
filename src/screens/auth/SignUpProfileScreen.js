@@ -130,13 +130,42 @@ const CustomPicker = ({ label, selectedValue, onValueChange, items, placeholder 
   );
 };
 
-const SignUpProfileScreen = ({ navigation }) => {
+const SignUpProfileScreen = ({ navigation, route }) => {
   const { colors } = useTheme();
   const { t, i18n } = useTranslation();
   const { currentLanguage, changeLanguage } = useLanguage();
   const [secure, setSecure] = useState(true);
   const isDesktop = width > 600;
   const isRTL = i18n.language === 'ur';
+  const { accountType } = route.params || {};
+
+  // Get title based on account type
+  const getAccountTitle = () => {
+    switch (accountType) {
+      case 'public':
+        return t('signup.publicUserTitle');
+      case 'individual':
+        return t('signup.individualUserTitle');
+      case 'lawFirm':
+        return t('signup.lawFirmTitle');
+      default:
+        return t('signup.title');
+    }
+  };
+
+  // Get subtitle based on account type
+  const getAccountSubtitle = () => {
+    switch (accountType) {
+      case 'public':
+        return t('signup.publicUserSubtitle');
+      case 'individual':
+        return t('signup.individualUserSubtitle');
+      case 'lawFirm':
+        return t('signup.lawFirmSubtitle');
+      default:
+        return t('signup.subtitle');
+    }
+  };
 
   // Load saved language on component mount
   useEffect(() => {
@@ -299,49 +328,12 @@ const SignUpProfileScreen = ({ navigation }) => {
 
   const insets = useSafeAreaInsets();
 
-  // Add language selector UI similar to LoginScreen
-  const renderLanguageSelector = () => (
-    <View style={[styles.languageContainer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-      <TouchableOpacity
-        onPress={() => handleLanguageChange('en')}
-        style={[
-          styles.languageButton,
-          currentLanguage === 'en' && styles.activeLanguageButton,
-          { marginRight: isRTL ? 0 : 10, marginLeft: isRTL ? 10 : 0 }
-        ]}
-      >
-        <Text style={[
-          styles.languageText,
-          currentLanguage === 'en' && styles.activeLanguageText,
-          { color: colors.text }
-        ]}>
-          EN
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => handleLanguageChange('ur')}
-        style={[
-          styles.languageButton,
-          currentLanguage === 'ur' && styles.activeLanguageButton
-        ]}
-      >
-        <Text style={[
-          styles.languageText,
-          currentLanguage === 'ur' && styles.activeLanguageText,
-          { color: colors.text }
-        ]}>
-          اردو
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
-
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Add language selector at the top */}
       <View style={styles.headerContainer}>
         <View style={{ flex: 1 }} />
-        {renderLanguageSelector()}
+       
       </View>
       <Formik
         initialValues={initialValues}
@@ -381,7 +373,7 @@ const SignUpProfileScreen = ({ navigation }) => {
                     textAlign: currentLanguage === 'en' ? 'left' : 'left',
                     width: '100%',
                     writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
-                  }]}>{t('signup.title')}</Text>
+                  }]}>{getAccountTitle()}</Text>
                   <Text style={[styles.subtitle, {
                     color: colors.text,
                     opacity: 0.8,
@@ -389,7 +381,7 @@ const SignUpProfileScreen = ({ navigation }) => {
                     width: '100%',
                     writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
                   }]}>
-                    {t('signup.subtitle')}
+                    {getAccountSubtitle()}
                   </Text>
                 </View>
 
@@ -723,11 +715,11 @@ const styles = StyleSheet.create({
     padding: 40,
   },
   title: {
-    fontSize: 32,
+    fontSize: 18,
     fontWeight: '800',
     color: '#111827',
     marginBottom: 4,
-    letterSpacing: -0.5,
+
   },
   subtitle: {
     fontSize: 14,

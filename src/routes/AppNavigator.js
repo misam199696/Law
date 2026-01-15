@@ -76,7 +76,7 @@ const AppNavigator = () => {
           component={SignUpProfileScreen}
           options={{ 
             title: 'Create Account',
-            headerShown: true,
+            headerShown: false,
             headerBackTitle: 'Back'
           }}
         />
