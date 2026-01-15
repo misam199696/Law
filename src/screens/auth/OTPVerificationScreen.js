@@ -35,7 +35,7 @@ const OTPVerificationScreen = ({ navigation, route }) => {
 
   const handleVerifyOTP = () => {
     // TODO: Implement OTP verification logic
-    navigation.navigate('SignupProfile');
+    navigation.navigate('SignupProfile', { accountType: route.params?.accountType });
     
   };
 
@@ -80,7 +80,7 @@ console.log("currentLanguage//////////",currentLanguage);
     if (isOtpComplete) {
       // Add a small delay to show the completed OTP before navigation
       const timer = setTimeout(() => {
-         navigation.navigate('SignupProfile');
+         navigation.navigate('SignupProfile', { accountType: route.params?.accountType });
       }, 500);
       
       return () => clearTimeout(timer);
