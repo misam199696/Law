@@ -85,7 +85,7 @@ const AppNavigator = () => {
           name="ForgotPassword" 
           component={ForgetPasswordScreen}
           options={{ 
-            title: 'Forget Password',
+            title: 'Forgot Password',
             headerShown: false,
             headerBackTitle: 'Back'
           }}

@@ -112,8 +112,8 @@
   "selectAccountType": "Select Account Type",
   "orContinueWith": "or continue with",
   "forgetPassword": {
-    "title": "Forget Password",
-    "subtitle": "Enter your email address and we'll send you a link to reset your password",
+    "title": "Forgot Password",
+    "subtitle": "Provide your account's email for which you want to reset the password",
     "sendResetLink": "Send Reset Link",
     "sending": "Sending...",
     "success": "Email Sent",
