@@ -43,6 +43,7 @@
     "firstName": "First Name",
     "lastName": "Last Name",
     "email": "Email",
+    "emailPlaceholder": "Enter your email address",
     "phoneNumber": "Phone Number",
     "firmName": "Firm Name",
     "profession": "Profession",
@@ -109,5 +110,21 @@
   },
   "accountType": "Account Type",
   "selectAccountType": "Select Account Type",
-  "orContinueWith": "or continue with"
+  "orContinueWith": "or continue with",
+  "forgetPassword": {
+    "title": "Forget Password",
+    "subtitle": "Enter your email address and we'll send you a link to reset your password",
+    "sendResetLink": "Send Reset Link",
+    "sending": "Sending...",
+    "success": "Email Sent",
+    "resetEmailSent": "Password reset link has been sent to your email address",
+    "failedToSend": "Failed to send reset email. Please try again.",
+    "rememberPassword": "Remember your password?"
+  },
+  "common": {
+    "back": "Back",
+    "ok": "OK",
+    "error": "Error",
+    "signIn": "Sign In"
+  }
 }
