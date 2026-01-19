@@ -49,11 +49,20 @@
     "firstName": "پہلا نام",
     "lastName": "آخری نام",
     "email": "ای میل",
+    "emailPlaceholder": "اپنا ای میل ایڈریس درج کریں",
     "phoneNumber": "فون نمبر",
     "firmName": "فرم کا نام",
     "profession": "پیشہ",
     "password": "پاس ورڈ",
-    "confirmPassword": "پاس ورڈ کی تصدیق کریں"
+    "confirmPassword": "پاس ورڈ کی تصدیق کریں",
+    "errors": {
+      "required": "یہ فیلڈ درکار ہے",
+      "emailRequired": "ای میل درکار ہے",
+      "invalidEmail": "براہ کرم درست ای میل ایڈریس درج کریں",
+      "passwordMismatch": "پاس ورڈ مماثل نہیں ہیں",
+      "invalidPhone": "براہ کرم درست فون نمبر درج کریں",
+      "minLength": "کم از کم {{min}} حروف ہونے چاہیئں"
+    }
   },
   "signup": {
     "selectAccountType": "اپنے اکاؤنٹ کی قسم منتخب کریں",
@@ -93,5 +102,21 @@
   },
   "accountType": "اکاؤنٹ کی قسم",
   "selectAccountType": "اکاؤنٹ کی قسم منتخب کریں",
-  "orContinueWith": "یا اس کے ساتھ جاری رکھیں"
+  "orContinueWith": "یا اس کے ساتھ جاری رکھیں",
+  "forgetPassword": {
+    "title": "پاسورڈ بھول گئے؟",
+    "subtitle": "اپنا ای میل ایڈریس درج کریں اور ہم آپ کو پاسورڈ ری سیٹ کرنے کے لیے ایک لنک بھیجیں گے",
+    "sendResetLink": "ری سیٹ لنک بھیجیں",
+    "sending": "بھیجا جا رہا ہے...",
+    "success": "ای میل بھیجا گیا",
+    "resetEmailSent": "پاسورڈ ری سیٹ لنک آپ کے ای میل ایڈریس پر بھیج دیا گیا ہے",
+    "failedToSend": "ری سیٹ ای میل بھیجنے میں ناکام۔ براہ کرم دوبارہ کوشش کریں۔",
+    "rememberPassword": "اپنا پاس ورڈ یاد ہے؟"
+  },
+  "common": {
+    "back": "پیچھے",
+    "ok": "ٹھیک ہے",
+    "error": "خرابی",
+    "signIn": "سائن ان کریں"
+  }
 }
