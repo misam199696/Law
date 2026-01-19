@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
 import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
-  TextInput,
+  ScrollView,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
-  Dimensions,
+  TouchableOpacity,
+  TextInput,
   Alert,
-  ScrollView,
+  useColorScheme,
+  Dimensions
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../context/ThemeContext';
-import { useTranslation } from 'react-i18next';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useLanguage } from '../../context/LanguageContext';
-import ThemeToggleButton from '../../components/ThemeToggleButton';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { useLanguage } from '../../context/LanguageContext';
+import ThemeToggleButton from '../../components/ThemeToggleButton';
 
 const { width, height } = Dimensions.get('window');
 const isSmallScreen = width <= 375; // iPhone SE and similar small screens
@@ -64,36 +64,45 @@ const ForgetPasswordScreen = ({ navigation }) => {
   }, [changeLanguage]);
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    setIsLoading(true);
-    setSubmitting(true);
-
     try {
+      setIsLoading(true);
+      setSubmitting(true);
+      
       // TODO: Implement actual API call for password reset
       console.log('Password reset requested for:', values.email);
       
       // Simulate API call
-      setTimeout(() => {
-        setIsLoading(false);
-        setSubmitting(false);
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      setIsLoading(false);
+      setSubmitting(false);
+      
+      // Show success alert with proper timing
+      requestAnimationFrame(() => {
         Alert.alert(
           t('forgetPassword.success'),
           t('forgetPassword.resetEmailSent'),
           [
             {
               text: t('common.ok'),
-              onPress: () => navigation.navigate('Login'),
+              onPress: () => navigation.navigate('NewCredential'),
             },
           ]
         );
-      }, 2000);
+      });
+      
     } catch (error) {
       setIsLoading(false);
       setSubmitting(false);
-      Alert.alert(
-        t('common.error'),
-        t('forgetPassword.failedToSend'),
-        [{ text: t('common.ok'), style: 'cancel' }]
-      );
+      
+      // Show error alert with proper timing
+      requestAnimationFrame(() => {
+        Alert.alert(
+          t('common.error'),
+          t('forgetPassword.failedToSend'),
+          [{ text: t('common.ok'), style: 'cancel' }]
+        );
+      });
     }
   };
 
