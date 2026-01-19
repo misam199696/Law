@@ -36,12 +36,13 @@ const getResponsiveValue = (small, medium, large) => {
 };
 
 /**
- * SignUpScreen Component
- * A comprehensive registration screen for legal advocates with professional profile fields.
+ * Custom Dropdown Component
+ * A reusable dropdown component without external dependencies
  */
-const CustomPicker = ({ label, selectedValue, onValueChange, items, placeholder }) => {
-  const { colors, isDark } = useTheme();
-  const [modalVisible, setModalVisible] = useState(false);
+const CustomDropdown = ({ label, selectedValue, onValueChange, items, placeholder, error }) => {
+  const { colors } = useTheme();
+  const [showDropdown, setShowDropdown] = useState(false);
+  const { currentLanguage } = useLanguage();
 
   const getDisplayValue = () => {
     const selectedItem = items.find(item => item.value === selectedValue);
@@ -52,93 +53,71 @@ const CustomPicker = ({ label, selectedValue, onValueChange, items, placeholder 
     <View style={styles.inputGroup}>
       <Text style={[styles.label, { color: colors.text }]}>{label}</Text>
       <TouchableOpacity
-        style={[styles.inputContainer, {
-          backgroundColor: colors.card,
-          borderColor: colors.border,
-          justifyContent: 'space-between',
-          paddingRight: getResponsiveValue(10, 11, 12)
-        }]}
-        onPress={() => setModalVisible(true)}
+        style={[
+          styles.inputContainer,
+          {
+            backgroundColor: colors.card,
+            borderColor: error ? colors.error : colors.border,
+            justifyContent: 'space-between',
+            paddingRight: getResponsiveValue(10, 11, 12)
+          }
+        ]}
+        onPress={() => setShowDropdown(!showDropdown)}
+        activeOpacity={0.8}
       >
         <Text style={[styles.inputStyle, { color: selectedValue ? colors.text : colors.secondary }]}>
           {getDisplayValue()}
         </Text>
-        <Text style={[styles.dropdownIcon, { color: colors.text }]}>▼</Text>
+        <Text style={[styles.dropdownIcon, { color: colors.text }]}>{showDropdown ? '⌃' : '⌄'}</Text>
       </TouchableOpacity>
 
-      <Modal
-        visible={modalVisible}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-          <View style={[styles.modalOverlay, { backgroundColor: 'rgba(0,0,0,0.5)' }]} />
-        </TouchableWithoutFeedback>
-        <View style={[styles.modalContent, { backgroundColor: colors.background }]}>
-          <View style={[styles.pickerHeader, {
-            borderBottomWidth: 1,
-            borderBottomColor: colors.border,
-            backgroundColor: colors.card
-          }]}>
+      {/* Custom Dropdown List */}
+      {showDropdown && (
+        <View style={[
+          styles.customDropdown,
+          { backgroundColor: colors.card, borderColor: colors.border }
+        ]}>
+          {items.map((item, index) => (
             <TouchableOpacity
-              style={{ padding: getResponsiveValue(10, 11, 12) }}
-            >
-              <Text style={[styles.pickerButton, { color: colors.primary }]}>Done</Text>
-            </TouchableOpacity>
-          </View>
-          <Picker
-            selectedValue={selectedValue}
-            onValueChange={(itemValue) => {
-              onValueChange(itemValue);
-              setModalVisible(false);
-            }}
-            style={[styles.picker, {
-              backgroundColor: colors.background,
-            }]}
-            dropdownIconColor={colors.primary}
-            dropdownIconRippleColor={colors.primary}
-            itemStyle={[styles.pickerItem, {
-              color: colors.text,
-              backgroundColor: colors.background,
-              fontSize: getResponsiveValue(14, 15, 16),
-              height: getResponsiveValue(44, 47, 50),
-            }]}
-            themeVariant={isDark ? 'dark' : 'light'}
-          >
-            <Picker.Item
-              label={placeholder || 'Select an option...'}
-              value=""
-              color={colors.text}
-              style={{
-                backgroundColor: colors.background,
-                fontSize: getResponsiveValue(14, 15, 16),
-                opacity: 0.7,
+              key={item.value}
+              style={[
+                styles.dropdownOption,
+                { 
+                  backgroundColor: selectedValue === item.value ? colors.lightBlue : 'transparent',
+                  borderColor: colors.border
+                }
+              ]}
+              onPress={() => {
+                onValueChange(item.value);
+                setShowDropdown(false);
               }}
-            />
-            {items.map((item, index) => (
-              <Picker.Item
-                key={index}
-                label={item.label}
-                value={item.value}
-                color={item.value === selectedValue ? colors.primary : colors.text}
-                style={{
-                  backgroundColor: isDark ? colors.card : colors.background,
-                  color: item.value === selectedValue ? colors.primary : colors.text,
-                  padding: getResponsiveValue(12, 14, 15),
-                  fontSize: getResponsiveValue(14, 15, 16),
-                  borderBottomWidth: 1,
-                  borderBottomColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
-                }}
-              />
-            ))}
-          </Picker>
+              activeOpacity={0.8}
+            >
+              <Text style={[
+                styles.dropdownOptionText,
+                { 
+                  color: selectedValue === item.value ? colors.primary : colors.text,
+                  textAlign: currentLanguage === 'en' ? 'left' : 'right',
+                  writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
+                }
+              ]}>
+                {item.label}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
-      </Modal>
+      )}
+      {error && (
+        <Text style={[styles.errorText, { color: colors.error }]}>{error}</Text>
+      )}
     </View>
   );
 };
 
+/**
+ * SignUpScreen Component
+ * A comprehensive registration screen for legal advocates with professional profile fields.
+ */
 const SignUpProfileScreen = ({ navigation, route }) => {
   const { colors } = useTheme();
   const { t, i18n } = useTranslation();
@@ -238,17 +217,37 @@ const SignUpProfileScreen = ({ navigation, route }) => {
     phone: Yup.string()
       .required(t('form.errors.required'))
       .matches(/^[0-9+\-\s()]*$/, t('form.errors.invalidPhone')),
-    cnic: Yup.string()
-      .required(t('form.errors.required'))
-      .matches(/^[0-9]{5}-[0-9]{7}-[0-9]$|^[A-Za-z]-\d{4}-\d{4}$/, 'Invalid CNIC or Bar Council format'),
+    cnic: Yup.string().test(
+      'cnic-required',
+      t('form.errors.required'),
+      function(value) {
+        const { accountType } = this.parent;
+        if (accountType !== 'public') {
+          return value && value.trim() !== '';
+        }
+        return true; // Optional for public users
+      }
+    ).matches(
+      /^[0-9]{5}-[0-9]{7}-[0-9]$|^[A-Za-z]-\d{4}-\d{4}$/,
+      'Invalid CNIC or Bar Council format'
+    ),
     country: Yup.string()
       .required(t('form.errors.required')),
     city: Yup.string()
       .required(t('form.errors.required')),
     province: Yup.string()
       .required(t('form.errors.required')),
-    profession: Yup.string()
-      .required(t('form.errors.required')),
+    profession: Yup.string().test(
+      'profession-required',
+      t('form.errors.required'),
+      function(value) {
+        const { accountType } = this.parent;
+        if (accountType === 'lawFirm' || accountType === 'public') {
+          return value && value.trim() !== '';
+        }
+        return true; // Optional for individual users
+      }
+    ),
     source: Yup.string()
       .required(t('form.errors.required')),
     agree: Yup.boolean()
@@ -328,12 +327,13 @@ const SignUpProfileScreen = ({ navigation, route }) => {
     lastName: '',
     phone: '',
     cnic: '',
-    country: '',
+    country: 'Pakistan', // Set Pakistan as default country
     city: '',
     province: '',
     profession: '',
     source: '',
     agree: false,
+    accountType: accountType, // Add accountType to form values
   });
 
   const insets = useSafeAreaInsets();
@@ -477,40 +477,41 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                     )}
                   </View>
 
-                  {/* CNIC / Bar Council */}
-                  <View style={[styles.halfInputWrapper, { marginLeft: 8 }]}>
-                    <Text style={[styles.label, { color: colors.text }]}>
-                      CNIC / Bar Council
-                      <Text style={[styles.required, { color: colors.error }]}>*</Text>
-                    </Text>
-                    <View style={[
-                      styles.inputContainer,
-                      {
-                        backgroundColor: colors.card,
-                        borderColor: errors.cnic && touched.cnic ? colors.error : colors.border
-                      }
-                    ]}>
-                      {/* <Text style={[styles.icon, { color: colors.primary }]}>🆔</Text> */}
-                      <TextInput
-                        value={values.cnic}
-                        onChangeText={handleChange('cnic')}
-                        onBlur={handleBlur('cnic')}
-                        placeholder="1234578900"
-                        placeholderTextColor={colors.secondary}
-                        keyboardType="default"
-                        autoCapitalize="characters"
-                        style={[styles.textInput, {
-                          color: colors.text,
-                          backgroundColor: 'transparent',
-                          fontSize: 12,
-                          width: '80%',
-                        }]}
-                      />
+                  {/* CNIC / Bar Council - Only show for non-public users */}
+                  {accountType !== 'public' && (
+                    <View style={[styles.halfInputWrapper, { marginLeft: 8 }]}>
+                      <Text style={[styles.label, { color: colors.text }]}>
+                        CNIC / Bar Council
+                        <Text style={[styles.required, { color: colors.error }]}>*</Text>
+                      </Text>
+                      <View style={[
+                        styles.inputContainer,
+                        {
+                          backgroundColor: colors.card,
+                          borderColor: errors.cnic && touched.cnic ? colors.error : colors.border
+                        }
+                      ]}>
+                        <TextInput
+                          value={values.cnic}
+                          onChangeText={handleChange('cnic')}
+                          onBlur={handleBlur('cnic')}
+                          placeholder="1234578900"
+                          placeholderTextColor={colors.secondary}
+                          keyboardType="default"
+                          autoCapitalize="characters"
+                          style={[styles.textInput, {
+                            color: colors.text,
+                            backgroundColor: 'transparent',
+                            fontSize: 12,
+                            width: '80%',
+                          }]}
+                        />
+                      </View>
+                      {errors.cnic && touched.cnic && (
+                        <Text style={[styles.errorText, { color: colors.error }]}>{errors.cnic}</Text>
+                      )}
                     </View>
-                    {errors.cnic && touched.cnic && (
-                      <Text style={[styles.errorText, { color: colors.error }]}>{errors.cnic}</Text>
-                    )}
-                  </View>
+                  )}
                 </View>
 
 
@@ -578,50 +579,43 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                       )}
                     </View>
 
-                    {/* Province Picker */}
+                    {/* Province Dropdown */}
                   <View style={[styles.professionInputGroup, { backgroundColor: colors.background }]}>
-                       <Text style={[styles.professionLabel, { color: colors.text }]}>{t('province')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
-                    
-                        <CustomPicker
-                          selectedValue={values.province}
-                          onValueChange={v => setFieldValue('province', v)}
-                          items={provinceOptions}
-                          placeholder="Select province"
-                        />
-                      </View>
-                      {errors.province && touched.province && (
-                        <Text style={[styles.errorText, { color: colors.error }]}>{errors.province}</Text>
-                      )}
+                    <CustomDropdown
+                      label={t('province')}
+                      selectedValue={values.province}
+                      onValueChange={v => setFieldValue('province', v)}
+                      items={provinceOptions}
+                      placeholder="Select province"
+                      error={errors.province && touched.province ? errors.province : null}
+                    />
+                  </View>
                   
 
-
-                {/* Profession Dropdown */}
-                <View style={[styles.professionInputGroup, { backgroundColor: colors.background }]}>
-                  <Text style={[styles.professionLabel, { color: colors.text }]}>{t('selectProfession')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
-                  <CustomPicker
-                    selectedValue={values.profession}
-                    onValueChange={v => setFieldValue('profession', v)}
-                    items={professionOptions}
-                    placeholder="Select your profession"
-                  />
-                  {errors.profession && touched.profession && (
-                    <Text style={[styles.errorText, { color: colors.error }]}>{errors.profession}</Text>
-                  )}
-                </View>
+                {/* Profession Dropdown - Show for lawFirm and public users */}
+                {(accountType === 'lawFirm' || accountType === 'public') && (
+                  <View style={[styles.professionInputGroup, { backgroundColor: colors.background }]}>
+                    <CustomDropdown
+                      label={t('selectProfession')}
+                      selectedValue={values.profession}
+                      onValueChange={v => setFieldValue('profession', v)}
+                      items={professionOptions}
+                      placeholder="Select your profession"
+                      error={errors.profession && touched.profession ? errors.profession : null}
+                    />
+                  </View>
+                )}
 
                 {/* Source Dropdown */}
                 <View style={styles.sourceInputGroup}>
-                  <Text style={[styles.sourceLabel, { color: colors.text }]}>{t('selectSource')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
-                  <CustomPicker
+                  <CustomDropdown
+                    label={t('selectSource')}
                     selectedValue={values.source}
                     onValueChange={v => setFieldValue('source', v)}
                     items={sourceOptions}
                     placeholder="Select an option"
-                    customStyles={styles.sourcePicker}
+                    error={errors.source && touched.source ? errors.source : null}
                   />
-                  {errors.source && touched.source && (
-                    <Text style={[styles.errorText, { color: colors.error }]}>{errors.source}</Text>
-                  )}
                 </View>
                 {/* Terms Agreement (Custom Circular Checkbox) */}
                 <TouchableOpacity
@@ -798,47 +792,37 @@ const styles = StyleSheet.create({
     marginLeft: getResponsiveValue(6, 7, 8),
     transform: [{ scaleY: 0.8 }],
   },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    maxHeight: getResponsiveValue('55%', '58%', '60%'),
-    width: '100%',
-    borderTopLeftRadius: getResponsiveValue(16, 18, 20),
-    borderTopRightRadius: getResponsiveValue(16, 18, 20),
-    overflow: 'hidden',
+  // Custom Dropdown Styles
+  customDropdown: {
+    position: 'absolute',
+    top: '100%',
+    left: 0,
+    right: 0,
+    zIndex: 1000,
+    borderRadius: getResponsiveValue(8, 9, 10),
+    borderWidth: 1,
+    marginTop: getResponsiveValue(4, 5, 6),
+    maxHeight: getResponsiveValue(180, 200, 220),
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
     elevation: 5,
-    backgroundColor: 'transparent',
   },
-  pickerHeader: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    paddingVertical: getResponsiveValue(6, 7, 8),
-    borderTopLeftRadius: getResponsiveValue(16, 18, 20),
-    borderTopRightRadius: getResponsiveValue(16, 18, 20),
+  dropdownOption: {
+    padding: getResponsiveValue(12, 14, 16),
     borderBottomWidth: 1,
     borderBottomColor: '#E5E7EB',
-    marginBottom: getResponsiveValue(8, 9, 10),
   },
-  pickerButton: {
+  dropdownOptionText: {
     fontSize: getResponsiveValue(14, 15, 16),
-    fontWeight: '600',
-    paddingHorizontal: getResponsiveValue(12, 14, 16),
+    fontWeight: '500',
   },
-  picker: {
-    width: '100%',
-    fontSize: getResponsiveValue(12, 13, 14),
-    color: '#374151',
-    textAlign: 'left',
-  },
-  pickerItem: {
-    textAlign: 'left',
-    fontSize: getResponsiveValue(12, 13, 14),
+  errorText: {
+    fontSize: getResponsiveValue(10, 11, 12),
+    color: '#EF4444',
+    marginTop: 4,
+    marginLeft: 4,
   },
   termsContainer: {
     flexDirection: 'row',

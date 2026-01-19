@@ -214,9 +214,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
                   styles.loginContainer,
                   { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }
                 ]}>
-                  <Text style={[styles.loginText, { color: colors.text }]}>
-                    {t('forgetPassword.rememberPassword')} {' '}
-                  </Text>
+                  
                   <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                     <Text style={[styles.loginLink, { color: colors.primary }]}>
                       {t('common.signIn')}

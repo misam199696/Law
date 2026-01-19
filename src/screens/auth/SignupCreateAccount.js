@@ -39,7 +39,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
   const [secure, setSecure] = useState(true);
   const [selectedType, setSelectedType] = useState(route?.params?.userType || null);
   const [currentLanguage, setCurrentLanguage] = useState('en');
-  const [showAccountTypeModal, setShowAccountTypeModal] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
   const isDesktop = width > 600;
   const isTablet = width > 768;
 
@@ -373,42 +373,84 @@ const SignupCreateAccount = ({ navigation, route }) => {
                     </Text>
                   </TouchableOpacity>
 
-                  {/* Selected Type Display */}
+                  {/* Custom Account Type Dropdown */}
                   <View style={styles.cardsContainer}>
-                    {selectedType && accountTypes.map((type) => (
-                      type.id === selectedType && (
-                        <TouchableOpacity
-                          key={type.id}
-                          style={[
-                            dynamicStyles.card,
-                            dynamicStyles.cardSelected
-                          ]}
-                          onPress={() => setShowAccountTypeModal(true)}
-                          activeOpacity={0.8}
-                        >
-                          <View style={[styles.cardContent, { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }]}>
-                            <View style={[styles.iconContainer, { backgroundColor: type.iconBg }]}>
-                              <Icon
-                                name={type.icon}
-                                size={getResponsiveValue(16, 18, 20)}
-                                color={type.iconColor}
-                              />
+                    <TouchableOpacity
+                      style={[
+                        dynamicStyles.card,
+                        selectedType && dynamicStyles.cardSelected
+                      ]}
+                      onPress={() => setShowDropdown(!showDropdown)}
+                      activeOpacity={0.8}
+                    >
+                      <View style={[styles.cardContent, { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }]}>
+                        <View style={[styles.iconContainer, { backgroundColor: selectedType ? accountTypes.find(type => type.id === selectedType)?.iconBg : '#F3F4F6' }]}>
+                          <Icon
+                            name={selectedType ? accountTypes.find(type => type.id === selectedType)?.icon : 'person-outline'}
+                            size={getResponsiveValue(16, 18, 20)}
+                            color={selectedType ? accountTypes.find(type => type.id === selectedType)?.iconColor : '#9CA3AF'}
+                          />
+                        </View>
+                        <View style={styles.textContainer}>
+                          <Text style={[
+                            dynamicStyles.cardTitle,
+                            { 
+                              color: selectedType ? colors.text : '#9CA3AF',
+                              alignSelf: currentLanguage === 'en' ? 'flex-start' : 'flex-end'
+                            }
+                          ]}>
+                            {selectedType
+                              ? accountTypes.find(type => type.id === selectedType)?.id === 'public'
+                                ? t('signup.publicUser')
+                                : accountTypes.find(type => type.id === selectedType)?.id === 'individual'
+                                  ? t('signup.individualUser')
+                                  : t('signup.lawFirm')
+                              : t('signup.selectAccountType')}
+                          </Text>
+                          <Text style={[dynamicStyles.dropdown, {}]}>   {showDropdown ? '⌃' : '⌄'} </Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+
+                    {/* Custom Dropdown List */}
+                    {showDropdown && (
+                      <View style={[
+                        styles.customDropdown,
+                        { backgroundColor: colors.card, borderColor: colors.border }
+                      ]}>
+                        {accountTypes.map((type) => (
+                          <TouchableOpacity
+                            key={type.id}
+                            style={[
+                              styles.dropdownOption,
+                              { 
+                                backgroundColor: selectedType === type.id ? colors.lightBlue : 'transparent',
+                                borderColor: colors.border
+                              }
+                            ]}
+                            onPress={() => {
+                              setSelectedType(type.id);
+                              setShowDropdown(false);
+                            }}
+                            activeOpacity={0.8}
+                          >
+                            <View style={[styles.optionContent, { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }]}>
+                             
+                              <View style={styles.optionText}>
+                                <Text style={[styles.optionTitle, { color: colors.text, alignSelf: currentLanguage === 'en' ? 'flex-start' : 'flex-end' }]}>
+                                  {type.id === 'public'
+                                    ? t('signup.publicUser')
+                                    : type.id === 'individual'
+                                      ? t('signup.individualUser')
+                                      : t('signup.lawFirm')}
+                                </Text>
+                               
+                              </View>
                             </View>
-                            <View style={styles.textContainer}>
-                              <Text style={[dynamicStyles.cardTitle, { alignSelf: currentLanguage === 'en' ? 'flex-start' : 'flex-end' }]}>
-                                {type.id === 'public'
-                                  ? t('signup.publicUser')
-                                  : type.id === 'individual'
-                                    ? t('signup.individualUser')
-                                    : t('signup.lawFirm')}
-                              </Text>
-                              <Text style={[dynamicStyles.dropdown, {}]}>   ⌄ </Text>
-                            </View>
-                            
-                          </View>
-                        </TouchableOpacity>
-                      )
-                    ))}
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+                    )}
                   </View>
                 </View>
 
@@ -454,65 +496,6 @@ const SignupCreateAccount = ({ navigation, route }) => {
         )}
       </Formik>
 
-      {/* Account Type Selection Modal */}
-      <Modal
-        visible={showAccountTypeModal}
-        transparent={true}
-        animationType="slide"
-        onRequestClose={() => setShowAccountTypeModal(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
-            <View style={[styles.modalHeader, { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }]}>
-              <Text style={[styles.modalTitle, { color: colors.text }]}>{t('signup.chooseAccountType')}</Text>
-              <TouchableOpacity onPress={() => setShowAccountTypeModal(false)}>
-                <Icon name="close" size={getResponsiveValue(20, 22, 24)} color={colors.text} />
-              </TouchableOpacity>
-            </View>
-            
-            <View style={styles.modalBody}>
-              {accountTypes.map((type) => (
-                <TouchableOpacity
-                  key={type.id}
-                  style={[
-                    styles.accountTypeOption,
-                    { backgroundColor: colors.card, borderColor: colors.border },
-                    selectedType === type.id && { backgroundColor: colors.lightBlue, borderColor: colors.primary }
-                  ]}
-                  onPress={() => {
-                    setSelectedType(type.id);
-                    setShowAccountTypeModal(false);
-                  }}
-                  activeOpacity={0.8}
-                >
-                  <View style={[styles.optionContent, { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }]}>
-                    <View style={[styles.optionIcon, { backgroundColor: type.iconBg }]}>
-                      <Icon name={type.icon} size={getResponsiveValue(20, 22, 24)} color={type.iconColor} />
-                    </View>
-                    <View style={styles.optionText}>
-                      <Text style={[styles.optionTitle, { color: colors.text, alignSelf: currentLanguage === 'en' ?  'flex-start' : 'flex-end' }]}>
-                        {type.id === 'public'
-                          ? t('signup.publicUser')
-                          : type.id === 'individual'
-                            ? t('signup.individualUser')
-                            : t('signup.lawFirm')}
-                      </Text>
-                      <Text style={[styles.optionDescription, { color: colors.secondary , alignSelf: currentLanguage === 'en' ?  'flex-start' : 'flex-end' }]}>
-                        {type.id === 'public'
-                          ? t('signup.publicUserDesc')
-                          : type.id === 'individual'
-                            ? t('signup.individualUserDesc')
-                            : t('signup.lawFirmDesc')}
-                      </Text>
-                    </View>
-                   
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-        </View>
-      </Modal>
     </SafeAreaView>
   );
 };
@@ -747,42 +730,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  // Modal Styles
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    width: getResponsiveValue('85%', '88%', '90%'),
-    maxHeight: getResponsiveValue('75%', '78%', '80%'),
-    borderRadius: getResponsiveValue(16, 18, 20),
-    padding: getResponsiveValue(16, 18, 20),
+  // Custom Dropdown Styles
+  customDropdown: {
+    position: 'absolute',
+    top: '100%',
+    left: 0,
+    right: 0,
+    zIndex: 1000,
+    borderRadius: getResponsiveValue(12, 14, 16),
+    borderWidth: 1,
+    marginTop: getResponsiveValue(4, 5, 6),
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
-    shadowRadius: 10,
+    shadowRadius: 8,
     elevation: 5,
   },
-  modalHeader: {
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: getResponsiveValue(16, 18, 20),
-  },
-  modalTitle: {
-    fontSize: getResponsiveValue(14, 15, 16),
-    fontWeight: '700',
-  },
-  modalBody: {
-    gap: getResponsiveValue(10, 11, 12),
-  },
-  accountTypeOption: {
-    borderRadius: getResponsiveValue(10, 11, 12),
-    borderWidth: 1,
-    padding: getResponsiveValue(12, 14, 16),
+  dropdownOption: {
+    padding: getResponsiveValue(11, 13, 15),
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
   },
   optionContent: {
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
@@ -798,7 +768,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: getResponsiveValue(12, 14, 16),
   },
   optionTitle: {
-    fontSize: getResponsiveValue(14, 15, 16),
+    fontSize: getResponsiveValue(12, 14, 15),
     fontWeight: '700',
     marginBottom: getResponsiveValue(3, 4, 4),
   },
