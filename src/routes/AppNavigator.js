@@ -11,6 +11,7 @@ import OTPVerificationScreen from '../screens/auth/OTPVerificationScreen';
 import SplashScreen from '../screens/SplashScreen';
 import SignupCreateAccount from '../screens/auth/SignupCreateAccount';
 import ForgetPasswordScreen from '../screens/auth/ForgetPasswordScreen';
+import NewCredentialScreen from '../screens/auth/NewCredentialScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -86,6 +87,15 @@ const AppNavigator = () => {
           component={ForgetPasswordScreen}
           options={{ 
             title: 'Forgot Password',
+            headerShown: false,
+            headerBackTitle: 'Back'
+          }}
+        />
+        <Stack.Screen 
+          name="NewCredential" 
+          component={NewCredentialScreen}
+          options={{ 
+            title: 'New Credentials',
             headerShown: false,
             headerBackTitle: 'Back'
           }}
