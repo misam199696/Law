@@ -64,7 +64,7 @@ const setI18nConfig = (language) => {
 
 // Initialize i18n
 const initI18n = () => {
-  const defaultLanguage = 'en'; // Force English as default
+  const defaultLanguage = 'en'; // Default to English
   const initialLanguage = setI18nConfig(defaultLanguage);
   
   i18n

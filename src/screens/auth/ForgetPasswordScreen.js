@@ -32,13 +32,16 @@ const getResponsiveValue = (small, medium, large) => {
   return large;
 };
 
-const ForgetPasswordScreen = ({ navigation }) => {
+const ForgetPasswordScreen = ({ navigation, route }) => {
   const { colors } = useTheme();
   const { t, i18n } = useTranslation();
   const { currentLanguage, changeLanguage } = useLanguage();
   const [isLoading, setIsLoading] = useState(false);
   const isDesktop = width > 600;
   const isTablet = width > 768;
+
+  // Get email from route params (passed from LoginScreen)
+  const emailFromLogin = route.params?.email || '';
 
   const insets = useSafeAreaInsets();
 
@@ -121,7 +124,7 @@ const ForgetPasswordScreen = ({ navigation }) => {
           }
         ]}>
           <Formik
-            initialValues={{ email: '' }}
+            initialValues={{ email: emailFromLogin }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}
           >

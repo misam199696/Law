@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { I18nManager } from 'react-native';
+import { I18nManager, Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n, { LANGUAGES } from '../i18n';
 
 const LanguageContext = createContext();
@@ -14,6 +15,9 @@ export const LanguageProvider = ({ children }) => {
         console.warn(`Language '${language}' is not supported`);
         return;
       }
+      
+      // Save to AsyncStorage
+      await AsyncStorage.setItem('userLanguage', language);
       
       // Update i18n language
       await i18n.changeLanguage(language);
@@ -39,10 +43,19 @@ export const LanguageProvider = ({ children }) => {
 
   // Set initial language
   useEffect(() => {
-    // Force English as default on first load
-    if (!currentLanguage || currentLanguage !== 'en') {
-      changeLanguage('en');
-    }
+    // Load saved language from AsyncStorage
+    const loadSavedLanguage = async () => {
+      try {
+        const savedLanguage = await AsyncStorage.getItem('userLanguage');
+        if (savedLanguage && LANGUAGES[savedLanguage]) {
+          changeLanguage(savedLanguage);
+        }
+      } catch (error) {
+        console.error('Error loading saved language:', error);
+      }
+    };
+    
+    loadSavedLanguage();
   }, []);
 
   return (

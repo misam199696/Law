@@ -61,7 +61,12 @@
       "invalidEmail": "براہ کرم درست ای میل ایڈریس درج کریں",
       "passwordMismatch": "پاس ورڈ مماثل نہیں ہیں",
       "invalidPhone": "براہ کرم درست فون نمبر درج کریں",
-      "minLength": "کم از کم {{min}} حروف ہونے چاہیئں"
+      "minLength": "کم از کم {{min}} حروف ہونے چاہیئں",
+      "passwordMinLength": "پاس ورڈ کم از کم 8 حروف ہونا چاہیے",
+      "passwordUppercase": "پاس ورڈ میں کم از کم ایک حرف بڑہ کا ہونا چاہیے",
+      "passwordLowercase": "ایک حرف خواہ ہونا چاہیے",
+      "passwordNumberOrSpecial": "پاس ورڈ میں کم از کم ایک نمبر یا خاص حرف",
+      "passwordMatch": "پاس ورڈ مماثل ہونا چاہیے"
     }
   },
   "signup": {
@@ -117,6 +122,24 @@
     "back": "پیچھے",
     "ok": "ٹھیک ہے",
     "error": "خرابی",
-    "signIn": "سائن ان کریں"
+    "signIn": "سائن ان کریں",
+    "submit": "جمع کروائیں",
+    "submitting": "جمع کر رہے ہیں...",
+    "success": "کامیابی",
+    "cancel": "منسوخ کریں"
+  },
+  "newCredential": {
+    "title": "نیئر کریڈینشلز",
+    "passwordRequirements": "پاس ورڈ کی ضروریات:",
+    "minLength": "پاس ورڈ کم از کم 8 حروف لمبا ہونا چاہیے",
+    "uppercase": "پاس ورڈ میں کم از کم ایک بڑا حرف ہونا چاہیے",
+    "lowercase": "ایک چھوٹا حرف ہونا چاہیے",
+    "numberOrSpecial": "پاس ورڈ میں کم از کم ایک نمبر یا خاص حرف ہونا چاہیے",
+    "newPassword": "نیا پاس ورڈ",
+    "confirmPassword": "پاس ورڈ کی تصدیق کریں",
+    "enterNewPassword": "نیا پاس ورڈ درج کریں",
+    "enterConfirmPassword": "نیا پاس ورڈ تصدیق کریں",
+    "passwordResetSuccess": "پاس ورڈ کامیابی سے ری سیٹ ہو گیا!",
+    "passwordResetError": "پاس ورڈ ری سیٹ کرنے میں ناکام۔ براہ کرم دوبارہ کوشش کریں۔"
   }
 }
