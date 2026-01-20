@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   View,
@@ -13,7 +13,9 @@ import {
   Dimensions
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTheme } from '../../context/ThemeContext';
+import LanguageContext, { useLanguage } from '../../context/LanguageContext';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -31,6 +33,7 @@ const getResponsiveValue = (small, medium, large) => {
 const NewCredentialScreen = ({ navigation }) => {
   const { colors } = useTheme();
   const { t, i18n } = useTranslation();
+  const { currentLanguage, changeLanguage } = useLanguage();
   const [secure, setSecure] = useState(true);
   const [secureConfirm, setSecureConfirm] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,6 +43,20 @@ const NewCredentialScreen = ({ navigation }) => {
     hasLowerCase: false,
     hasNumberOrSpecial: false
   });
+
+  useEffect(() => {
+    const loadLanguage = async () => {
+      try {
+        const savedLanguage = await AsyncStorage.getItem('userLanguage');
+        if (savedLanguage) {
+          changeLanguage(savedLanguage);
+        }
+      } catch (error) {
+        console.error('Error loading language:', error);
+      }
+    };
+    loadLanguage();
+  }, [changeLanguage]);
 
   // Password strength checker
   const checkPasswordStrength = (password) => {
@@ -54,14 +71,14 @@ const NewCredentialScreen = ({ navigation }) => {
   // Validation Schema
   const validationSchema = Yup.object().shape({
     newPassword: Yup.string()
-      .required('New password is required')
-      .min(8, 'Password must be at least 8 characters long')
-      .matches(/[A-Z]/, 'Password must contain at least one upper case')
-      .matches(/[a-z]/, 'One lower case letter')
-      .matches(/[0-9!@#$%^&*(),.?":{}|<>]/, 'Password must contain at least one number or special character'),
+      .required(t('form.errors.required'))
+      .min(8, t('form.errors.passwordMinLength'))
+      .matches(/[A-Z]/, t('form.errors.passwordUppercase'))
+      .matches(/[a-z]/, t('form.errors.passwordLowercase'))
+      .matches(/[0-9!@#$%^&*(),.?":{}|<>]/, t('form.errors.passwordNumberOrSpecial')),
     confirmPassword: Yup.string()
-      .required('Please confirm your password')
-      .oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
+      .required(t('form.errors.required'))
+      .oneOf([Yup.ref('newPassword'), null], t('form.errors.passwordMatch'))
   });
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -70,11 +87,11 @@ const NewCredentialScreen = ({ navigation }) => {
       console.log('New credentials submitted:', values);
       // Add your API call here
       // await yourApiCall(values);
-      Alert.alert('Success', 'Password has been reset successfully!');
+      Alert.alert(t('common.success'), t('newCredential.passwordResetSuccess'));
       navigation.navigate('Login');
     } catch (error) {
       console.error('Password reset error:', error);
-      Alert.alert('Error', 'Failed to reset password. Please try again.');
+      Alert.alert(t('common.error'), t('newCredential.passwordResetError'));
     } finally {
       setIsSubmitting(false);
       setSubmitting(false);
@@ -87,6 +104,9 @@ const NewCredentialScreen = ({ navigation }) => {
   };
 
   const insets = useSafeAreaInsets();
+  console.log("////////////", currentLanguage
+);
+  
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -99,34 +119,64 @@ const NewCredentialScreen = ({ navigation }) => {
           styles.card,
           { backgroundColor: colors.background }
         ]}>
-          <Text style={[styles.title, { color: colors.text }]}>
-            NEW CREDENTIALS
+          <Text style={[styles.title, { color: colors.text , textAlign: 'left',
+                    writingDirection: 'ltr'  }]}>
+            {t('newCredential.title')}
           </Text>
 
           {/* Password Requirements */}
-          <View style={styles.requirementsContainer}>
-            <Text style={[styles.requirementsTitle, { color: colors.text }]}>
-              Password Requirements:
+          <View style={[styles.requirementsContainer, {  }]}>
+            <Text style={[styles.requirementsTitle, { color: colors.text , textAlign: 'left',
+                    writingDirection: 'ltr'  }]}>
+              {t('newCredential.passwordRequirements')}
             </Text>
             <View style={styles.requirementList}>
               <View style={styles.requirementItem}>
-                <Text style={[styles.requirement, { color: passwordStrength.minLength ? '#10B981' : colors.secondary }]}>
-                  {passwordStrength.minLength ? '✓' : '•'} Password must be at least 8 characters long
+                <Text style={[
+                  styles.requirement, 
+                  { 
+                    color: passwordStrength.minLength ? '#10B981' : colors.secondary,
+                    textAlign: 'left',
+                    writingDirection: 'ltr'
+                  }
+                ]}>
+                  {passwordStrength.minLength ? '✓' : '•'} {t('newCredential.minLength')}
                 </Text>
               </View>
               <View style={styles.requirementItem}>
-                <Text style={[styles.requirement, { color: passwordStrength.hasUpperCase ? '#10B981' : colors.secondary }]}>
-                  {passwordStrength.hasUpperCase ? '✓' : '•'} Password must contain at least one upper case
+                <Text style={[
+                  styles.requirement, 
+                  { 
+                    color: passwordStrength.hasUpperCase ? '#10B981' : colors.secondary,
+                    textAlign: 'left',
+                    writingDirection: 'ltr'
+                  }
+                ]}>
+                  {passwordStrength.hasUpperCase ? '✓' : '•'} {t('newCredential.uppercase')}
                 </Text>
               </View>
               <View style={styles.requirementItem}>
-                <Text style={[styles.requirement, { color: passwordStrength.hasLowerCase ? '#10B981' : colors.secondary }]}>
-                  {passwordStrength.hasLowerCase ? '✓' : '•'} One lower case letter
+                <Text style={[
+                  styles.requirement, 
+                  { 
+                    color: passwordStrength.hasLowerCase ? '#10B981' : colors.secondary,
+                    textAlign: 'left',
+                    writingDirection: 'ltr'
+                  }
+                ]}>
+                  {passwordStrength.hasLowerCase ? '✓' : '•'} {t('newCredential.lowercase')}
                 </Text>
               </View>
               <View style={styles.requirementItem}>
-                <Text style={[styles.requirement, { color: passwordStrength.hasNumberOrSpecial ? '#10B981' : colors.secondary }]}>
-                  {passwordStrength.hasNumberOrSpecial ? '✓' : '•'} Password must contain at least one number or special character
+                <Text style={[
+                  styles.requirement, 
+                  { 
+                    color: passwordStrength.hasNumberOrSpecial ? '#10B981' : colors.secondary,
+                    textAlign: 'left',
+                    writingDirection: 'ltr'
+                  }
+                ]}>
+                  {passwordStrength.hasNumberOrSpecial ? '✓' : '•'} {t('newCredential.numberOrSpecial')}
                 </Text>
               </View>
             </View>
@@ -143,14 +193,16 @@ const NewCredentialScreen = ({ navigation }) => {
               <View style={styles.formContainer}>
                 {/* New Password */}
                 <View style={styles.inputGroup}>
-                  <Text style={[styles.label, { color: colors.text }]}>
-                    New Password
+                  <Text style={[styles.label, { color: colors.text , textAlign: 'left',
+                    writingDirection: 'ltr' }]}>
+                    {t('newCredential.newPassword')}
                   </Text>
                   <View style={[
                     styles.inputContainer,
                     {
                       backgroundColor: colors.card,
                       borderColor: errors.newPassword && touched.newPassword ? colors.error : colors.border
+                       
                     }
                   ]}>
                     <TextInput
@@ -160,15 +212,15 @@ const NewCredentialScreen = ({ navigation }) => {
                         checkPasswordStrength(text);
                       }}
                       onBlur={handleBlur('newPassword')}
-                      placeholder="Enter new password"
-                      placeholderTextColor="#9CA3AF"
+                      placeholder={t('newCredential.enterNewPassword')}
+                      placeholderTextColor={colors.secondary}
                       secureTextEntry={secure}
                       style={[
                         styles.inputStyle,
                         {
                           color: colors.text,
-                          textAlign: i18n.language === 'en' ? 'left' : 'right',
-                          writingDirection: i18n.language === 'en' ? 'ltr' : 'rtl',
+                          textAlign: currentLanguage === 'en' ? 'left' : 'right',
+                          writingDirection: currentLanguage === 'en' ? 'left' : 'right',
                           flex: 1
                         }
                       ]}
@@ -181,14 +233,21 @@ const NewCredentialScreen = ({ navigation }) => {
                     </TouchableOpacity>
                   </View>
                   {errors.newPassword && touched.newPassword && (
-                    <Text style={styles.errorText}>{errors.newPassword}</Text>
+                    <Text style={[
+                      styles.errorText,
+                      {
+                        textAlign: currentLanguage === 'en' ? 'left' : 'right',
+                        writingDirection: currentLanguage === 'en' ? 'left' : 'right'
+                      }
+                    ]}>{errors.newPassword}</Text>
                   )}
                 </View>
 
                 {/* Confirm Password */}
                 <View style={styles.inputGroup}>
-                  <Text style={[styles.label, { color: colors.text }]}>
-                    Re-type Password
+                  <Text style={[styles.label, { color: colors.text , textAlign: 'left',
+                    writingDirection: 'ltr' }]}>
+                    {t('newCredential.confirmPassword')}
                   </Text>
                   <View style={[
                     styles.inputContainer,
@@ -201,15 +260,15 @@ const NewCredentialScreen = ({ navigation }) => {
                       value={values.confirmPassword}
                       onChangeText={handleChange('confirmPassword')}
                       onBlur={handleBlur('confirmPassword')}
-                      placeholder="Confirm new password"
-                      placeholderTextColor="#9CA3AF"
+                      placeholder={t('newCredential.enterConfirmPassword')}
+                      placeholderTextColor={colors.secondary}
                       secureTextEntry={secureConfirm}
                       style={[
                         styles.inputStyle,
                         {
                           color: colors.text,
-                          textAlign: i18n.language === 'en' ? 'left' : 'right',
-                          writingDirection: i18n.language === 'en' ? 'ltr' : 'rtl',
+                          textAlign: currentLanguage === 'en' ? 'left' : 'right',
+                          writingDirection: currentLanguage === 'en' ? 'left' : 'right',
                           flex: 1
                         }
                       ]}
@@ -222,10 +281,17 @@ const NewCredentialScreen = ({ navigation }) => {
                     </TouchableOpacity>
                   </View>
                   {errors.confirmPassword && touched.confirmPassword && (
-                    <Text style={styles.errorText}>{errors.confirmPassword}</Text>
+                    <Text style={[
+                      styles.errorText,
+                      {
+                        textAlign: currentLanguage === 'en' ? 'left' : 'right',
+                        writingDirection: currentLanguage === 'en' ? 'left' : 'right'
+                      }
+                    ]}>{errors.confirmPassword}</Text>
                   )}
                 </View>
 
+                {/* Buttons */}
                 {/* Buttons */}
                 <View style={styles.buttonContainer}>
                   <TouchableOpacity
@@ -238,7 +304,7 @@ const NewCredentialScreen = ({ navigation }) => {
                     disabled={isSubmitting || formikSubmitting}
                   >
                     <Text style={styles.submitButtonText}>
-                      {isSubmitting || formikSubmitting ? 'Submitting...' : 'Submit'}
+                      {isSubmitting || formikSubmitting ? t('common.submitting') : t('common.submit')}
                     </Text>
                   </TouchableOpacity>
 
@@ -247,7 +313,7 @@ const NewCredentialScreen = ({ navigation }) => {
                     onPress={() => navigation.goBack()}
                   >
                     <Text style={[styles.cancelButtonText, { color: colors.text }]}>
-                      Cancel
+                      {t('common.cancel')}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -294,14 +360,14 @@ const styles = StyleSheet.create({
   },
   requirement: {
     fontSize: getResponsiveValue(14, 15, 16),
-    marginBottom: getResponsiveValue(6, 7, 8),
+    marginBottom: getResponsiveValue(3, 4, 6),
     lineHeight: getResponsiveValue(20, 22, 24),
   },
   formContainer: {
     width: '100%',
   },
   inputGroup: {
-    marginBottom: getResponsiveValue(20, 22, 24),
+    marginBottom: getResponsiveValue(15, 18, 20),
   },
   label: {
     fontSize: getResponsiveValue(14, 15, 16),
@@ -332,7 +398,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: getResponsiveValue(32, 36, 40),
-    gap: getResponsiveValue(16, 18, 20),
+    flexDirection: 'row-reverse',
+    gap: getResponsiveValue(12, 14, 16),
   },
   submitButton: {
     backgroundColor: '#12B7A6',
@@ -340,6 +407,7 @@ const styles = StyleSheet.create({
     height: getResponsiveValue(54, 57, 60),
     justifyContent: 'center',
     alignItems: 'center',
+    flex: 1,
   },
   submitButtonDisabled: {
     backgroundColor: '#9CA3AF',
@@ -355,6 +423,7 @@ const styles = StyleSheet.create({
     height: getResponsiveValue(54, 57, 60),
     justifyContent: 'center',
     alignItems: 'center',
+    flex: 1,
   },
   cancelButtonText: {
     fontSize: getResponsiveValue(16, 17, 18),

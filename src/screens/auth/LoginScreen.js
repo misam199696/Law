@@ -337,7 +337,7 @@ console.log();
 
                   {/* Forgot Password Link */}
                   <TouchableOpacity
-                    onPress={() => navigation.navigate('ForgotPassword')}
+                    onPress={() => navigation.navigate('ForgotPassword', { email: values.email })}
                     style={{
                       marginStart: currentLanguage === 'en' ? getResponsiveValue(-80, -95, -110) : 0,
                       marginEnd: currentLanguage === 'en' ? 0 : getResponsiveValue(-150, -175, -200)

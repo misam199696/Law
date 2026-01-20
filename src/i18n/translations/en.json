@@ -54,7 +54,12 @@
       "invalidEmail": "Please enter a valid email address",
       "passwordMismatch": "Passwords do not match",
       "invalidPhone": "Please enter a valid phone number",
-      "minLength": "Must be at least {{min}} characters"
+      "minLength": "Must be at least {{min}} characters",
+      "passwordMinLength": "Password must be at least 8 characters long",
+      "passwordUppercase": "Password must contain at least one upper case",
+      "passwordLowercase": "One lower case letter",
+      "passwordNumberOrSpecial": "Password must contain at least one number or special character",
+      "passwordMatch": "Passwords must match"
     }
   },
   "iAgreeToTerms1": "I agree to the",
@@ -125,6 +130,24 @@
     "back": "Back",
     "ok": "OK",
     "error": "Error",
-    "signIn": "Sign In"
+    "signIn": "Sign In",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "success": "Success",
+    "cancel": "Cancel"
+  },
+  "newCredential": {
+    "title": "NEW CREDENTIALS",
+    "passwordRequirements": "Password Requirements:",
+    "minLength": "Password must be at least 8 characters long",
+    "uppercase": "Password must contain at least one upper case",
+    "lowercase": "One lower case letter",
+    "numberOrSpecial": "Password must contain at least one number or special character",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "enterNewPassword": "Enter new password",
+    "enterConfirmPassword": "Confirm new password",
+    "passwordResetSuccess": "Password has been reset successfully!",
+    "passwordResetError": "Failed to reset password. Please try again."
   }
 }
