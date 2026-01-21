@@ -39,13 +39,18 @@ const OTPVerificationScreen = ({ navigation, route }) => {
   }, []);
 
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
-  const { phoneNumber } = route.params || {};
+  const { phoneNumber, isLoginFlow, email } = route.params || {};
   const otpInputs = useRef([]);
 
   const handleVerifyOTP = () => {
     // TODO: Implement OTP verification logic
-    navigation.navigate('SignupProfile', { accountType: route.params?.accountType });
-    
+    if (isLoginFlow) {
+      // Navigate to Home for login flow
+      navigation.navigate('Home');
+    } else {
+      // Navigate to SignupProfile for signup flow
+      navigation.navigate('SignupProfile', { accountType: route.params?.accountType });
+    }
   };
 
   const handleResendOTP = () => {
@@ -84,17 +89,23 @@ const OTPVerificationScreen = ({ navigation, route }) => {
   const isOtpComplete = otp.every(digit => digit !== '');
 console.log("currentLanguage//////////",currentLanguage);
 
-  // Auto-navigate to Home when 6 digits are entered
+  // Auto-navigate when 6 digits are entered
   useEffect(() => {
     if (isOtpComplete) {
       // Add a small delay to show the completed OTP before navigation
       const timer = setTimeout(() => {
-         navigation.navigate('SignupProfile', { accountType: route.params?.accountType });
+        if (isLoginFlow) {
+          // Navigate to Home for login flow
+          navigation.navigate('Home');
+        } else {
+          // Navigate to SignupProfile for signup flow
+          navigation.navigate('SignupProfile', { accountType: route.params?.accountType });
+        }
       }, 500);
       
       return () => clearTimeout(timer);
     }
-  }, [isOtpComplete, navigation]);
+  }, [isOtpComplete, navigation, isLoginFlow, route.params?.accountType]);
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>

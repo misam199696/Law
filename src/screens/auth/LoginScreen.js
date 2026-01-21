@@ -85,7 +85,9 @@ console.log();
       // In a real app, you would verify credentials here first
       // Then navigate to OTP verification
       navigation.navigate('OTPVerification', { 
-        phoneNumber: values.email // Using email as phone number for demo
+        phoneNumber: values.email, // Using email as phone number for demo
+        isLoginFlow: true, // Flag to indicate this is login flow
+        email: values.email
       });
     } catch (error) {
       console.error('Login error:', error);
