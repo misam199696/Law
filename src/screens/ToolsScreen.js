@@ -1,20 +1,35 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform, SafeAreaView } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 
 const ToolsScreen = () => {
   const { colors } = useTheme();
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.title, { color: colors.text }]}>Tools</Text>
-      <Text style={[styles.subtitle, { color: colors.text }]}>Tools and utilities</Text>
-    </View>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoidingView}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
+      >
+        <View style={styles.content}>
+          <Text style={[styles.title, { color: colors.text }]}>Tools</Text>
+          <Text style={[styles.subtitle, { color: colors.text }]}>Tools and utilities</Text>
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  keyboardAvoidingView: {
+    flex: 1,
+  },
+  content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

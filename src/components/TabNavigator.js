@@ -2,6 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, View, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Header from './Header';
 
 import HomeScreen from '../screens/HomeScreen';
 import ToolsScreen from '../screens/ToolsScreen';
@@ -13,8 +14,26 @@ import SettingsScreen from '../screens/SettingsScreen';
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+  const handleMenuPress = () => {
+    console.log('Menu pressed');
+  };
+
+  const handleNotificationPress = () => {
+    console.log('Notification pressed');
+  };
+
+  const handleProfilePress = () => {
+    console.log('Profile pressed');
+  };
+
   return (
-    <Tab.Navigator
+    <View style={styles.container}>
+      <Header 
+        onMenuPress={handleMenuPress}
+        onNotificationPress={handleNotificationPress}
+        onProfilePress={handleProfilePress}
+      />
+      <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -103,7 +122,15 @@ const TabNavigator = () => {
         options={{ tabBarLabel: 'Settings' }}
       />
     </Tab.Navigator>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#111827',
+  },
+});
 
 export default TabNavigator;
