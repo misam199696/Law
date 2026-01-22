@@ -12,6 +12,7 @@ import SplashScreen from '../screens/SplashScreen';
 import SignupCreateAccount from '../screens/auth/SignupCreateAccount';
 import ForgetPasswordScreen from '../screens/auth/ForgetPasswordScreen';
 import NewCredentialScreen from '../screens/auth/NewCredentialScreen';
+import TabNavigator from '../components/TabNavigator';
 
 const Stack = createNativeStackNavigator();
 
@@ -102,8 +103,8 @@ const AppNavigator = () => {
         />
         <Stack.Screen 
           name="Home" 
-          component={HomeScreen} 
-          options={{ title: 'Home' }}
+          component={TabNavigator} 
+          options={{ headerShown: false }}
         />
         <Stack.Screen 
           name="Details" 

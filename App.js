@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { StatusBar, I18nManager, LogBox } from 'react-native';
+import { StatusBar, I18nManager, LogBox, Platform } from 'react-native';
+import 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { I18nextProvider } from 'react-i18next';
 import { ThemeProvider } from './src/context/ThemeContext';
