@@ -1,10 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import CustomDropdownMenu from './CustomDropdownMenu';
 
 const Header = ({ onMenuPress, onNotificationPress, onProfilePress }) => {
   const insets = useSafeAreaInsets();
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [activeMenuItem, setActiveMenuItem] = useState('overview');
+  
+  // Calculate the actual header height
+  const headerHeight = insets.top +  70; // top padding + min height (removed bottom padding)
+
+  const handleMenuPress = () => {
+    setIsDropdownVisible(!isDropdownVisible);
+  };
+
+  const handleDropdownClose = () => {
+    setIsDropdownVisible(false);
+  };
+
+  const handleDropdownSelect = (item) => {
+    console.log('Selected:', item);
+    setActiveMenuItem(item.id); // Update the active menu item
+    setIsDropdownVisible(false); // Close dropdown after selection
+    // Handle navigation or action based on selected item
+  };
 
   return (
     <View style={[
@@ -16,7 +37,7 @@ const Header = ({ onMenuPress, onNotificationPress, onProfilePress }) => {
       }
     ]}>
       <View style={styles.leftSection}>
-        <TouchableOpacity onPress={onMenuPress} style={styles.menuButton}>
+        <TouchableOpacity onPress={handleMenuPress} style={styles.menuButton}>
           <Icon name="menu" size={24} color="#FFFFFF" />
         </TouchableOpacity>
         
@@ -44,7 +65,16 @@ const Header = ({ onMenuPress, onNotificationPress, onProfilePress }) => {
           <Icon name="keyboard-arrow-down" size={20} color="#9CA3AF" />
         </TouchableOpacity>
       </View>
+      
+      <CustomDropdownMenu
+        isVisible={isDropdownVisible}
+        onClose={handleDropdownClose}
+        onSelect={handleDropdownSelect}
+        headerHeight={headerHeight}
+        activeId={activeMenuItem}
+      />
     </View>
+    
   );
 };
 
@@ -53,8 +83,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#111827',
-    paddingBottom: 20,
+    backgroundColor: '#171616ff',
+    paddingBottom: 10,
     minHeight: 80,
   },
   leftSection: {
@@ -87,7 +117,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     alignSelf: 'flex-start',
     fontWeight: '600',
-    marginBottom: 2,
+    marginBottom: 6,
   },
   subtitle: {
     color: '#9CA3AF',
@@ -117,9 +147,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   profileImage: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 28,
+    height: 28,
+    borderRadius: 6,
     marginRight: 6,
   },
 });

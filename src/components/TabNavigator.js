@@ -14,10 +14,6 @@ import SettingsScreen from '../screens/SettingsScreen';
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-  const handleMenuPress = () => {
-    console.log('Menu pressed');
-  };
-
   const handleNotificationPress = () => {
     console.log('Notification pressed');
   };
@@ -29,7 +25,6 @@ const TabNavigator = () => {
   return (
     <View style={styles.container}>
       <Header 
-        onMenuPress={handleMenuPress}
         onNotificationPress={handleNotificationPress}
         onProfilePress={handleProfilePress}
       />
