@@ -27,7 +27,7 @@ const SplashScreen = ({ navigation }) => {
       ]).start(() => {
         // After animation completes, navigate to Login screen after a delay
         setTimeout(() => {
-          navigation.replace('Home');
+          navigation.replace('Login');
         }, 1000);
       });
     };

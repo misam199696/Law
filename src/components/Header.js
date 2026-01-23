@@ -2,15 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import CustomDropdownMenu from './CustomDropdownMenu';
+import CustomModalMenu from './CustomModalMenu';
 
 const Header = ({ onMenuPress, onNotificationPress, onProfilePress }) => {
   const insets = useSafeAreaInsets();
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState('overview');
-  
-  // Calculate the actual header height
-  const headerHeight = insets.top +  70; // top padding + min height (removed bottom padding)
 
   const handleMenuPress = () => {
     setIsDropdownVisible(!isDropdownVisible);
@@ -66,11 +63,10 @@ const Header = ({ onMenuPress, onNotificationPress, onProfilePress }) => {
         </TouchableOpacity>
       </View>
       
-      <CustomDropdownMenu
+      <CustomModalMenu
         isVisible={isDropdownVisible}
         onClose={handleDropdownClose}
         onSelect={handleDropdownSelect}
-        headerHeight={headerHeight}
         activeId={activeMenuItem}
       />
     </View>
@@ -84,8 +80,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: '#171616ff',
-    paddingBottom: 10,
-    minHeight: 80,
+    paddingBottom: 20,
+    minHeight: 90,
   },
   leftSection: {
     flexDirection: 'row',

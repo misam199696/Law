@@ -1,0 +1,262 @@
+import React, { useRef, useEffect, useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Animated, Modal, TouchableWithoutFeedback, Dimensions, SafeAreaView, Platform } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+
+const isSmallScreen = screenWidth <= 375; // iPhone SE and similar small screens
+const isMediumScreen = screenWidth > 375 && screenWidth <= 414; // 6-inch and normal screens
+const isLargeScreen = screenWidth > 414; // Larger screens and tablets
+
+const getResponsiveValue = (small, medium, large, iosSmall, iosMedium, iosLarge) => {
+  if (Platform.OS === 'ios') {
+    if (isSmallScreen) return iosSmall !== undefined ? iosSmall : small;
+    if (isMediumScreen) return iosMedium !== undefined ? iosMedium : medium;
+    return iosLarge !== undefined ? iosLarge : large;
+  } else {
+    if (isSmallScreen) return small;
+    if (isMediumScreen) return medium;
+    return large;
+  }
+};
+
+const menuItems = [
+  { id: 'overview', label: 'Overview', icon: 'dashboard' },
+  { id: 'judgments', label: 'Judgments', icon: 'gavel' },
+  { id: 'voice-search', label: 'Voice Search', icon: 'mic' },
+  { id: 'legal-statutes', label: 'Legal Statutes', icon: 'menu-book' },
+  { id: 'petition-drafting', label: 'Petition Drafting', icon: 'description' },
+  { id: 'contract-drafting', label: 'Contract Drafting', icon: 'assignment' },
+];
+
+const CustomModalMenu = ({
+  isVisible,
+  activeId = 'overview',
+  onSelect,
+  onClose,
+}) => {
+  const slideAnim = useRef(new Animated.Value(-500)).current;
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    if (isVisible) {
+      // Show modal and animate in
+      setShowModal(true);
+      slideAnim.setValue(-500);
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      // Animate out first, then hide modal
+      Animated.timing(slideAnim, {
+        toValue: -500,
+        duration: 500,
+        useNativeDriver: true,
+      }).start(() => {
+        // Hide modal after animation completes
+        setShowModal(false);
+      });
+    }
+  }, [isVisible]);
+
+  return (
+    <Modal
+      visible={showModal}
+      transparent={true}
+      animationType="none"
+      onRequestClose={onClose}
+    >
+      <TouchableWithoutFeedback onPress={onClose}>
+        <View style={styles.backdrop}>
+          <TouchableWithoutFeedback onPress={() => {}}>
+            <SafeAreaView style={styles.safeArea}>
+              <Animated.View 
+                style={[
+                  styles.menuContainer,
+                  {
+                    transform: [{ translateX: slideAnim }],
+                  }
+                ]}
+              >
+              <View style={styles.menuHeader}>
+                <View style={styles.logoContainer}>
+                  <View style={styles.logoBackground}>
+                    <Icon name="balance-scale" size={getResponsiveValue(20, 24, 28, 22, 26, 30)} color="#10B981" />
+                  </View>
+                  <View>
+                    <Text style={styles.menuTitle}>LegalAssist</Text>
+                    <Text style={styles.proPlatformText}>Pro Platform</Text>
+                  </View>
+                </View>
+                <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                  <Icon name="chevron-left" size={getResponsiveValue(20, 24, 28, 22, 26, 30)} color="#9CA3AF" />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.menuItems}>
+                {menuItems.map(item => {
+                  const isActive = item.id === activeId;
+
+                  return (
+                    <TouchableOpacity
+                      key={item.id}
+                      style={[styles.menuItem, isActive && styles.activeItem]}
+                      onPress={() => {
+                        onSelect(item);
+                        onClose();
+                      }}
+                      activeOpacity={0.8}
+                    >
+                      <Icon
+                        name={item.icon}
+                        size={getResponsiveValue(16, 18, 20, 18, 20, 22)}
+                        color={isActive ? '#FFFFFF' : '#9CA3AF'}
+                      />
+                      <Text style={[styles.menuText, isActive && styles.activeText]}>
+                        {item.label}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+
+                {/* Go Premium */}
+                <TouchableOpacity 
+                  style={styles.premiumBtn} 
+                  activeOpacity={0.9}
+                  onPress={() => {
+                    // Handle premium action
+                    onClose();
+                  }}
+                >
+                  <Icon name="auto-awesome" size={getResponsiveValue(16, 18, 20, 18, 20, 22)} color="#FFFFFF" />
+                  <Text style={styles.premiumText}>Go Premium</Text>
+                </TouchableOpacity>
+              </View>
+            </Animated.View>
+          </SafeAreaView>
+        </TouchableWithoutFeedback>
+      </View>
+    </TouchableWithoutFeedback>
+    </Modal>
+  );
+};
+
+export default CustomModalMenu;
+
+const styles = StyleSheet.create({
+  backdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  },
+  safeArea: {
+    flex: 1,
+  },
+  menuContainer: {
+    width: getResponsiveValue(screenWidth * 0.85, 280, 320, screenWidth * 0.9, 300, 340),
+    maxWidth: 270,
+    height: '100%',
+    backgroundColor: '#171616ff',
+    paddingHorizontal: getResponsiveValue(16, 18, 20, 18, 20, 22),
+    paddingTop: getResponsiveValue(15, 18, 20, 20, 25, 30),
+    justifyContent: 'space-between',
+    alignSelf: 'flex-start',
+    borderTopLeftRadius: getResponsiveValue(16, 16, 16, 20, 20, 20),
+    borderTopRightRadius: getResponsiveValue(16, 16, 16, 20, 20, 20),
+    borderBottomLeftRadius: getResponsiveValue(16, 16, 16, 0, 0, 0),
+    borderBottomRightRadius: getResponsiveValue(16, 16, 16, 0, 0, 0),
+  },
+  menuHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logoBackground: {
+    width: getResponsiveValue(36, 40, 44, 40, 44, 48),
+    height: getResponsiveValue(36, 40, 44, 40, 44, 48),
+    borderRadius: getResponsiveValue(6, 8, 10, 8, 10, 12),
+    backgroundColor: '#14B8A6',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: getResponsiveValue(10, 12, 14, 12, 14, 16),
+  },
+  menuTitle: {
+    color: '#FFFFFF',
+    fontSize: getResponsiveValue(18, 20, 22, 20, 22, 24),
+    fontWeight: '300',
+  },
+  proPlatformText: {
+    color: '#9CA3AF',
+    fontSize: getResponsiveValue(10, 12, 14, 12, 14, 16),
+    marginTop: 2,
+  },
+  overviewButton: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    backgroundColor: '#14B8A6',
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    marginBottom: 35,
+  },
+  overviewButtonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '500',
+    marginLeft: 30,
+    
+  },
+  closeButton: {
+    padding: 4,
+  },
+  menuItems: {
+    flex: 1,
+    justifyContent: 'center',
+    marginTop:20
+  },
+  menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: getResponsiveValue(8, 10, 12, 12, 14, 16),
+    paddingHorizontal: getResponsiveValue(12, 14, 16, 14, 16, 18),
+    borderRadius: getResponsiveValue(10, 12, 14, 12, 14, 16),
+    marginBottom: getResponsiveValue(6, 8, 10, 8, 10, 12),
+  },
+  activeItem: {
+    backgroundColor: '#14B8A6',
+  },
+  menuText: {
+    fontSize: getResponsiveValue(16, 18, 20, 17, 19, 21),
+    color: '#E5E7EB',
+    paddingLeft: getResponsiveValue(24, 28, 32, 26, 30, 34),
+  },
+  activeText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+  },
+  premiumBtn: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#14B8A6',
+    borderRadius: getResponsiveValue(10, 12, 14, 12, 14, 16),
+    paddingVertical: getResponsiveValue(10, 12, 14, 14, 16, 18),
+    paddingHorizontal: getResponsiveValue(16, 18, 20, 18, 20, 22),
+    marginTop: 'auto',
+    marginBottom: getResponsiveValue(16, 18, 20, 20, 24, 28),
+    gap: getResponsiveValue(4, 6, 8, 6, 8, 10),
+  },
+  premiumText: {
+    color: '#FFFFFF',
+    fontSize: getResponsiveValue(14, 15, 16, 15, 16, 17),
+    fontWeight: '600',
+  },
+});
