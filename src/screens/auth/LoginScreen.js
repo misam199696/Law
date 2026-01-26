@@ -15,7 +15,6 @@ import {
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../context/ThemeContext';
-import ThemeToggleButton from '../../components/ThemeToggleButton';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -53,17 +52,6 @@ const LoginScreen = ({ navigation }) => {
     };
     loadLanguage();
   }, []);
-
-  const changeLanguage = async (language) => {
-    try {
-      await AsyncStorage.setItem('userLanguage', language);
-      i18n.changeLanguage(language);
-      setCurrentLanguage(language);
-    } catch (error) {
-      console.error('Error saving language:', error);
-    }
-  };
-console.log();
 
   // Validation Schema
   const validationSchema = Yup.object().shape({
@@ -141,43 +129,13 @@ console.log();
                 { backgroundColor: colors.background }
               ]}>
                 <View style={[styles.headerContainer ,{ flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }]}>
-                  <View >
                     <Text style={[styles.title, { color: colors.text }]}>{t('welcomeBack')},</Text>
-                    <Text style={[styles.title, { color: colors.text }]}>{t('advocate')}</Text>
-                  </View>
-                  <View style={{ flexDirection:  'row', alignItems: 'center' }}>
-                    <TouchableOpacity
-                      style={[
-                        styles.languageButton,
-                        currentLanguage === 'en' && styles.languageButtonActive,
-                        { marginRight: 8 }
-                      ]}
-                      onPress={() => changeLanguage('en')}
-                    >
-                      <Text style={[
-                        styles.languageButtonText,
-                        { color: currentLanguage === 'en' ? '#FFFFFF' : colors.text }
-                      ]}>
-                        EN
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[
-                        styles.languageButton,
-                        currentLanguage === 'ur' && styles.languageButtonActive
-                      ]}
-                      onPress={() => changeLanguage('ur')}
-                    >
-                      <Text style={[
-                        styles.languageButtonText,
-                        { color: currentLanguage === 'ur' ? '#FFFFFF' : colors.text }
-                      ]}>
-                        اردو
-                      </Text>
-                    </TouchableOpacity>
-                    <ThemeToggleButton style={[styles.themeButton, { marginLeft: 8 }]} />
-                  </View>
                 </View>
+
+                 <View style={[styles.headerContainer ,{ flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }]}>
+                     <Text style={[styles.title, { color: colors.text }]}>{t('advocate')}</Text>
+                </View>
+                 
                 <Text style={[styles.subtitle, { color: colors.secondary , textAlign: currentLanguage === 'en' ? 'left' : 'right' }]}>
                   {t('enterCredentials')}
                 </Text>
@@ -420,22 +378,7 @@ console.log();
 };
 
 const styles = StyleSheet.create({
-  languageButton: {
-    paddingHorizontal: getResponsiveValue(8, 10, 12),
-    paddingVertical: getResponsiveValue(4, 5, 6),
-    borderRadius: 16,
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-  },
-  languageButtonActive: {
-    backgroundColor: '#3B82F6',
-    borderColor: '#3B82F6',
-  },
-  languageButtonText: {
-    fontSize: getResponsiveValue(12, 13, 14),
-    fontWeight: '500',
-  },
+ 
   errorText: {
     color: '#EF4444',
     fontSize: getResponsiveValue(10, 11, 12),
@@ -449,8 +392,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerContainer: {
-    justifyContent: 'space-between',
-    alignItems: 'center',
     marginBottom: getResponsiveValue(6, 7, 8),
   },
   themeButton: {
@@ -480,8 +421,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: getResponsiveValue(24, 28, 32),
     fontWeight: '800',
-    marginBottom: 4,
-    letterSpacing: -0.5,
+    marginBottom: 0,
+    // letterSpacing: -0.5,
   },
   subtitle: {
     fontSize: getResponsiveValue(12, 13, 14),

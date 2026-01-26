@@ -26,7 +26,7 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#111827',
+    // backgroundColor: '#111827',
   },
   keyboardAvoidingView: {
     flex: 1,
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#FFFFFF',
+    color: 'blac',
   },
 });
 

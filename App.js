@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar, I18nManager, LogBox, Platform } from 'react-native';
 import 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -6,7 +6,7 @@ import { I18nextProvider } from 'react-i18next';
 import { ThemeProvider } from './src/context/ThemeContext';
 import { LanguageProvider, useLanguage } from './src/context/LanguageContext';
 import AppNavigator from './src/routes/AppNavigator';
-import i18n from './src/i18n';
+import i18n, { loadSavedLanguage } from './src/i18n';
 
 // Ignore specific warnings
 LogBox.ignoreLogs([
@@ -19,14 +19,9 @@ const RTLUpdater = ({ children }) => {
   const { isRTL } = useLanguage();
   
   useEffect(() => {
-    // Force RTL layout if needed
-    if (I18nManager.isRTL !== isRTL) {
-      I18nManager.forceRTL(isRTL);
-      // On Android, we need to restart the app for RTL changes to take effect
-      if (Platform.OS === 'android') {
-        // You might want to show a message to the user to restart the app
-        console.log('Please restart the app to apply RTL changes');
-      }
+    // Force LTR layout to keep header, menu, and tabs consistent
+    if (I18nManager.isRTL !== false) {
+      I18nManager.forceRTL(false);
     }
   }, [isRTL]);
 
@@ -34,8 +29,8 @@ const RTLUpdater = ({ children }) => {
     <SafeAreaProvider
       style={{
         flex: 1,
-        // @ts-ignore - This is a valid style
-        direction: isRTL ? 'rtl' : 'ltr',
+        // Always use LTR direction for consistent layout
+        direction: 'ltr',
       }}
     >
       <StatusBar 
@@ -49,6 +44,27 @@ const RTLUpdater = ({ children }) => {
 };
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const initializeLanguage = async () => {
+      try {
+        await loadSavedLanguage();
+      } catch (error) {
+        console.error('Error loading language:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initializeLanguage();
+  }, []);
+
+  if (isLoading) {
+    // You can return a loading screen here
+    return null;
+  }
+
   return (
     <I18nextProvider i18n={i18n}>
       <LanguageProvider>

@@ -1,6 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { Platform, NativeModules, I18nManager } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import en from './translations/en.json';
 import ur from './translations/ur.json';
 
@@ -48,50 +49,57 @@ const getDeviceLanguage = () => {
 
 // Set app language and direction
 const setI18nConfig = (language) => {
-  const isRTL = RTL_LANGUAGES.includes(language);
+  // Don't change layout direction - keep header, menu, and tabs consistent
+  // const isRTL = RTL_LANGUAGES.includes(language);
+  // I18nManager.forceRTL(isRTL);
   
-  // Update layout direction
-  I18nManager.forceRTL(isRTL);
-  
-  // Update document direction for web
+  // Update document direction for web (if needed)
   if (typeof document !== 'undefined') {
-    document.dir = isRTL ? 'rtl' : 'ltr';
+    // document.dir = isRTL ? 'rtl' : 'ltr';
+    document.dir = 'ltr'; // Always LTR for consistent layout
     document.documentElement.lang = language;
   }
   
   return language;
 };
 
-// Initialize i18n
-const initI18n = () => {
-  const defaultLanguage = 'en'; // Default to English
-  const initialLanguage = setI18nConfig(defaultLanguage);
-  
-  i18n
-    .use(initReactI18next)
-    .init({
-      resources: {
-        en: { translation: en },
-        ur: { translation: ur },
-      },
-      lng: initialLanguage,
-      fallbackLng: 'en',
-      compatibilityJSON: 'v3',
-      interpolation: {
-        escapeValue: false,
-      },
-      react: {
-        useSuspense: false,
-      },
-    });
-    
-  // Add language change handler
-  i18n.on('languageChanged', (lng) => {
-    setI18nConfig(lng);
+// Initialize i18n immediately (synchronously for now)
+const i18nInstance = i18n
+  .use(initReactI18next)
+  .init({
+    resources: {
+      en: { translation: en },
+      ur: { translation: ur },
+    },
+    lng: 'en', // Default language
+    fallbackLng: 'en',
+    compatibilityJSON: 'v3',
+    interpolation: {
+      escapeValue: false,
+    },
+    react: {
+      useSuspense: false,
+    },
   });
 
-  return i18n;
+// Async function to load saved language and update
+const loadSavedLanguage = async () => {
+  try {
+    const savedLanguage = await AsyncStorage.getItem('userLanguage');
+    
+    if (savedLanguage && LANGUAGES[savedLanguage]) {
+      await i18n.changeLanguage(savedLanguage);
+      setI18nConfig(savedLanguage);
+    }
+  } catch (error) {
+    console.error('Error loading saved language:', error);
+  }
 };
 
-export { LANGUAGES, setI18nConfig };
-export default initI18n();
+// Add language change handler
+i18n.on('languageChanged', (lng) => {
+  setI18nConfig(lng);
+});
+
+export { LANGUAGES, setI18nConfig, loadSavedLanguage };
+export default i18n;
