@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, View, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from './Header';
+import { useTheme } from '../context/ThemeContext';
 
 import HomeScreen from '../screens/HomeScreen';
 import ToolsScreen from '../screens/ToolsScreen';
@@ -14,6 +15,8 @@ import SettingsScreen from '../screens/SettingsScreen';
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+  const { colors } = useTheme();
+  
   const handleNotificationPress = () => {
     console.log('Notification pressed');
   };
@@ -58,10 +61,10 @@ const TabNavigator = () => {
 
           return <Icon name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#14B8A6', // Teal color for active tab
-        tabBarInactiveTintColor: '#6B7280', // Grey for inactive tabs
+        tabBarActiveTintColor: colors.primary, // Use theme primary color
+        tabBarInactiveTintColor: colors.secondary, // Use theme secondary color
         tabBarStyle: {
-          backgroundColor: '#1F2937', // Dark grey background
+          backgroundColor: colors.background, // Use theme background color
           // borderTopLeftRadius: 20,
           // borderTopRightRadius: 20,
           height: 80,
@@ -124,7 +127,7 @@ const TabNavigator = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000ff',
+    backgroundColor: 'transparent', // Let theme handle background
   },
 });
 

@@ -1,6 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Animated, Modal, TouchableWithoutFeedback, Dimensions, SafeAreaView, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Animated, Modal, TouchableWithoutFeedback, Dimensions, SafeAreaView, Platform, Switch } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -35,8 +37,17 @@ const CustomModalMenu = ({
   onSelect,
   onClose,
 }) => {
+  const { currentLanguage, changeLanguage } = useLanguage();
+  const { isDarkMode, toggleTheme } = useTheme();
   const slideAnim = useRef(new Animated.Value(-500)).current;
   const [showModal, setShowModal] = useState(false);
+
+  const handleLanguageToggle = async (value) => {
+    const newLang = value ? 'ur' : 'en';
+    await changeLanguage(newLang);
+    // Close modal after language change so it opens from left side next time
+    onClose();
+  };
 
   useEffect(() => {
     if (isVisible) {
@@ -120,6 +131,38 @@ const CustomModalMenu = ({
                     </TouchableOpacity>
                   );
                 })}
+
+                {/* Language Toggle */}
+                <View style={styles.toggleContainer}>
+                  <View style={styles.toggleItem}>
+                    <Icon name="language" size={getResponsiveValue(16, 18, 20, 18, 20, 22)} color="#9CA3AF" />
+                    <Text style={styles.toggleText}>
+                      {currentLanguage === 'ur' ? 'اردو' : 'English'}
+                    </Text>
+                    <Switch
+                      value={currentLanguage === 'ur'}
+                      onValueChange={handleLanguageToggle}
+                      trackColor={{ false: '#374151', true: '#14B8A6' }}
+                      thumbColor={currentLanguage === 'ur' ? '#FFFFFF' : '#9CA3AF'}
+                      ios_backgroundColor="#374151"
+                    />
+                  </View>
+                </View>
+
+                {/* Dark Mode Toggle */}
+                <View style={styles.toggleContainer}>
+                  <View style={styles.toggleItem}>
+                    <Icon name="dark-mode" size={getResponsiveValue(16, 18, 20, 18, 20, 22)} color="#9CA3AF" />
+                    <Text style={styles.toggleText}>Dark Mode</Text>
+                    <Switch
+                      value={isDarkMode}
+                      onValueChange={toggleTheme}
+                      trackColor={{ false: '#374151', true: '#14B8A6' }}
+                      thumbColor={isDarkMode ? '#FFFFFF' : '#9CA3AF'}
+                      ios_backgroundColor="#374151"
+                    />
+                  </View>
+                </View>
 
                 {/* Go Premium */}
                 <TouchableOpacity 
@@ -258,5 +301,23 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: getResponsiveValue(14, 15, 16, 15, 16, 17),
     fontWeight: '600',
+  },
+  toggleContainer: {
+    marginBottom: getResponsiveValue(12, 14, 16, 14, 16, 18),
+  },
+  toggleItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: getResponsiveValue(8, 10, 12, 10, 12, 14),
+    paddingHorizontal: getResponsiveValue(12, 14, 16, 14, 16, 18),
+    borderRadius: getResponsiveValue(10, 12, 14, 12, 14, 16),
+    backgroundColor: '#1F2937',
+  },
+  toggleText: {
+    flex: 1,
+    fontSize: getResponsiveValue(14, 15, 16, 15, 16, 17),
+    color: '#E5E7EB',
+    marginLeft: getResponsiveValue(12, 14, 16, 14, 16, 18),
   },
 });
