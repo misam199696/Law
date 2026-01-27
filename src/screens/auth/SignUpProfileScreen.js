@@ -23,6 +23,8 @@ import { Picker } from '@react-native-picker/picker';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import CountryPicker from 'react-native-country-picker-modal';
+import ManIcon from '../../assets/svg/manIcon';
+import PhoneIcon from '../../assets/svg/Phone';
 
 const { width, height } = Dimensions.get('window');
 const isSmallScreen = width <= 375; // iPhone SE and similar small screens
@@ -51,7 +53,7 @@ const CustomDropdown = ({ label, selectedValue, onValueChange, items, placeholde
 
   return (
     <View style={styles.inputGroup}>
-      <Text style={[styles.label, { color: colors.text }]}>{label}</Text>
+      <Text style={[styles.label, { color: colors.text, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{label}</Text>
       <TouchableOpacity
         style={[
           styles.inputContainer,
@@ -65,7 +67,7 @@ const CustomDropdown = ({ label, selectedValue, onValueChange, items, placeholde
         onPress={() => setShowDropdown(!showDropdown)}
         activeOpacity={0.8}
       >
-        <Text style={[styles.inputStyle, { color: selectedValue ? colors.text : colors.secondary }]}>
+        <Text style={[styles.inputStyle, { color: selectedValue ? colors.text : colors.secondary, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>
           {getDisplayValue()}
         </Text>
         <Text style={[styles.dropdownIcon, { color: colors.text }]}>{showDropdown ? '⌃' : '⌄'}</Text>
@@ -248,8 +250,6 @@ const SignUpProfileScreen = ({ navigation, route }) => {
         return true; // Optional for individual users
       }
     ),
-    source: Yup.string()
-      .required(t('form.errors.required')),
     agree: Yup.boolean()
       .oneOf([true], t('form.errors.required'))
   });
@@ -306,11 +306,6 @@ const SignUpProfileScreen = ({ navigation, route }) => {
     { label: t('profession.student'), value: 'Student' },
   ];
 
-  const sourceOptions = [
-    { label: t('source.google'), value: 'Google' },
-    { label: t('source.linkedin'), value: 'LinkedIn' },
-    { label: t('source.referral'), value: 'Referral' },
-  ];
 
   const provinceOptions = [
     { label: t('province.punjab'), value: 'Punjab' },
@@ -331,7 +326,6 @@ const SignUpProfileScreen = ({ navigation, route }) => {
     city: '',
     province: '',
     profession: '',
-    source: '',
     agree: false,
     accountType: accountType, // Add accountType to form values
   });
@@ -381,14 +375,14 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                 }}>
                   <Text style={[styles.title, {
                     color: colors.text,
-                    textAlign: currentLanguage === 'en' ? 'left' : 'left',
+                    textAlign: currentLanguage === 'en' ? 'left' : 'right',
                     width: '100%',
                     writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
                   }]}>{getAccountTitle()}</Text>
                   <Text style={[styles.subtitle, {
                     color: colors.text,
                     opacity: 0.8,
-                    textAlign: currentLanguage === 'en' ? 'left' : 'left',
+                    textAlign: currentLanguage === 'en' ? 'left' : 'right',
                     width: '100%',
                     writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
                   }]}>
@@ -399,7 +393,7 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                 {/* First + Last Name Row */}
                 <View style={styles.row}>
                   <View style={[styles.halfInputWrapper, { marginRight: 16 }]}>
-                    <Text style={[styles.label, { color: colors.text }]}>{t('form.firstName')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                    <Text style={[styles.label, { color: colors.text, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{t('form.firstName')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                     <View style={[
                       styles.inputContainer,
                       {
@@ -407,22 +401,22 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                         borderColor: errors.firstName && touched.firstName ? colors.error : colors.border
                       }
                     ]}>
-                      <Text style={styles.icon}>👤</Text>
+                      <ManIcon style={{ marginRight: getResponsiveValue(8, 9, 10) }} />
                       <TextInput
                         value={values.firstName}
                         onChangeText={handleChange('firstName')}
                         onBlur={handleBlur('firstName')}
                         placeholder="John"
-                        style={[styles.inputStyle, { color: colors.text, backgroundColor: 'transparent' }]}
+                        style={[styles.inputStyle, { color: colors.text, backgroundColor: 'transparent', textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}
                         placeholderTextColor={colors.secondary}
                       />
                     </View>
                     {errors.firstName && touched.firstName && (
-                      <Text style={[styles.errorText, { color: colors.error }]}>{errors.firstName}</Text>
+                      <Text style={[styles.errorText, { color: colors.error, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{errors.firstName}</Text>
                     )}
                   </View>
                   <View style={styles.halfInputWrapper}>
-                    <Text style={[styles.label, { color: colors.text }]}>{t('form.lastName')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                    <Text style={[styles.label, { color: colors.text, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{t('form.lastName')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                     <View style={[
                       styles.inputContainer,
                       {
@@ -430,18 +424,18 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                         borderColor: errors.lastName && touched.lastName ? colors.error : colors.border
                       }
                     ]}>
-                      <Text style={styles.icon}>👤</Text>
+                      <ManIcon style={{ marginRight: getResponsiveValue(8, 9, 10) }} />
                       <TextInput
                         value={values.lastName}
                         onChangeText={handleChange('lastName')}
                         onBlur={handleBlur('lastName')}
                         placeholder="Advocate"
-                        style={[styles.inputStyle, { color: colors.text, backgroundColor: 'transparent' }]}
+                        style={[styles.inputStyle, { color: colors.text, backgroundColor: 'transparent', textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}
                         placeholderTextColor={colors.secondary}
                       />
                     </View>
                     {errors.lastName && touched.lastName && (
-                      <Text style={[styles.errorText, { color: colors.error }]}>{errors.lastName}</Text>
+                      <Text style={[styles.errorText, { color: colors.error, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{errors.lastName}</Text>
                     )}
                   </View>
                 </View>
@@ -450,7 +444,7 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                 <View style={styles.row}>
                   {/* Phone Number */}
                   <View style={[styles.halfInputWrapper, { marginRight: 8 }]}>
-                    <Text style={[styles.label, { color: colors.text }]}>{t('form.phoneNumber')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                    <Text style={[styles.label, { color: colors.text, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{t('form.phoneNumber')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                     <View style={[
                       styles.inputContainer,
                       {
@@ -458,7 +452,7 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                         borderColor: errors.phone && touched.phone ? colors.error : colors.border
                       }
                     ]}>
-                      <Text style={[styles.icon, { color: colors.primary }]}>📱</Text>
+                      <PhoneIcon style={{ marginRight: getResponsiveValue(8, 9, 10) }} />
                       <TextInput
                         value={values.phone}
                         onChangeText={handleChange('phone')}
@@ -469,19 +463,21 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                         style={[styles.textInput, {
                           color: colors.text, backgroundColor: 'transparent', fontSize: 12,
                           width: '80%',
+                          textAlign: currentLanguage === 'en' ? 'left' : 'right',
+                          // writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
                         }]}
                       />
                     </View>
                     {errors.phone && touched.phone && (
-                      <Text style={[styles.errorText, { color: colors.error }]}>{errors.phone}</Text>
+                      <Text style={[styles.errorText, { color: colors.error, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{errors.phone}</Text>
                     )}
                   </View>
 
                   {/* CNIC / Bar Council - Only show for non-public users */}
                   {accountType !== 'public' && (
                     <View style={[styles.halfInputWrapper, { marginLeft: 8 }]}>
-                      <Text style={[styles.label, { color: colors.text }]}>
-                        CNIC / Bar Council
+                      <Text style={[styles.label, { color: colors.text, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>
+                        {t('cnicBarCouncil')}
                         <Text style={[styles.required, { color: colors.error }]}>*</Text>
                       </Text>
                       <View style={[
@@ -504,11 +500,13 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                             backgroundColor: 'transparent',
                             fontSize: 12,
                             width: '80%',
+                            // textAlign: currentLanguage === 'en' ? 'left' : 'right',
+                            // writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
                           }]}
                         />
                       </View>
                       {errors.cnic && touched.cnic && (
-                        <Text style={[styles.errorText, { color: colors.error }]}>{errors.cnic}</Text>
+                        <Text style={[styles.errorText, { color: colors.error, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{errors.cnic}</Text>
                       )}
                     </View>
                   )}
@@ -517,7 +515,7 @@ const SignUpProfileScreen = ({ navigation, route }) => {
 
                 {/* Country Picker */}
                 <View style={[styles.inputGroup, { marginTop: 10 }]}>
-                  <Text style={[styles.label, { color: colors.text }]}>{t('country')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                  <Text style={[styles.label, { color: colors.text, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{t('country')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                   <TouchableOpacity
                     style={[
                       styles.inputContainer,
@@ -532,13 +530,13 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                     ]}
                     onPress={() => setCountryPickerVisible(true)}
                   >
-                    <Text style={[styles.inputStyle, { color: values.country ? colors.text : colors.secondary }]}>
+                    <Text style={[styles.inputStyle, { color: values.country ? colors.text : colors.secondary, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>
                       {values.country || 'Select your country'}
                     </Text>
                     <Text style={{ color: colors.text }}>▼</Text>
                   </TouchableOpacity>
                   {errors.country && touched.country && (
-                    <Text style={[styles.errorText, { color: colors.error }]}>{errors.country}</Text>
+                    <Text style={[styles.errorText, { color: colors.error, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{errors.country}</Text>
                   )}
                   <CountryPicker
                     {...countryPickerProps}
@@ -556,7 +554,7 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                 {/* City and Province Row */}
                     {/* City Input */}
                     <View style={{ width: '100%' }}>
-                      <Text style={[styles.label, { color: colors.text }]}>{t('city')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                      <Text style={[styles.label, { color: colors.text, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{t('city')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                       <View style={[
                         styles.inputContainer,
                         {
@@ -571,11 +569,11 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                           onBlur={handleBlur('city')}
                           placeholder="Enter city"
                           placeholderTextColor={colors.secondary}
-                          style={[styles.textInput, { color: colors.text, backgroundColor: 'transparent' }]}
+                          style={[styles.textInput, { color: colors.text, backgroundColor: 'transparent', textAlign: currentLanguage === 'en' ? 'left' : 'right' }]}
                         />
                       </View>
                       {errors.city && touched.city && (
-                        <Text style={[styles.errorText, { color: colors.error }]}>{errors.city}</Text>
+                        <Text style={[styles.errorText, { color: colors.error, textAlign: currentLanguage === 'en' ? 'left' : 'right' }]}>{errors.city}</Text>
                       )}
                     </View>
 
@@ -606,17 +604,6 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                   </View>
                 )}
 
-                {/* Source Dropdown */}
-                <View style={styles.sourceInputGroup}>
-                  <CustomDropdown
-                    label={t('selectSource')}
-                    selectedValue={values.source}
-                    onValueChange={v => setFieldValue('source', v)}
-                    items={sourceOptions}
-                    placeholder="Select an option"
-                    error={errors.source && touched.source ? errors.source : null}
-                  />
-                </View>
                 {/* Terms Agreement (Custom Circular Checkbox) */}
                 <TouchableOpacity
                   style={styles.termsContainer}
@@ -631,7 +618,7 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                     {values.agree && <Text style={styles.checkIcon}>✓</Text>}
                   </View>
                   <Text style={styles.termsText}>
-                    {t('agree')} <Text style={styles.link}>{t('privacyPolicy')}</Text> {changeLanguage === 'en' ? `&` : ''} <Text style={styles.link}>{t('terms')}</Text><Text style={styles.required}>*</Text>
+                    {t('agree')} <Text style={styles.link}>{t('privacyPolicy')}</Text> {currentLanguage === 'en' ? `&` : ''} <Text style={styles.link}>{t('terms')}</Text><Text style={styles.required}>*</Text>
                   </Text>
                 </TouchableOpacity>
                 {errors.agree && touched.agree && (
@@ -648,7 +635,7 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                   onPress={handleSubmit}
                   disabled={isSubmitting}
                 >
-                  <Text style={styles.submitButtonText}>
+                  <Text style={[styles.submitButtonText, { textAlign: currentLanguage === 'en' ? 'center' : 'center', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>
                     {isSubmitting ? 'Creating Account...' : t('createAccount')}
                   </Text>
                 </TouchableOpacity>
@@ -657,9 +644,9 @@ const SignUpProfileScreen = ({ navigation, route }) => {
 
                 {/* Login Link */}
                 <View style={[styles.footer, { borderTopColor: colors.border }]}>
-                  <Text style={[styles.footerText, { color: colors.text }]}>{t('alreadyHaveAccount')} </Text>
+                  <Text style={[styles.footerText, { color: colors.text, textAlign: currentLanguage === 'en' ? 'center' : 'center', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{t('alreadyHaveAccount')}</Text>
                   <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                    <Text style={[styles.footerLink, { color: colors.primary }]}>{t('signInInstead')}</Text>
+                    <Text style={[styles.footerLink, { color: colors.primary, textAlign: currentLanguage === 'en' ? 'center' : 'center', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{t('signInInstead')}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -872,27 +859,6 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     padding: 5,
   },
-  // Source Dropdown Styles
-  sourceInputGroup: {
-    marginBottom: getResponsiveValue(-12, -11, -10),
-    width: '100%',
-    borderRadius: getResponsiveValue(6, 7, 8),
-    padding: getResponsiveValue(3, 4, 5),
-  },
-  sourceLabel: {
-    fontSize: getResponsiveValue(12, 13, 14),
-    // fontWeight: '600',
-    marginBottom: getResponsiveValue(-12, -11, -10),
-    color: '#6366F1',
-  },
-  sourcePicker: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E0E7FF',
-    borderRadius: 6,
-    padding: 0,
-  },
-
   link: {
     color: '#12B7A6',
     fontWeight: '700',
@@ -920,50 +886,25 @@ const styles = StyleSheet.create({
   },
   submitButtonDisabled: {
     backgroundColor: '#9CA3AF',
-  },
-  submitButtonLabel: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  submitButtonDisabled: {
     opacity: 0.7,
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   footerText: {
     fontSize: getResponsiveValue(12, 13, 14),
     color: '#1F2937',
     fontWeight: '600',
+    textAlign: 'center',
+    marginLeft: getResponsiveValue(15, 16, 17),
   },
   footerLink: {
     fontSize: getResponsiveValue(12, 13, 14),
     color: '#12B7A6',
     fontWeight: '700',
-  },
-  socialButton: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#2d2d2d',
-    borderRadius: getResponsiveValue(12, 13, 14),
-    paddingVertical: getResponsiveValue(12, 14, 15),
-    marginBottom: 16,
-  },
-  socialButtonText: {
-    color: '#080808ff',
-    fontSize: getResponsiveValue(14, 15, 16),
-    fontWeight: '500',
-  },
-  socialContainer: {
-    marginTop: 24,
-    width: '100%',
-    marginTop: 24,
-    marginBottom: 16,
+    textAlign: 'center',
   },
   socialButton: {
     width: '100%',
@@ -982,6 +923,11 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginLeft: 12,
   },
+  socialContainer: {
+    marginTop: 24,
+    width: '100%',
+    marginBottom: 16,
+  },
   iconWrapper: {
     width: 24,
     height: 24,
@@ -998,19 +944,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
     padding: 10,
   },
-  footerText: {
-    fontSize: 14,
-    color: '#6B7280',
-    fontWeight: '400',
-  },
-
-
-  label: {
-    fontSize: 13,
-    color: '#9CA3AF',
-    marginBottom: 0,
-  },
-  inputStyle: {
+  textInput: {
     flex: 1,
     fontSize: getResponsiveValue(12, 13, 14),
     color: '#F3F4F6',

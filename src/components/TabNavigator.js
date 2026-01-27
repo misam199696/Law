@@ -1,9 +1,16 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, View, Text } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from './Header';
 import { useTheme } from '../context/ThemeContext';
+
+// Import SVG icons
+import Home from '../assets/svg/home';
+import Tools from '../assets/svg/judgments';
+import Book from '../assets/svg/book';
+import Voice from '../assets/svg/voice';
+import Documents from '../assets/svg/Drafting';
+import Settings from '../assets/svg/contract';
 
 import HomeScreen from '../screens/HomeScreen';
 import ToolsScreen from '../screens/ToolsScreen';
@@ -34,41 +41,41 @@ const TabNavigator = () => {
       <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
+          let IconComponent;
 
           switch (route.name) {
             case 'Home':
-              iconName = 'home';
+              IconComponent = Home;
               break;
             case 'Tools':
-              iconName = 'build';
+              IconComponent = Tools;
               break;
             case 'Library':
-              iconName = 'menu-book';
+              IconComponent = Book;
               break;
             case 'Voice':
-              iconName = 'mic';
+              IconComponent = Voice;
               break;
             case 'Documents':
-              iconName = 'description';
+              IconComponent = Documents;
               break;
             case 'Settings':
-              iconName = 'settings';
+              IconComponent = Settings;
               break;
             default:
-              iconName = 'help';
+              IconComponent = Home;
           }
 
-          return <Icon name={iconName} size={size} color={color} />;
+          return <IconComponent width={size} height={size} stroke={color} strokeWidth={1.5} fill="none" color={color} />;
         },
-        tabBarActiveTintColor: colors.primary, // Use theme primary color
-        tabBarInactiveTintColor: colors.secondary, // Use theme secondary color
+        tabBarActiveTintColor: '#11B7B1', // Active icon color - matching brand color
+        tabBarInactiveTintColor: '#9CA3AF', // Inactive icon color - gray
         tabBarStyle: {
-          backgroundColor: colors.background, // Use theme background color
-          // borderTopLeftRadius: 20,
-          // borderTopRightRadius: 20,
+          backgroundColor: '#1F2937', // Dark background color matching Figma
+          borderTopWidth: 0, // Remove top border
           height: 80,
           paddingBottom: 5,
+          paddingTop: 10,
           position: 'absolute',
           bottom: 0,
           left: 0,
@@ -92,32 +99,32 @@ const TabNavigator = () => {
       <Tab.Screen 
         name="Home" 
         component={HomeScreen}
-        options={{ tabBarLabel: 'Home' }}
+        options={{ tabBarLabel: '' }}
       />
       <Tab.Screen 
         name="Tools" 
         component={ToolsScreen}
-        options={{ tabBarLabel: 'Tools' }}
+        options={{ tabBarLabel: '' }}
       />
       <Tab.Screen 
         name="Library" 
         component={LibraryScreen}
-        options={{ tabBarLabel: 'Library' }}
+        options={{ tabBarLabel: '' }}
       />
       <Tab.Screen 
         name="Voice" 
         component={VoiceScreen}
-        options={{ tabBarLabel: 'Voice' }}
+        options={{ tabBarLabel: '' }}
       />
       <Tab.Screen 
         name="Documents" 
         component={DocumentsScreen}
-        options={{ tabBarLabel: 'Documents' }}
+        options={{ tabBarLabel: '' }}
       />
       <Tab.Screen 
         name="Settings" 
         component={SettingsScreen}
-        options={{ tabBarLabel: 'Settings' }}
+        options={{ tabBarLabel: '' }}
       />
     </Tab.Navigator>
     </View>

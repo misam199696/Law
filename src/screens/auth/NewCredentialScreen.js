@@ -119,15 +119,13 @@ const NewCredentialScreen = ({ navigation }) => {
           styles.card,
           { backgroundColor: colors.background }
         ]}>
-          <Text style={[styles.title, { color: colors.text , textAlign: 'left',
-                    writingDirection: 'ltr'  }]}>
+          <Text style={[styles.title, { color: colors.text, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>
             {t('newCredential.title')}
           </Text>
 
           {/* Password Requirements */}
           <View style={[styles.requirementsContainer, {  }]}>
-            <Text style={[styles.requirementsTitle, { color: colors.text , textAlign: 'left',
-                    writingDirection: 'ltr'  }]}>
+            <Text style={[styles.requirementsTitle, { color: colors.text, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>
               {t('newCredential.passwordRequirements')}
             </Text>
             <View style={styles.requirementList}>
@@ -136,8 +134,8 @@ const NewCredentialScreen = ({ navigation }) => {
                   styles.requirement, 
                   { 
                     color: passwordStrength.minLength ? '#10B981' : colors.secondary,
-                    textAlign: 'left',
-                    writingDirection: 'ltr'
+                    textAlign: currentLanguage === 'en' ? 'left' : 'right',
+                    writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
                   }
                 ]}>
                   {passwordStrength.minLength ? '✓' : '•'} {t('newCredential.minLength')}
@@ -148,8 +146,8 @@ const NewCredentialScreen = ({ navigation }) => {
                   styles.requirement, 
                   { 
                     color: passwordStrength.hasUpperCase ? '#10B981' : colors.secondary,
-                    textAlign: 'left',
-                    writingDirection: 'ltr'
+                    textAlign: currentLanguage === 'en' ? 'left' : 'right',
+                    writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
                   }
                 ]}>
                   {passwordStrength.hasUpperCase ? '✓' : '•'} {t('newCredential.uppercase')}
@@ -160,8 +158,8 @@ const NewCredentialScreen = ({ navigation }) => {
                   styles.requirement, 
                   { 
                     color: passwordStrength.hasLowerCase ? '#10B981' : colors.secondary,
-                    textAlign: 'left',
-                    writingDirection: 'ltr'
+                    textAlign: currentLanguage === 'en' ? 'left' : 'right',
+                    writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
                   }
                 ]}>
                   {passwordStrength.hasLowerCase ? '✓' : '•'} {t('newCredential.lowercase')}
@@ -172,8 +170,8 @@ const NewCredentialScreen = ({ navigation }) => {
                   styles.requirement, 
                   { 
                     color: passwordStrength.hasNumberOrSpecial ? '#10B981' : colors.secondary,
-                    textAlign: 'left',
-                    writingDirection: 'ltr'
+                    textAlign: currentLanguage === 'en' ? 'left' : 'right',
+                    writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
                   }
                 ]}>
                   {passwordStrength.hasNumberOrSpecial ? '✓' : '•'} {t('newCredential.numberOrSpecial')}
@@ -193,8 +191,7 @@ const NewCredentialScreen = ({ navigation }) => {
               <View style={styles.formContainer}>
                 {/* New Password */}
                 <View style={styles.inputGroup}>
-                  <Text style={[styles.label, { color: colors.text , textAlign: 'left',
-                    writingDirection: 'ltr' }]}>
+                  <Text style={[styles.label, { color: colors.text, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>
                     {t('newCredential.newPassword')}
                   </Text>
                   <View style={[
@@ -220,7 +217,7 @@ const NewCredentialScreen = ({ navigation }) => {
                         {
                           color: colors.text,
                           textAlign: currentLanguage === 'en' ? 'left' : 'right',
-                          writingDirection: currentLanguage === 'en' ? 'left' : 'right',
+                          writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl',
                           flex: 1
                         }
                       ]}
@@ -237,7 +234,7 @@ const NewCredentialScreen = ({ navigation }) => {
                       styles.errorText,
                       {
                         textAlign: currentLanguage === 'en' ? 'left' : 'right',
-                        writingDirection: currentLanguage === 'en' ? 'left' : 'right'
+                        writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
                       }
                     ]}>{errors.newPassword}</Text>
                   )}
@@ -245,8 +242,7 @@ const NewCredentialScreen = ({ navigation }) => {
 
                 {/* Confirm Password */}
                 <View style={styles.inputGroup}>
-                  <Text style={[styles.label, { color: colors.text , textAlign: 'left',
-                    writingDirection: 'ltr' }]}>
+                  <Text style={[styles.label, { color: colors.text, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>
                     {t('newCredential.confirmPassword')}
                   </Text>
                   <View style={[
@@ -268,7 +264,7 @@ const NewCredentialScreen = ({ navigation }) => {
                         {
                           color: colors.text,
                           textAlign: currentLanguage === 'en' ? 'left' : 'right',
-                          writingDirection: currentLanguage === 'en' ? 'left' : 'right',
+                          writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl',
                           flex: 1
                         }
                       ]}
@@ -285,7 +281,7 @@ const NewCredentialScreen = ({ navigation }) => {
                       styles.errorText,
                       {
                         textAlign: currentLanguage === 'en' ? 'left' : 'right',
-                        writingDirection: currentLanguage === 'en' ? 'left' : 'right'
+                        writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
                       }
                     ]}>{errors.confirmPassword}</Text>
                   )}

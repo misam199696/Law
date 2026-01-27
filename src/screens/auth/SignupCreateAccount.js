@@ -20,6 +20,13 @@ import { useTheme } from '../../context/ThemeContext';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Email from '../../assets/svg/email';
+import Password from '../../assets/svg/password';
+import PublicUser from '../../assets/svg/publicUser';
+import IndividualUser from '../../assets/svg/individualUser';
+import LawFirm from '../../assets/svg/lawFirm';
+import Google from '../../assets/svg/google';
+import Facebook from '../../assets/svg/facebook';
 
 
 const { width, height } = Dimensions.get('window');
@@ -114,7 +121,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
       id: 'public',
       title: t('signup.publicUser'),
       description: t('signup.publicUserDesc'),
-      icon: 'person-outline',
+      icon: <PublicUser width={getResponsiveValue(16, 18, 20)} height={getResponsiveValue(16, 18, 20)} />,
       iconColor: '#FFA500',
       iconBg: '#FFF5E6'
     },
@@ -122,7 +129,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
       id: 'individual',
       title: t('signup.individualUser'),
       description: t('signup.individualUserDesc'),
-      icon: 'business',
+                  icon: <IndividualUser width={getResponsiveValue(16, 18, 20)} height={getResponsiveValue(16, 18, 20)} />,
       iconColor: '#00BFA5',
       iconBg: '#E6F7F5'
     },
@@ -130,7 +137,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
       id: 'lawFirm',
       title: t('signup.lawFirm'),
       description: t('signup.lawFirmDesc'),
-      icon: 'gavel',
+                  icon: <LawFirm width={getResponsiveValue(16, 18, 20)} height={getResponsiveValue(16, 18, 20)} />,
       iconColor: '#FF5252',
       iconBg: '#FFEBEE'
     }
@@ -225,7 +232,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
                       },
                       errors.email && touched.email && styles.inputError
                     ]}>
-                      <Text style={styles.icon}>✉️</Text>
+                      <Email />
                       <TextInput
                         value={values.email}
                         onChangeText={handleChange('email')}
@@ -283,7 +290,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
                           <Text>{secure ? '👁️' : '👁️‍🗨️'}</Text>
                         </TouchableOpacity>
                       )}
-                      <Text style={styles.icon}>🔒</Text>
+                      <Password />
                       <TextInput
                         value={values.password}
                         onChangeText={handleChange('password')}
@@ -385,11 +392,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
                     >
                       <View style={[styles.cardContent, { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }]}>
                         <View style={[styles.iconContainer, { backgroundColor: selectedType ? accountTypes.find(type => type.id === selectedType)?.iconBg : '#F3F4F6' }]}>
-                          <Icon
-                            name={selectedType ? accountTypes.find(type => type.id === selectedType)?.icon : 'person-outline'}
-                            size={getResponsiveValue(16, 18, 20)}
-                            color={selectedType ? accountTypes.find(type => type.id === selectedType)?.iconColor : '#9CA3AF'}
-                          />
+                         {selectedType ? accountTypes.find(type => type.id === selectedType)?.icon : 'person-outline'}
                         </View>
                         <View style={styles.textContainer}>
                           <Text style={[
@@ -468,7 +471,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
                     activeOpacity={0.7}
                     onPress={() => console.log('Google')}
                   >
-                    <GoogleIcon />
+                    <Google />
                     <Text style={[styles.socialButtonText, { color: colors.text }]}>{t('continueWithGoogle')}</Text>
                   </TouchableOpacity>
 
@@ -477,7 +480,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
                     activeOpacity={0.7}
                     onPress={() => console.log('Facebook')}
                   >
-                    <FacebookIcon />
+                    <Facebook />
                     <Text style={[styles.socialButtonText, { color: colors.text }]}>{t('continueWithFacebook')}</Text>
                   </TouchableOpacity>
                 </View>
