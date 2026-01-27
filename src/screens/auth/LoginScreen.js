@@ -17,6 +17,11 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTheme } from '../../context/ThemeContext';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import Email from '../../assets/svg/email';
+import Password from '../../assets/svg/password';
+import Eye from '../../assets/svg/eye';
+import Google from '../../assets/svg/google';
+import Facebook from '../../assets/svg/facebook';
 
 const { width, height } = Dimensions.get('window');
 const isSmallScreen = width <= 375; // iPhone SE and similar small screens
@@ -164,7 +169,7 @@ const LoginScreen = ({ navigation }) => {
                       },
                       errors.email && touched.email && styles.inputError
                     ]}>
-                      <Text style={styles.icon}>✉️</Text>
+                      <Email />
                       <TextInput
                         value={values.email}
                         onChangeText={handleChange('email')}
@@ -219,10 +224,12 @@ const LoginScreen = ({ navigation }) => {
                           onPress={() => setSecure(!secure)} 
                           style={styles.eyeIcon}
                         >
-                          <Text>{secure ? '👁️' : '👁️‍🗨️'}</Text>
+                         {secure ? <Eye /> : <Eye />}
+                          
+                          
                         </TouchableOpacity>
                       )}
-                      <Text style={styles.icon}>🔒</Text>
+                      <Password />
                       <TextInput
                         value={values.password}
                         onChangeText={handleChange('password')}
@@ -346,7 +353,7 @@ const LoginScreen = ({ navigation }) => {
                     activeOpacity={0.7}
                     onPress={() => console.log('Google')}
                   >
-                    <GoogleIcon />
+                    <Google />
                     <Text style={[styles.socialButtonText, { color: colors.text }]}>{t('continueWithGoogle')}</Text>
                   </TouchableOpacity>
 
@@ -355,7 +362,7 @@ const LoginScreen = ({ navigation }) => {
                     activeOpacity={0.7}
                     onPress={() => console.log('Facebook')}
                   >
-                    <FacebookIcon />
+                    <Facebook />
                     <Text style={[styles.socialButtonText, { color: colors.text }]}>{t('continueWithFacebook')}</Text>
                   </TouchableOpacity>
                 </View>

@@ -20,6 +20,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useLanguage } from '../../context/LanguageContext';
 import ThemeToggleButton from '../../components/ThemeToggleButton';
+import Email from '../../assets/svg/email';
 
 const { width, height } = Dimensions.get('window');
 const isSmallScreen = width <= 375; // iPhone SE and similar small screens
@@ -144,10 +145,10 @@ const ForgetPasswordScreen = ({ navigation, route }) => {
                   { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }
                 ]}>
                   <View style={{ flex: 1, alignItems: currentLanguage === 'en' ? 'flex-start' : 'flex-end' }}>
-                    <Text style={[styles.title, { color: colors.text, alignSelf: currentLanguage === 'en' ? 'left' : 'right' }]}>
+                    <Text style={[styles.title, { color: colors.text, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>
                       {t('forgetPassword.title')}
                     </Text>
-                    <Text style={[styles.subtitle, { color: colors.secondary, alignSelf: currentLanguage === 'en' ? 'left' : 'right' }]}>
+                    <Text style={[styles.subtitle, { color: colors.secondary, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>
                       {t('forgetPassword.subtitle')}
                     </Text>
                   </View>
@@ -174,7 +175,7 @@ const ForgetPasswordScreen = ({ navigation, route }) => {
                       paddingHorizontal: 12
                     }
                   ]}>
-                    <Text style={[styles.icon, { color: colors.primary }]}>📧</Text>
+                    <Email />
                     <TextInput
                       value={values.email}
                       onChangeText={handleChange('email')}
@@ -293,12 +294,10 @@ const styles = StyleSheet.create({
     fontSize: getResponsiveValue(24, 28, 32),
     fontWeight: '800',
     marginBottom: getResponsiveValue(8, 10, 12),
-    textAlign: 'left',
   },
   subtitle: {
     fontSize: getResponsiveValue(14, 15, 16),
     fontWeight: '500',
-    textAlign: 'left',
     opacity: 0.8,
     lineHeight: getResponsiveValue(20, 22, 24),
   },

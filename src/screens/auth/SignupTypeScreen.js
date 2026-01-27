@@ -15,6 +15,13 @@ import { useTranslation } from 'react-i18next';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { ThemeContext } from '../../context/ThemeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Logo from '../../assets/svg/logo';
+import Message from '../../assets/svg/message';
+import Documents from '../../assets/svg/documents';
+import Justice from '../../assets/svg/justice';
+import PublicUser from '../../assets/svg/publicUser';
+import IndividualUser from '../../assets/svg/individualUser';
+import LawFirm from '../../assets/svg/lawFirm';
 
 const { width, height } = Dimensions.get('window');
 const isSmallScreen = width <= 375; // iPhone SE and similar small screens
@@ -55,7 +62,7 @@ const SignupTypeScreen = () => {
             id: 'public',
             title: t('signup.publicUser'),
             description: t('signup.publicUserDesc'),
-            icon: 'person-outline',
+            icon: <PublicUser width={getResponsiveValue(16, 18, 20)} height={getResponsiveValue(16, 18, 20)} />,
             iconColor: '#FFA500',
             iconBg: '#FFF5E6'
         },
@@ -63,7 +70,7 @@ const SignupTypeScreen = () => {
             id: 'individual',
             title: t('signup.individualUser'),
             description: t('signup.individualUserDesc'),
-            icon: 'business',
+            icon: <IndividualUser width={getResponsiveValue(16, 18, 20)} height={getResponsiveValue(16, 18, 20)} />,
             iconColor: '#00BFA5',
             iconBg: '#E6F7F5'
         },
@@ -71,7 +78,7 @@ const SignupTypeScreen = () => {
             id: 'lawFirm',
             title: t('signup.lawFirm'),
             description: t('signup.lawFirmDesc'),
-            icon: 'gavel',
+            icon: <LawFirm width={getResponsiveValue(16, 18, 20)} height={getResponsiveValue(16, 18, 20)} />,
             iconColor: '#FF5252',
             iconBg: '#FFEBEE'
         }
@@ -238,11 +245,11 @@ const SignupTypeScreen = () => {
                     {/* App Logo and Tagline */}
                     <View style={dynamicStyles.logoContainer}>
                         <View style={[styles.logoCircle, { backgroundColor: isDarkMode ? '#1E2E3D' : '#E6F7F5' }]}>
-                            <Image
-                                source={require('../../assets/images/icon.png')}
-                                style={[styles.logo,]}
-                                resizeMode="contain"
-                            />
+                           <Logo 
+          width={40}
+          height={40}
+          style={styles.logo}
+        />
                         </View>
                         <Text style={dynamicStyles.appTitle}>{t('signup.trustedLegalAssistant')}</Text>
                         <Text style={dynamicStyles.appSubtitle}>{t('signup.legalMarketplace')}</Text>
@@ -253,19 +260,19 @@ const SignupTypeScreen = () => {
                         <View style={[dynamicStyles.serviceButton, [
                             { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }
                         ]]}>
-                            <Icon name="help-outline" size={getResponsiveValue(12, 14, 15)} color={colors.primary} />
+                           <Message width={getResponsiveValue(12, 14, 15)} height={getResponsiveValue(12, 14, 15)} />
                             <Text style={[dynamicStyles.serviceButtonText, { color: colors.text }]}>{t('signup.aiLegalAnswers')}</Text>
                         </View>
                         <View style={[dynamicStyles.serviceButton, [
                             { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }
                         ]]}>
-                            <Icon name="chat-bubble-outline" size={getResponsiveValue(12, 14, 15)} color={colors.primary} />
+                            <Documents width={getResponsiveValue(12, 14, 15)} height={getResponsiveValue(12, 14, 15)} />
                             <Text style={[dynamicStyles.serviceButtonText, { color: colors.text }]}>{t('signup.legalConsultations')}</Text>
                         </View>
                         <View style={[dynamicStyles.serviceButton, [
                             { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }
                         ]]}>
-                            <Icon name="search" size={getResponsiveValue(12, 14, 15)} color={colors.primary} />
+                            <Justice width={getResponsiveValue(12, 14, 15)} height={getResponsiveValue(12, 14, 15)} />
                             <Text style={[dynamicStyles.serviceButtonText, { color: colors.text }]}>{t('signup.legalResearch')}</Text>
                         </View>
                     </View>
@@ -288,11 +295,7 @@ const SignupTypeScreen = () => {
                                 >
                                     <View style={[styles.cardContent,{flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse'}]}>
                                         <View style={[styles.iconContainer, { backgroundColor: type.iconBg }]}>
-                                            <Icon
-                                                name={type.icon}
-                                                size={getResponsiveValue(16, 18, 20)}
-                                                color={type.iconColor}
-                                            />
+                                           {type.icon}
                                         </View>
                                         <View style={styles.textContainer}>
                                             <Text style={[dynamicStyles.cardTitle,{alignSelf: currentLanguage === 'en' ? 'flex-start' : 'flex-end'}]}>

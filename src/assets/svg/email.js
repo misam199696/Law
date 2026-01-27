@@ -1,0 +1,28 @@
+import * as React from "react";
+import Svg, { Path } from "react-native-svg";
+const Email = (props) => (
+  <Svg
+    width={20}
+    height={20}
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <Path
+      d="M16.667 3.33398H3.33366C2.41318 3.33398 1.66699 4.08018 1.66699 5.00065V15.0007C1.66699 15.9211 2.41318 16.6673 3.33366 16.6673H16.667C17.5875 16.6673 18.3337 15.9211 18.3337 15.0007V5.00065C18.3337 4.08018 17.5875 3.33398 16.667 3.33398Z"
+      stroke="#00C3D0"
+      strokeWidth={1.66667}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <Path
+      d="M18.3337 5.83398L10.8587 10.584C10.6014 10.7452 10.3039 10.8307 10.0003 10.8307C9.69673 10.8307 9.39927 10.7452 9.14199 10.584L1.66699 5.83398"
+      stroke="#00C3D0"
+      strokeWidth={1.66667}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </Svg>
+);
+export default Email;

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Image, StyleSheet, Animated, Easing } from 'react-native';
+import { View, StyleSheet, Animated, Easing } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
+import Logo from '../assets/svg/logo';
 
 const SplashScreen = ({ navigation }) => {
   const { colors } = useTheme();
@@ -49,10 +50,10 @@ const SplashScreen = ({ navigation }) => {
           }
         ]}
       >
-        <Image 
-          source={require('../assets/images/icon.png')} 
-          style={[styles.logo, ]}
-          resizeMode="contain"
+        <Logo 
+          width={100}
+          height={100}
+          style={styles.logo}
         />
       </Animated.View>
     </View>
@@ -72,7 +73,6 @@ const styles = StyleSheet.create({
   logo: {
     width: 200,
     height: 200,
-    resizeMode: 'contain',
   },
 });
 

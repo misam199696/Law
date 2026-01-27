@@ -3,6 +3,13 @@ import { View, Text, StyleSheet, TouchableOpacity, Animated, Modal, TouchableWit
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
+import Logo from '../assets/svg/logo';
+import OverView from '../assets/svg/overview';
+import Judgment from '../assets/svg/judgments';
+import Voice from '../assets/svg/voice';
+import Book from '../assets/svg/book';
+import Drafting from '../assets/svg/Drafting';
+import Contract from '../assets/svg/contract';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -23,12 +30,12 @@ const getResponsiveValue = (small, medium, large, iosSmall, iosMedium, iosLarge)
 };
 
 const menuItems = [
-  { id: 'overview', label: 'Overview', icon: 'dashboard' },
-  { id: 'judgments', label: 'Judgments', icon: 'gavel' },
-  { id: 'voice-search', label: 'Voice Search', icon: 'mic' },
-  { id: 'legal-statutes', label: 'Legal Statutes', icon: 'menu-book' },
-  { id: 'petition-drafting', label: 'Petition Drafting', icon: 'description' },
-  { id: 'contract-drafting', label: 'Contract Drafting', icon: 'assignment' },
+  { id: 'overview', label: 'Overview', icon: OverView },
+  { id: 'judgments', label: 'Judgments', icon: Judgment },
+  { id: 'voice-search', label: 'Voice Search', icon: Voice },
+  { id: 'legal-statutes', label: 'Legal Statutes', icon: Book },
+  { id: 'petition-drafting', label: 'Petition Drafting', icon: Drafting },
+  { id: 'contract-drafting', label: 'Contract Drafting', icon: Contract },
 ];
 
 const CustomModalMenu = ({
@@ -94,7 +101,7 @@ const CustomModalMenu = ({
               <View style={styles.menuHeader}>
                 <View style={styles.logoContainer}>
                   <View style={styles.logoBackground}>
-                    <Icon name="balance-scale" size={getResponsiveValue(20, 24, 28, 22, 26, 30)} color="#10B981" />
+                    <Logo size={getResponsiveValue(20, 24, 28, 22, 26, 30)} />
                   </View>
                   <View>
                     <Text style={styles.menuTitle}>LegalAssist</Text>
@@ -120,10 +127,9 @@ const CustomModalMenu = ({
                       }}
                       activeOpacity={0.8}
                     >
-                      <Icon
-                        name={item.icon}
-                        size={getResponsiveValue(16, 18, 20, 18, 20, 22)}
-                        color={isActive ? '#FFFFFF' : '#9CA3AF'}
+                      <item.icon 
+                        width={getResponsiveValue(16, 18, 20, 18, 20, 22)} 
+                        height={getResponsiveValue(16, 18, 20, 18, 20, 22)} 
                       />
                       <Text style={[styles.menuText, isActive && styles.activeText]}>
                         {item.label}
