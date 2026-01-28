@@ -26,6 +26,16 @@ import CountryPicker from 'react-native-country-picker-modal';
 import ManIcon from '../../assets/svg/manIcon';
 import PhoneIcon from '../../assets/svg/Phone';
 
+export const PAKISTAN_PROVINCES = [
+  "Punjab",
+  "Sindh", 
+  "Khyber Pakhtunkhwa",
+  "Balochistan",
+  "Gilgit-Baltistan",
+  "Azad Jammu and Kashmir",
+  "Islamabad Capital Territory",
+];
+
 const { width, height } = Dimensions.get('window');
 const isSmallScreen = width <= 375; // iPhone SE and similar small screens
 const isMediumScreen = width > 375 && width <= 414; // 6-inch and normal screens
@@ -75,10 +85,14 @@ const CustomDropdown = ({ label, selectedValue, onValueChange, items, placeholde
 
       {/* Custom Dropdown List */}
       {showDropdown && (
-        <View style={[
-          styles.customDropdown,
-          { backgroundColor: colors.card, borderColor: colors.border }
-        ]}>
+        <ScrollView 
+          style={[
+            styles.customDropdown,
+            { backgroundColor: colors.card, borderColor: colors.border }
+          ]}
+          contentContainerStyle={{ paddingVertical: 4 }}
+          showsVerticalScrollIndicator={true}
+          nestedScrollEnabled={true}>
           {items.map((item, index) => (
             <TouchableOpacity
               key={item.value}
@@ -107,7 +121,7 @@ const CustomDropdown = ({ label, selectedValue, onValueChange, items, placeholde
               </Text>
             </TouchableOpacity>
           ))}
-        </View>
+        </ScrollView>
       )}
       {error && (
         <Text style={[styles.errorText, { color: colors.error }]}>{error}</Text>
@@ -124,6 +138,7 @@ const SignUpProfileScreen = ({ navigation, route }) => {
   const { colors } = useTheme();
   const { t, i18n } = useTranslation();
   const { currentLanguage, changeLanguage } = useLanguage();
+  const [focusedInput, setFocusedInput] = useState(null);
   const [secure, setSecure] = useState(true);
   const isDesktop = width > 600;
   const isTablet = width > 768;
@@ -307,15 +322,10 @@ const SignUpProfileScreen = ({ navigation, route }) => {
   ];
 
 
-  const provinceOptions = [
-    { label: t('province.punjab'), value: 'Punjab' },
-    { label: t('province.sindh'), value: 'Sindh' },
-    { label: t('province.kpk'), value: 'KPK' },
-    { label: t('province.balochistan'), value: 'Balochistan' },
-    { label: t('province.ict'), value: 'ICT' },
-    { label: t('province.gb'), value: 'GB' },
-    { label: t('province.ajk'), value: 'AJK' },
-  ];
+  const provinceOptions = PAKISTAN_PROVINCES.map(province => ({
+    label: province,
+    value: province
+  }));
 
   const [initialValues] = useState({
     firstName: '',
@@ -398,16 +408,32 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                       styles.inputContainer,
                       {
                         backgroundColor: colors.card,
-                        borderColor: errors.firstName && touched.firstName ? colors.error : colors.border
+                        borderColor: errors.firstName && touched.firstName ? colors.error : focusedInput === 'firstName' ? '#14B8A6' : colors.border,
+                        flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        paddingHorizontal: 12
                       }
                     ]}>
-                      <ManIcon style={{ marginRight: getResponsiveValue(8, 9, 10) }} />
+                      <ManIcon style={{ marginRight: currentLanguage === 'en' ? getResponsiveValue(8, 9, 10) : 0, marginLeft: currentLanguage === 'en' ? 0 : getResponsiveValue(8, 9, 10) }} />
                       <TextInput
                         value={values.firstName}
                         onChangeText={handleChange('firstName')}
-                        onBlur={handleBlur('firstName')}
+                        onBlur={() => {
+                          handleBlur('firstName');
+                          setFocusedInput(null);
+                        }}
+                        onFocus={() => setFocusedInput('firstName')}
                         placeholder="John"
-                        style={[styles.inputStyle, { color: colors.text, backgroundColor: 'transparent', textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}
+                        style={[styles.inputStyle, { 
+                          color: colors.text, 
+                          backgroundColor: 'transparent', 
+                          textAlign: currentLanguage === 'en' ? 'left' : 'right', 
+                          writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl',
+                          flex: 1,
+                          marginLeft: currentLanguage === 'en' ? 8 : 8,
+                          marginRight: currentLanguage === 'en' ? 8 : 20
+                        }]}
                         placeholderTextColor={colors.secondary}
                       />
                     </View>
@@ -421,16 +447,32 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                       styles.inputContainer,
                       {
                         backgroundColor: colors.card,
-                        borderColor: errors.lastName && touched.lastName ? colors.error : colors.border
+                        borderColor: errors.lastName && touched.lastName ? colors.error : focusedInput === 'lastName' ? '#14B8A6' : colors.border,
+                        flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        paddingHorizontal: 12
                       }
                     ]}>
-                      <ManIcon style={{ marginRight: getResponsiveValue(8, 9, 10) }} />
+                      <ManIcon style={{ marginRight: currentLanguage === 'en' ? getResponsiveValue(8, 9, 10) : 0, marginLeft: currentLanguage === 'en' ? 0 : getResponsiveValue(8, 9, 10) }} />
                       <TextInput
                         value={values.lastName}
                         onChangeText={handleChange('lastName')}
-                        onBlur={handleBlur('lastName')}
-                        placeholder="Advocate"
-                        style={[styles.inputStyle, { color: colors.text, backgroundColor: 'transparent', textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}
+                        onBlur={() => {
+                          handleBlur('lastName');
+                          setFocusedInput(null);
+                        }}
+                        onFocus={() => setFocusedInput('lastName')}
+                        placeholder="Doe"
+                        style={[styles.inputStyle, { 
+                          color: colors.text, 
+                          backgroundColor: 'transparent', 
+                          textAlign: currentLanguage === 'en' ? 'left' : 'right', 
+                          writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl',
+                          flex: 1,
+                          marginLeft: currentLanguage === 'en' ? 8 : 8,
+                          marginRight: currentLanguage === 'en' ? 8 : 20
+                        }]}
                         placeholderTextColor={colors.secondary}
                       />
                     </View>
@@ -443,28 +485,43 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                 {/* Phone Number and CNIC Row */}
                 <View style={styles.row}>
                   {/* Phone Number */}
-                  <View style={[styles.halfInputWrapper, { marginRight: 8 }]}>
+                  <View style={[
+                    accountType === 'public' ? styles.fullInputWrapper : styles.halfInputWrapper, 
+                    accountType === 'public' ? {} : { marginRight: 8 }
+                  ]}>
                     <Text style={[styles.label, { color: colors.text, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{t('form.phoneNumber')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                     <View style={[
                       styles.inputContainer,
                       {
                         backgroundColor: colors.card,
-                        borderColor: errors.phone && touched.phone ? colors.error : colors.border
+                        borderColor: errors.phone && touched.phone ? colors.error : focusedInput === 'phone' ? '#14B8A6' : colors.border,
+                        flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        paddingHorizontal: 12
                       }
                     ]}>
-                      <PhoneIcon style={{ marginRight: getResponsiveValue(8, 9, 10) }} />
+                      <PhoneIcon style={{ marginRight: currentLanguage === 'en' ? getResponsiveValue(8, 9, 10) : 0, marginLeft: currentLanguage === 'en' ? 0 : getResponsiveValue(8, 9, 10) }} />
                       <TextInput
                         value={values.phone}
                         onChangeText={handleChange('phone')}
-                        onBlur={handleBlur('phone')}
+                        onBlur={() => {
+                          handleBlur('phone');
+                          setFocusedInput(null);
+                        }}
+                        onFocus={() => setFocusedInput('phone')}
                         placeholder="+92 300 1234567"
                         placeholderTextColor={colors.secondary}
                         keyboardType="phone-pad"
                         style={[styles.textInput, {
-                          color: colors.text, backgroundColor: 'transparent', fontSize: 12,
-                          width: '80%',
+                          color: colors.text, 
+                          backgroundColor: 'transparent', 
+                          fontSize: 12,
+                          flex: 1,
                           textAlign: currentLanguage === 'en' ? 'left' : 'right',
-                          // writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
+                          writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl',
+                          marginLeft: currentLanguage === 'en' ? 8 : 8,
+                          marginRight: currentLanguage === 'en' ? 8 : 20
                         }]}
                       />
                     </View>
@@ -484,13 +541,21 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                         styles.inputContainer,
                         {
                           backgroundColor: colors.card,
-                          borderColor: errors.cnic && touched.cnic ? colors.error : colors.border
+                          borderColor: errors.cnic && touched.cnic ? colors.error : focusedInput === 'cnic' ? '#14B8A6' : colors.border,
+                          flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          paddingHorizontal: 12
                         }
                       ]}>
                         <TextInput
                           value={values.cnic}
                           onChangeText={handleChange('cnic')}
-                          onBlur={handleBlur('cnic')}
+                          onBlur={() => {
+                            handleBlur('cnic');
+                            setFocusedInput(null);
+                          }}
+                          onFocus={() => setFocusedInput('cnic')}
                           placeholder="1234578900"
                           placeholderTextColor={colors.secondary}
                           keyboardType="default"
@@ -499,9 +564,11 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                             color: colors.text,
                             backgroundColor: 'transparent',
                             fontSize: 12,
-                            width: '80%',
-                            // textAlign: currentLanguage === 'en' ? 'left' : 'right',
-                            // writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
+                            flex: 1,
+                            textAlign: currentLanguage === 'en' ? 'left' : 'right',
+                            writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl',
+                            marginLeft: currentLanguage === 'en' ? 8 : 8,
+                            marginRight: currentLanguage === 'en' ? 8 : 20
                           }]}
                         />
                       </View>
@@ -559,14 +626,18 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                         styles.inputContainer,
                         {
                           backgroundColor: colors.card,
-                          borderColor: errors.city && touched.city ? colors.error : colors.border,
+                          borderColor: errors.city && touched.city ? colors.error : focusedInput === 'city' ? '#14B8A6' : colors.border,
                           // marginRight: 10
                         }
                       ]}>
                         <TextInput
                           value={values.city}
                           onChangeText={handleChange('city')}
-                          onBlur={handleBlur('city')}
+                          onBlur={() => {
+                            handleBlur('city');
+                            setFocusedInput(null);
+                          }}
+                          onFocus={() => setFocusedInput('city')}
                           placeholder="Enter city"
                           placeholderTextColor={colors.secondary}
                           style={[styles.textInput, { color: colors.text, backgroundColor: 'transparent', textAlign: currentLanguage === 'en' ? 'left' : 'right' }]}
@@ -731,6 +802,9 @@ const styles = StyleSheet.create({
   },
   halfInputWrapper: {
     width: '48%',
+  },
+  fullInputWrapper: {
+    width: '100%',
   },
   inputGroup: {
     marginBottom: getResponsiveValue(12, 14, 16),

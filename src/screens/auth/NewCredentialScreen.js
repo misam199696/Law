@@ -18,6 +18,9 @@ import { useTheme } from '../../context/ThemeContext';
 import LanguageContext, { useLanguage } from '../../context/LanguageContext';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import Password from '../../assets/svg/password';
+import Eye from '../../assets/svg/eye';
+import EyeOff from '../../assets/svg/eyeOff';
 
 const { width } = Dimensions.get('window');
 const isSmallScreen = width <= 375;
@@ -34,6 +37,7 @@ const NewCredentialScreen = ({ navigation }) => {
   const { colors } = useTheme();
   const { t, i18n } = useTranslation();
   const { currentLanguage, changeLanguage } = useLanguage();
+  const [focusedInput, setFocusedInput] = useState(null);
   const [secure, setSecure] = useState(true);
   const [secureConfirm, setSecureConfirm] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -198,17 +202,25 @@ const NewCredentialScreen = ({ navigation }) => {
                     styles.inputContainer,
                     {
                       backgroundColor: colors.card,
-                      borderColor: errors.newPassword && touched.newPassword ? colors.error : colors.border
-                       
+                      borderColor: errors.newPassword && touched.newPassword ? colors.error : focusedInput === 'newPassword' ? '#14B8A6' : colors.border,
+                      flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      paddingHorizontal: 12
                     }
                   ]}>
+                    <Password />
                     <TextInput
                       value={values.newPassword}
                       onChangeText={(text) => {
                         handleChange('newPassword')(text);
                         checkPasswordStrength(text);
                       }}
-                      onBlur={handleBlur('newPassword')}
+                      onBlur={() => {
+                        handleBlur('newPassword');
+                        setFocusedInput(null);
+                      }}
+                      onFocus={() => setFocusedInput('newPassword')}
                       placeholder={t('newCredential.enterNewPassword')}
                       placeholderTextColor={colors.secondary}
                       secureTextEntry={secure}
@@ -218,15 +230,20 @@ const NewCredentialScreen = ({ navigation }) => {
                           color: colors.text,
                           textAlign: currentLanguage === 'en' ? 'left' : 'right',
                           writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl',
-                          flex: 1
+                          flex: 1,
+                          marginLeft: currentLanguage === 'en' ? 8 : 8,
+                          marginRight: currentLanguage === 'en' ? 8 : 20
                         }
                       ]}
                     />
                     <TouchableOpacity
                       onPress={() => setSecure(!secure)}
-                      style={styles.eyeIcon}
+                      style={[
+                        styles.eyeIcon,
+                        currentLanguage === 'en' ? { right: 12 } : { left: 12 }
+                      ]}
                     >
-                      <Text>{secure ? '👁️' : '👁️‍🗨️'}</Text>
+                      {secure ? <EyeOff width={20} height={20} color="#9CA3AF" /> : <Eye width={20} height={20} color="#9CA3AF" />}
                     </TouchableOpacity>
                   </View>
                   {errors.newPassword && touched.newPassword && (
@@ -249,13 +266,22 @@ const NewCredentialScreen = ({ navigation }) => {
                     styles.inputContainer,
                     {
                       backgroundColor: colors.card,
-                      borderColor: errors.confirmPassword && touched.confirmPassword ? colors.error : colors.border
+                      borderColor: errors.confirmPassword && touched.confirmPassword ? colors.error : focusedInput === 'confirmPassword' ? '#14B8A6' : colors.border,
+                      flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      paddingHorizontal: 12
                     }
                   ]}>
+                    <Password />
                     <TextInput
                       value={values.confirmPassword}
                       onChangeText={handleChange('confirmPassword')}
-                      onBlur={handleBlur('confirmPassword')}
+                      onBlur={() => {
+                        handleBlur('confirmPassword');
+                        setFocusedInput(null);
+                      }}
+                      onFocus={() => setFocusedInput('confirmPassword')}
                       placeholder={t('newCredential.enterConfirmPassword')}
                       placeholderTextColor={colors.secondary}
                       secureTextEntry={secureConfirm}
@@ -265,15 +291,20 @@ const NewCredentialScreen = ({ navigation }) => {
                           color: colors.text,
                           textAlign: currentLanguage === 'en' ? 'left' : 'right',
                           writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl',
-                          flex: 1
+                          flex: 1,
+                          marginLeft: currentLanguage === 'en' ? 8 : 8,
+                          marginRight: currentLanguage === 'en' ? 8 : 20
                         }
                       ]}
                     />
                     <TouchableOpacity
                       onPress={() => setSecureConfirm(!secureConfirm)}
-                      style={styles.eyeIcon}
+                      style={[
+                        styles.eyeIcon,
+                        currentLanguage === 'en' ? { right: 12 } : { left: 12 }
+                      ]}
                     >
-                      <Text>{secureConfirm ? '👁️' : '👁️‍🗨️'}</Text>
+                      {secureConfirm ? <EyeOff width={20} height={20} color="#9CA3AF" /> : <Eye width={20} height={20} color="#9CA3AF" />}
                     </TouchableOpacity>
                   </View>
                   {errors.confirmPassword && touched.confirmPassword && (
@@ -385,6 +416,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   eyeIcon: {
+    position: 'absolute',
+    top: getResponsiveValue(10, 11, 12),
+    zIndex: 1,
     padding: getResponsiveValue(8, 9, 10),
   },
   errorText: {

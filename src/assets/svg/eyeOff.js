@@ -1,6 +1,6 @@
 import * as React from "react";
 import Svg, { Path } from "react-native-svg";
-const Eye = (props) => (
+const EyeOff = (props) => (
   <Svg
     width={20}
     height={20}
@@ -23,6 +23,13 @@ const Eye = (props) => (
       strokeLinecap="round"
       strokeLinejoin="round"
     />
+    <Path
+      d="M2.5 2.5L17.5 17.5"
+      stroke="currentColor"
+      strokeWidth={1.66667}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </Svg>
 );
-export default Eye;
+export default EyeOff;

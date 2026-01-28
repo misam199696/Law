@@ -15,10 +15,10 @@ export const ThemeProvider = ({ children }) => {
     isDarkMode,
     toggleTheme,
     colors: {
-      background: isDarkMode ? '#121212' : '#FFFFFF',
-      card: isDarkMode ? '#1E1E1E' : '#FFFFFF',
+      background: isDarkMode ? '#2B2B31' : '#FFFFFF',
+      card: isDarkMode ? '#2B2B31' : '#FFFFFF',
       text: isDarkMode ? '#FFFFFF' : '#000000',
-      border: isDarkMode ? '#333333' : '#E5E7EB',
+      border: isDarkMode ? '#374151' : '#E5E7EB',
       primary: '#12B7A6',
       primaryDark: '#0E8C7F',
       secondary: isDarkMode ? '#9CA3AF' : '#6B7280',

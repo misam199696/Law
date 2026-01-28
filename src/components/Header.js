@@ -3,8 +3,12 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import CustomModalMenu from './CustomModalMenu';
+import MenuButton from '../assets/svg/menuButton';
+import { useTheme } from '../context/ThemeContext';
+import BellIcon from '../assets/svg/bellIcon';
 
 const Header = ({ onMenuPress, onNotificationPress, onProfilePress }) => {
+  const { isDarkMode } = useTheme();
   const insets = useSafeAreaInsets();
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [activeMenuItem, setActiveMenuItem] = useState('overview');
@@ -28,6 +32,9 @@ const Header = ({ onMenuPress, onNotificationPress, onProfilePress }) => {
     <View style={[
       styles.container,
       {
+        backgroundColor: isDarkMode ? '#2B2B31' : '#FFFFFF',
+        borderBottomColor: isDarkMode ? '#1f1f1fff' : '#E5E7EB',
+        borderBottomWidth: 1,
         paddingTop: insets.top + 10,
         paddingLeft: insets.left + 20,
         paddingRight: insets.right + 20,
@@ -35,22 +42,22 @@ const Header = ({ onMenuPress, onNotificationPress, onProfilePress }) => {
     ]}>
       <View style={styles.leftSection}>
         <TouchableOpacity onPress={handleMenuPress} style={styles.menuButton}>
-          <Icon name="menu" size={24} color="#FFFFFF" />
+          <MenuButton width={30} height={30} />
         </TouchableOpacity>
         
         <View style={styles.logoContainer}>
-          <Text style={styles.logoText}>LA</Text>
+          <Text style={[styles.logoText, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>LA</Text>
         </View>
       </View>
 
       <View style={styles.centerSection}>
-        <Text style={styles.greeting}>Good Morning, Advocate</Text>
-        <Text style={styles.subtitle}>Welcome back to your dashboard</Text>
+        <Text style={[styles.greeting, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>Good Morning, Advocate</Text>
+        <Text style={[styles.subtitle, { color: isDarkMode ? '#9CA3AF' : '#6B7280' }]}>Welcome back to your dashboard</Text>
       </View>
 
       <View style={styles.rightSection}>
         <TouchableOpacity onPress={onNotificationPress} style={styles.notificationButton}>
-          <Icon name="notifications" size={24} color="#FFFFFF" />
+          <BellIcon width={24} height={24} color={isDarkMode ? '#FFFFFF' : '#000000'} />
           <View style={styles.notificationBadge} />
         </TouchableOpacity>
         
@@ -59,7 +66,7 @@ const Header = ({ onMenuPress, onNotificationPress, onProfilePress }) => {
             source={{ uri: 'https://picsum.photos/seed/user-avatar/40/40.jpg' }} 
             style={styles.profileImage} 
           />
-          <Icon name="keyboard-arrow-down" size={20} color="#9CA3AF" />
+          <Icon name="keyboard-arrow-down" size={20} color={isDarkMode ? '#9CA3AF' : '#6B7280'} />
         </TouchableOpacity>
       </View>
       
@@ -79,7 +86,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#171616ff',
+    backgroundColor: '#000000',
     paddingBottom: 20,
     minHeight: 90,
   },

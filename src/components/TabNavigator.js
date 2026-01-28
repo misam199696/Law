@@ -22,7 +22,7 @@ import SettingsScreen from '../screens/SettingsScreen';
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-  const { colors } = useTheme();
+  const { isDarkMode, colors } = useTheme();
   
   const handleNotificationPress = () => {
     console.log('Notification pressed');
@@ -69,10 +69,10 @@ const TabNavigator = () => {
           return <IconComponent width={size} height={size} stroke={color} strokeWidth={1.5} fill="none" color={color} />;
         },
         tabBarActiveTintColor: '#11B7B1', // Active icon color - matching brand color
-        tabBarInactiveTintColor: '#9CA3AF', // Inactive icon color - gray
+        tabBarInactiveTintColor: isDarkMode ? '#FFFFFF' : '#9CA3AF', // Inactive icon color based on theme
         tabBarStyle: {
-          backgroundColor: '#1F2937', // Dark background color matching Figma
-          borderTopWidth: 0, // Remove top border
+          backgroundColor: isDarkMode ? '#2B2B31' : '#FFFFFF', // Background color based on theme
+          borderTopWidth: 0,// Remove top border
           height: 80,
           paddingBottom: 5,
           paddingTop: 10,
