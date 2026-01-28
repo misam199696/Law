@@ -13,20 +13,22 @@ import {
   TextInput,
   Alert,
   useColorScheme,
-  Modal
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../context/ThemeContext';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import Email from '../../assets/svg/email';
 import Password from '../../assets/svg/password';
+import Eye from '../../assets/svg/eye';
+import EyeOff from '../../assets/svg/eyeOff';
 import PublicUser from '../../assets/svg/publicUser';
 import IndividualUser from '../../assets/svg/individualUser';
 import LawFirm from '../../assets/svg/lawFirm';
 import Google from '../../assets/svg/google';
 import Facebook from '../../assets/svg/facebook';
+import FacebookDark from '../../assets/svg/facebookDark';
+import { DarkTheme } from '@react-navigation/native';
 
 
 const { width, height } = Dimensions.get('window');
@@ -41,8 +43,9 @@ const getResponsiveValue = (small, medium, large) => {
 };
 
 const SignupCreateAccount = ({ navigation, route }) => {
-  const { colors } = useTheme();
+  const { colors, isDarkMode } = useTheme();
   const { t, i18n } = useTranslation();
+  const [focusedInput, setFocusedInput] = useState(null);
   const [secure, setSecure] = useState(true);
   const [selectedType, setSelectedType] = useState(route?.params?.userType || null);
   const [currentLanguage, setCurrentLanguage] = useState('en');
@@ -106,15 +109,6 @@ const SignupCreateAccount = ({ navigation, route }) => {
 
   const insets = useSafeAreaInsets();
 
-  // --- Icons using react-native-vector-icons ---
-  const GoogleIcon = () => (
-    <Text style={[styles.socialIconText, { color: '#4285F4', fontSize: 16, fontWeight: 'bold' }]}>G</Text>
-  );
-
-  const FacebookIcon = () => (
-    <Text style={[styles.socialIconText, { color: 'white', fontSize: 16, fontWeight: 'bold' }]}>f</Text>
-  );
-
 
   const accountTypes = [
     {
@@ -144,7 +138,6 @@ const SignupCreateAccount = ({ navigation, route }) => {
   ];
 
 
-  const isDarkMode = useColorScheme() === 'dark';
 
   const dynamicStyles = StyleSheet.create({
     card: {
@@ -212,10 +205,11 @@ const SignupCreateAccount = ({ navigation, route }) => {
                 <View style={styles.row}>
                   {/* Email */}
                   <View style={[styles.halfInputWrapper, { marginRight: 8 }]}>
-                    <Text style={[styles.label, {
+                    <Text style={[{
                       color: colors.text,
                       textAlign: currentLanguage === 'en' ? 'left' : 'right',
-                      writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
+                      writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl',
+                      marginBottom: 4
                     }]}>
                       {t('email')}<Text style={styles.required}>*</Text>
                     </Text>
@@ -224,7 +218,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
                       {
                         width: '100%',
                         backgroundColor: colors.card,
-                        borderColor: colors.border,
+                        borderColor: focusedInput === 'email' ? '#14B8A6' : colors.border,
                         flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse',
                         justifyContent: 'space-between',
                         alignItems: 'center',
@@ -236,7 +230,11 @@ const SignupCreateAccount = ({ navigation, route }) => {
                       <TextInput
                         value={values.email}
                         onChangeText={handleChange('email')}
-                        onBlur={handleBlur('email')}
+                        onBlur={() => {
+                          handleBlur('email');
+                          setFocusedInput(null);
+                        }}
+                        onFocus={() => setFocusedInput('email')}
                         placeholder={t('emailPlaceholder')}
                         placeholderTextColor="#9CA3AF"
                         keyboardType="email-address"
@@ -274,27 +272,23 @@ const SignupCreateAccount = ({ navigation, route }) => {
                       {
                         width: '100%',
                         backgroundColor: colors.card,
-                        borderColor: colors.border,
-                        flexDirection: 'row',
+                        borderColor: focusedInput === 'password' ? '#14B8A6' : colors.border,
+                        flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse',
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         paddingHorizontal: 12
                       },
                       errors.password && touched.password && styles.inputError
                     ]}>
-                      {currentLanguage === 'ur' && (
-                        <TouchableOpacity
-                          onPress={() => setSecure(!secure)}
-                          style={styles.eyeIcon}
-                        >
-                          <Text>{secure ? '👁️' : '👁️‍🗨️'}</Text>
-                        </TouchableOpacity>
-                      )}
                       <Password />
                       <TextInput
                         value={values.password}
                         onChangeText={handleChange('password')}
-                        onBlur={handleBlur('password')}
+                        onBlur={() => {
+                          handleBlur('password');
+                          setFocusedInput(null);
+                        }}
+                        onFocus={() => setFocusedInput('password')}
                         placeholder={t('passwordPlaceholder')}
                         placeholderTextColor="#9CA3AF"
                         secureTextEntry={secure}
@@ -310,14 +304,15 @@ const SignupCreateAccount = ({ navigation, route }) => {
                           }
                         ]}
                       />
-                      {currentLanguage === 'en' && (
-                        <TouchableOpacity
-                          onPress={() => setSecure(!secure)}
-                          style={styles.eyeIcon}
+                        <TouchableOpacity 
+                          onPress={() => setSecure(!secure)} 
+                          style={[
+                            styles.eyeIcon,
+                            currentLanguage === 'en' ? { right: 12 } : { left: 12 }
+                          ]}
                         >
-                          <Text>{secure ? '👁️' : '👁️‍🗨️'}</Text>
+                          {secure ? <EyeOff width={20} height={20} color="#9CA3AF" /> : <Eye width={20} height={20} color="#9CA3AF" />}
                         </TouchableOpacity>
-                      )}
                     </View>
                     {errors.password && touched.password && (
                       <Text style={styles.errorText}>{errors.password}</Text>
@@ -480,7 +475,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
                     activeOpacity={0.7}
                     onPress={() => console.log('Facebook')}
                   >
-                    <Facebook />
+                    {isDarkMode=== false ? <Facebook /> : <FacebookDark />}
                     <Text style={[styles.socialButtonText, { color: colors.text }]}>{t('continueWithFacebook')}</Text>
                   </TouchableOpacity>
                 </View>
@@ -614,8 +609,8 @@ const styles = StyleSheet.create({
   },
   eyeIcon: {
     position: 'absolute',
-    right: getResponsiveValue(10, 11, 12),
     top: getResponsiveValue(10, 11, 12),
+    zIndex: 1,
   },
   termsContainer: {
     flexDirection: 'row',

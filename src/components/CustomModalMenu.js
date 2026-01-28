@@ -10,6 +10,8 @@ import Voice from '../assets/svg/voice';
 import Book from '../assets/svg/book';
 import Drafting from '../assets/svg/Drafting';
 import Contract from '../assets/svg/contract';
+import LeftArrow from '../assets/svg/leftArrow';
+import LeftArrowBlack from '../assets/svg/leftArrowBlack';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -95,21 +97,27 @@ const CustomModalMenu = ({
                   styles.menuContainer,
                   {
                     transform: [{ translateX: slideAnim }],
+                    backgroundColor: isDarkMode ? '#2B2B31' : '#FFFFFF',
                   }
                 ]}
               >
               <View style={styles.menuHeader}>
                 <View style={styles.logoContainer}>
                   <View style={styles.logoBackground}>
-                    <Logo size={getResponsiveValue(20, 24, 28, 22, 26, 30)} />
+                    <Logo size={getResponsiveValue(20, 24, 28, 22, 26, 30)} color={isDarkMode ? '#FFFFFF' : '#000000'} />
                   </View>
                   <View>
-                    <Text style={styles.menuTitle}>LegalAssist</Text>
-                    <Text style={styles.proPlatformText}>Pro Platform</Text>
+                    <Text style={[styles.menuTitle, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>LegalAssist</Text>
+                    <Text style={[styles.proPlatformText, { color: isDarkMode ? '#9CA3AF' : '#6B7280' }]}>Pro Platform</Text>
                   </View>
                 </View>
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                  <Icon name="chevron-left" size={getResponsiveValue(20, 24, 28, 22, 26, 30)} color="#9CA3AF" />
+                  {
+                    isDarkMode ? 
+                     
+                    <LeftArrow size={getResponsiveValue(20, 24, 28, 22, 26, 30)} /> :
+                    <LeftArrowBlack size={getResponsiveValue(20, 24, 28, 22, 26, 30)} />
+                  }
                 </TouchableOpacity>
               </View>
 
@@ -120,7 +128,7 @@ const CustomModalMenu = ({
                   return (
                     <TouchableOpacity
                       key={item.id}
-                      style={[styles.menuItem, isActive && styles.activeItem]}
+                      style={[styles.menuItem, isActive && [styles.activeItem, { backgroundColor: isDarkMode ? '#14B8A6' : '#E5F2F1' }]]}
                       onPress={() => {
                         onSelect(item);
                         onClose();
@@ -130,8 +138,10 @@ const CustomModalMenu = ({
                       <item.icon 
                         width={getResponsiveValue(16, 18, 20, 18, 20, 22)} 
                         height={getResponsiveValue(16, 18, 20, 18, 20, 22)} 
+                        color={isDarkMode ? '#FFFFFF' : '#000000'}
+                        stroke={isDarkMode ? '#FFFFFF' : '#000000'}
                       />
-                      <Text style={[styles.menuText, isActive && styles.activeText]}>
+                      <Text style={[styles.menuText, { color: isDarkMode ? '#FFFFFF' : '#374151' }, isActive && { color: isDarkMode ? '#FFFFFF' : '#000000', fontWeight: '600' }]}>
                         {item.label}
                       </Text>
                     </TouchableOpacity>
@@ -139,33 +149,33 @@ const CustomModalMenu = ({
                 })}
 
                 {/* Language Toggle */}
-                <View style={styles.toggleContainer}>
+                <View style={[styles.toggleContainer,{backgroundColor: isDarkMode ? '#2B2B31' : 'white'}]}>
                   <View style={styles.toggleItem}>
-                    <Icon name="language" size={getResponsiveValue(16, 18, 20, 18, 20, 22)} color="#9CA3AF" />
-                    <Text style={styles.toggleText}>
+                    <Drafting width={getResponsiveValue(16, 18, 20, 18, 20, 22)} height={getResponsiveValue(16, 18, 20, 18, 20, 22)} color={isDarkMode ? '#FFFFFF' : '#000000'} />
+                    <Text style={[styles.toggleText, { color: isDarkMode ? '#FFFFFF' : '#374151' }]}>
                       {currentLanguage === 'ur' ? 'اردو' : 'English'}
                     </Text>
                     <Switch
                       value={currentLanguage === 'ur'}
                       onValueChange={handleLanguageToggle}
-                      trackColor={{ false: '#374151', true: '#14B8A6' }}
-                      thumbColor={currentLanguage === 'ur' ? '#FFFFFF' : '#9CA3AF'}
-                      ios_backgroundColor="#374151"
+                      trackColor={{ false: isDarkMode ? '#374151' : '#D1D5DB', true: '#14B8A6' }}
+                      thumbColor={currentLanguage === 'ur' ? '#FFFFFF' : isDarkMode ? '#6B7280' : '#FFFFFF'}
+                      ios_backgroundColor={isDarkMode ? '#374151' : '#D1D5DB'}
                     />
                   </View>
                 </View>
 
                 {/* Dark Mode Toggle */}
-                <View style={styles.toggleContainer}>
+                 <View style={[styles.toggleContainer,{backgroundColor: isDarkMode ? '#2B2B31' : 'white'}]}>
                   <View style={styles.toggleItem}>
-                    <Icon name="dark-mode" size={getResponsiveValue(16, 18, 20, 18, 20, 22)} color="#9CA3AF" />
-                    <Text style={styles.toggleText}>Dark Mode</Text>
+                    <Icon name="dark-mode" size={getResponsiveValue(16, 18, 20, 18, 20, 22)} color={isDarkMode ? '#FFFFFF' : '#000000'} />
+                    <Text style={[styles.toggleText, { color: isDarkMode ? '#FFFFFF' : '#374151' }]}>Dark Mode</Text>
                     <Switch
                       value={isDarkMode}
                       onValueChange={toggleTheme}
-                      trackColor={{ false: '#374151', true: '#14B8A6' }}
-                      thumbColor={isDarkMode ? '#FFFFFF' : '#9CA3AF'}
-                      ios_backgroundColor="#374151"
+                      trackColor={{ false: isDarkMode ? '#374151' : '#D1D5DB', true: '#14B8A6' }}
+                      thumbColor={isDarkMode ? '#FFFFFF' : '#FFFFFF'}
+                      ios_backgroundColor={isDarkMode ? '#374151' : '#D1D5DB'}
                     />
                   </View>
                 </View>
@@ -213,10 +223,10 @@ const styles = StyleSheet.create({
     paddingTop: getResponsiveValue(15, 18, 20, 20, 25, 30),
     justifyContent: 'space-between',
     alignSelf: 'flex-start',
-    borderTopLeftRadius: getResponsiveValue(16, 16, 16, 20, 20, 20),
-    borderTopRightRadius: getResponsiveValue(16, 16, 16, 20, 20, 20),
-    borderBottomLeftRadius: getResponsiveValue(16, 16, 16, 0, 0, 0),
-    borderBottomRightRadius: getResponsiveValue(16, 16, 16, 0, 0, 0),
+    // borderTopLeftRadius: getResponsiveValue(16, 16, 16, 20, 20, 20),
+    // borderTopRightRadius: getResponsiveValue(16, 16, 16, 20, 20, 20),
+    // borderBottomLeftRadius: getResponsiveValue(16, 16, 16, 0, 0, 0),
+    // borderBottomRightRadius: getResponsiveValue(16, 16, 16, 0, 0, 0),
   },
   menuHeader: {
     flexDirection: 'row',
@@ -284,7 +294,7 @@ const styles = StyleSheet.create({
   },
   menuText: {
     fontSize: getResponsiveValue(16, 18, 20, 17, 19, 21),
-    color: '#E5E7EB',
+    color: '#FFFFFF',
     paddingLeft: getResponsiveValue(24, 28, 32, 26, 30, 34),
   },
   activeText: {
@@ -318,12 +328,12 @@ const styles = StyleSheet.create({
     paddingVertical: getResponsiveValue(8, 10, 12, 10, 12, 14),
     paddingHorizontal: getResponsiveValue(12, 14, 16, 14, 16, 18),
     borderRadius: getResponsiveValue(10, 12, 14, 12, 14, 16),
-    backgroundColor: '#1F2937',
+    
   },
   toggleText: {
     flex: 1,
     fontSize: getResponsiveValue(14, 15, 16, 15, 16, 17),
-    color: '#E5E7EB',
+    color: '#FFFFFF',
     marginLeft: getResponsiveValue(12, 14, 16, 14, 16, 18),
   },
 });

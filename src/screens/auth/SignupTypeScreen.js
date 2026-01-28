@@ -1,4 +1,4 @@
-import React, { useState, useContext , useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
     View,
     Text,
@@ -29,9 +29,9 @@ const isMediumScreen = width > 375 && width <= 414; // 6-inch and normal screens
 const isLargeScreen = width > 414; // Larger screens and tablets
 
 const getResponsiveValue = (small, medium, large) => {
-  if (isSmallScreen) return small;
-  if (isMediumScreen) return medium;
-  return large;
+    if (isSmallScreen) return small;
+    if (isMediumScreen) return medium;
+    return large;
 };
 
 const SignupTypeScreen = () => {
@@ -41,21 +41,21 @@ const SignupTypeScreen = () => {
     const [selectedType, setSelectedType] = useState(null);
 
 
-      // Load saved language on component mount
-  useEffect(() => {
-    const loadLanguage = async () => {
-      try {
-        const savedLanguage = await AsyncStorage.getItem('userLanguage');
-        if (savedLanguage) {
-          i18n.changeLanguage(savedLanguage);
-          setCurrentLanguage(savedLanguage);
-        }
-      } catch (error) {
-        console.error('Error loading language:', error);
-      }
-    };
-    loadLanguage();
-  }, []);
+    // Load saved language on component mount
+    useEffect(() => {
+        const loadLanguage = async () => {
+            try {
+                const savedLanguage = await AsyncStorage.getItem('userLanguage');
+                if (savedLanguage) {
+                    i18n.changeLanguage(savedLanguage);
+                    setCurrentLanguage(savedLanguage);
+                }
+            } catch (error) {
+                console.error('Error loading language:', error);
+            }
+        };
+        loadLanguage();
+    }, []);
 
     const accountTypes = [
         {
@@ -85,7 +85,7 @@ const SignupTypeScreen = () => {
     ];
 
 
-    
+
 
     const { colors } = useContext(ThemeContext);
     const isDarkMode = useColorScheme() === 'dark';
@@ -135,11 +135,11 @@ const SignupTypeScreen = () => {
             borderWidth: 1,
             borderColor: colors.border,
             justifyContent: 'space-evenly',
-            paddingVertical: getResponsiveValue(1, 1, 1)
+            paddingVertical: getResponsiveValue(4, 4, 4)
         },
         serviceButtonText: {
             fontSize: getResponsiveValue(7, 8, 9),
-            fontWeight:'500',
+            fontWeight: '500',
             marginLeft: 0,
             color: colors.primary,
             textAlign: 'center',
@@ -147,11 +147,10 @@ const SignupTypeScreen = () => {
         section: {
             backgroundColor: colors.lightBlue,
             borderRadius: getResponsiveValue(16, 18, 20),
-            padding: getResponsiveValue(16, 18, 20),    
-            // marginBottom: 20,
+            padding: getResponsiveValue(16, 18, 20),
             borderWidth: 1,
             borderColor: colors.border,
-            
+
         },
         sectionTitle: {
             fontSize: getResponsiveValue(16, 18, 20),
@@ -170,7 +169,7 @@ const SignupTypeScreen = () => {
             padding: getResponsiveValue(10, 11, 12),
             borderWidth: 1,
             borderColor: colors.border,
-            backgroundColor:   colors.card,
+            backgroundColor: colors.card,
         },
         cardSelected: {
             borderColor: colors.primary,
@@ -215,7 +214,8 @@ const SignupTypeScreen = () => {
             shadowRadius: 8,
             elevation: 5,
             marginTop: getResponsiveValue(30, 40, 50),
-            
+            marginBottom: getResponsiveValue(150, 155, 160),
+
         },
         continueButtonDisabled: {
             backgroundColor: isDarkMode ? '#2D3E4D' : '#56928dff',
@@ -245,11 +245,11 @@ const SignupTypeScreen = () => {
                     {/* App Logo and Tagline */}
                     <View style={dynamicStyles.logoContainer}>
                         <View style={[styles.logoCircle, { backgroundColor: isDarkMode ? '#1E2E3D' : '#E6F7F5' }]}>
-                           <Logo 
-          width={40}
-          height={40}
-          style={styles.logo}
-        />
+                            <Logo
+                                width={40}
+                                height={40}
+                                style={styles.logo}
+                            />
                         </View>
                         <Text style={dynamicStyles.appTitle}>{t('signup.trustedLegalAssistant')}</Text>
                         <Text style={dynamicStyles.appSubtitle}>{t('signup.legalMarketplace')}</Text>
@@ -260,7 +260,7 @@ const SignupTypeScreen = () => {
                         <View style={[dynamicStyles.serviceButton, [
                             { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }
                         ]]}>
-                           <Message width={getResponsiveValue(12, 14, 15)} height={getResponsiveValue(12, 14, 15)} />
+                            <Message width={getResponsiveValue(12, 14, 15)} height={getResponsiveValue(12, 14, 15)} />
                             <Text style={[dynamicStyles.serviceButtonText, { color: colors.text }]}>{t('signup.aiLegalAnswers')}</Text>
                         </View>
                         <View style={[dynamicStyles.serviceButton, [
@@ -279,8 +279,8 @@ const SignupTypeScreen = () => {
 
                     {/* Account Type Selection */}
                     <View style={dynamicStyles.section}>
-                        <Text style={[dynamicStyles.sectionTitle,{alignSelf: currentLanguage === 'en' ? 'flex-start' : 'flex-end'}]}>{t('signup.chooseAccountType')}</Text>
-                        <Text style={[dynamicStyles.sectionSubtitle,{alignSelf: currentLanguage === 'en' ? 'flex-start' : 'flex-end'}]}>{t('signup.pickAccountType')}</Text>
+                        <Text style={[dynamicStyles.sectionTitle, { alignSelf: currentLanguage === 'en' ? 'flex-start' : 'flex-end' }]}>{t('signup.chooseAccountType')}</Text>
+                        <Text style={[dynamicStyles.sectionSubtitle, { alignSelf: currentLanguage === 'en' ? 'flex-start' : 'flex-end' }]}>{t('signup.pickAccountType')}</Text>
 
                         <View style={styles.cardsContainer}>
                             {accountTypes.map((type) => (
@@ -293,19 +293,19 @@ const SignupTypeScreen = () => {
                                     onPress={() => setSelectedType(type.id)}
                                     activeOpacity={0.8}
                                 >
-                                    <View style={[styles.cardContent,{flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse'}]}>
+                                    <View style={[styles.cardContent, { flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse' }]}>
                                         <View style={[styles.iconContainer, { backgroundColor: type.iconBg }]}>
-                                           {type.icon}
+                                            {type.icon}
                                         </View>
                                         <View style={styles.textContainer}>
-                                            <Text style={[dynamicStyles.cardTitle,{alignSelf: currentLanguage === 'en' ? 'flex-start' : 'flex-end'}]}>
+                                            <Text style={[dynamicStyles.cardTitle, { alignSelf: currentLanguage === 'en' ? 'flex-start' : 'flex-end' }]}>
                                                 {type.id === 'public'
                                                     ? t('signup.publicUser')
                                                     : type.id === 'individual'
                                                         ? t('signup.individualUser')
                                                         : t('signup.lawFirm')}
                                             </Text>
-                                            <Text style={[dynamicStyles.cardDescription,{alignSelf: currentLanguage === 'en' ? 'flex-start' : 'flex-end'}]}>
+                                            <Text style={[dynamicStyles.cardDescription, { alignSelf: currentLanguage === 'en' ? 'flex-start' : 'flex-end' }]}>
                                                 {type.id === 'public'
                                                     ? t('signup.publicUserDesc')
                                                     : type.id === 'individual'
@@ -322,19 +322,19 @@ const SignupTypeScreen = () => {
                                 </TouchableOpacity>
                             ))}
                         </View>
-                        <View style={{paddingBottom: getResponsiveValue(80, 90, 100)}} >
-                         <TouchableOpacity
-                        style={[
-                            dynamicStyles.continueButton,
-                            !selectedType && dynamicStyles.continueButtonDisabled
-                        ]}
-                        onPress={handleContinue}
-                        disabled={!selectedType}
-                        activeOpacity={0.8}
-                    >
-                        <Text style={dynamicStyles.continueButtonText}>{t('signup.createAccount')}</Text>
-                    </TouchableOpacity>
-                    </View>
+                        <View style={{ paddingBottom: getResponsiveValue(80, 90, 100) }} >
+                            <TouchableOpacity
+                                style={[
+                                    dynamicStyles.continueButton,
+                                    !selectedType && dynamicStyles.continueButtonDisabled
+                                ]}
+                                onPress={handleContinue}
+                                disabled={!selectedType}
+                                activeOpacity={0.8}
+                            >
+                                <Text style={dynamicStyles.continueButtonText}>{t('signup.createAccount')}</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </ScrollView>
             </View>
@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
     },
     cardsContainer: {
         gap: getResponsiveValue(12, 14, 16),
-        
+
     },
     cardContent: {
         alignItems: 'center',
@@ -372,10 +372,10 @@ const styles = StyleSheet.create({
         borderRadius: getResponsiveValue(10, 11, 12),
         justifyContent: 'center',
         alignItems: 'center',
-        
+
     },
     textContainer: {
-      paddingHorizontal: getResponsiveValue(8, 9, 10)
+        paddingHorizontal: getResponsiveValue(8, 9, 10)
     },
     // radioButtonSelected: {
     //     width: 12,

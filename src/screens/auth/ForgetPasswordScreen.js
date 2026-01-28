@@ -37,6 +37,7 @@ const ForgetPasswordScreen = ({ navigation, route }) => {
   const { colors } = useTheme();
   const { t, i18n } = useTranslation();
   const { currentLanguage, changeLanguage } = useLanguage();
+  const [focusedInput, setFocusedInput] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const isDesktop = width > 600;
   const isTablet = width > 768;
@@ -168,8 +169,8 @@ const ForgetPasswordScreen = ({ navigation, route }) => {
                     styles.inputContainer,
                     {
                       backgroundColor: colors.card,
-                      borderColor: touched.email && errors.email ? colors.error : colors.border,
-                      // flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse',
+                      borderColor: touched.email && errors.email ? colors.error : focusedInput === 'email' ? '#14B8A6' : colors.border,
+                      flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse',
                       justifyContent: 'space-between',
                       alignItems: 'center',
                       paddingHorizontal: 12
@@ -179,7 +180,11 @@ const ForgetPasswordScreen = ({ navigation, route }) => {
                     <TextInput
                       value={values.email}
                       onChangeText={handleChange('email')}
-                      onBlur={handleBlur('email')}
+                      onBlur={() => {
+                        handleBlur('email');
+                        setFocusedInput(null);
+                      }}
+                      onFocus={() => setFocusedInput('email')}
                       placeholder={t('form.emailPlaceholder')}
                       placeholderTextColor={colors.secondary}
                       style={[
@@ -189,8 +194,8 @@ const ForgetPasswordScreen = ({ navigation, route }) => {
                           textAlign: currentLanguage === 'en' ? 'left' : 'right',
                           writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl',
                           flex: 1,
-                          marginLeft: currentLanguage === 'en' ? 8 : 0,
-                          marginRight: currentLanguage === 'en' ? 0 : 8
+                          marginLeft: currentLanguage === 'en' ? 8 : 8,
+                          marginRight: currentLanguage === 'en' ? 8 : 20
                         }
                       ]}
                       keyboardType="email-address"

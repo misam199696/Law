@@ -2,10 +2,13 @@ import React from 'react';
 import { View, Button, StyleSheet, Text, ScrollView, Platform, SafeAreaView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { KeyboardAvoidingView } from 'react-native';
+import { useTheme } from '../context/ThemeContext';
+
 
 const HomeScreen = ({ navigation }) => {
+  const { isDark } = useTheme();
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container,{backgroundColor: isDark ? '#000000' : '#FFFFFF'}]}>
       <KeyboardAvoidingView
         style={styles.keyboardAvoidingView}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -26,7 +29,6 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#111827',
   },
   keyboardAvoidingView: {
     flex: 1,

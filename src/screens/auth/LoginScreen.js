@@ -20,8 +20,11 @@ import * as Yup from 'yup';
 import Email from '../../assets/svg/email';
 import Password from '../../assets/svg/password';
 import Eye from '../../assets/svg/eye';
+import EyeOff from '../../assets/svg/eyeOff';
 import Google from '../../assets/svg/google';
 import Facebook from '../../assets/svg/facebook';
+import { DarkTheme } from '@react-navigation/native';
+import FacebookDark from '../../assets/svg/facebookDark';
 
 const { width, height } = Dimensions.get('window');
 const isSmallScreen = width <= 375; // iPhone SE and similar small screens
@@ -35,9 +38,10 @@ const getResponsiveValue = (small, medium, large) => {
 };
 
 const LoginScreen = ({ navigation }) => {
-  const { colors } = useTheme();
+  const { colors, isDarkMode } = useTheme();
   const { t, i18n } = useTranslation();
   const [secure, setSecure] = useState(true);
+  const [focusedInput, setFocusedInput] = useState(null);
   const [currentLanguage, setCurrentLanguage] = useState('en');
   const isDesktop = width > 600;
   const isTablet = width > 768;
@@ -95,17 +99,8 @@ const LoginScreen = ({ navigation }) => {
     password: '',
     agree: false,
   };
-
+  
   const insets = useSafeAreaInsets();
-
-  // --- Icons using react-native-vector-icons ---
-  const GoogleIcon = () => (
-      <Text style={[styles.socialIconText, { color: '#4285F4', fontSize: 16, fontWeight: 'bold' }]}>G</Text>
-  );
-
-  const FacebookIcon = () => (
-      <Text style={[styles.socialIconText, { color: 'white', fontSize: 16, fontWeight: 'bold' }]}>f</Text>
-  );
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background, paddingTop: 10 }]}>
@@ -149,10 +144,11 @@ const LoginScreen = ({ navigation }) => {
                 <View style={styles.row}>
                   {/* Email */}
                   <View style={[styles.halfInputWrapper, { marginRight: 8 }]}>
-                    <Text style={[styles.label, { 
+                    <Text style={[{
                       color: colors.text,
                       textAlign: currentLanguage === 'en' ? 'left' : 'right',
-                      writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
+                      writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl',
+                      marginBottom: 4
                     }]}>
                       {t('email')}<Text style={styles.required}>*</Text>
                     </Text>
@@ -161,7 +157,8 @@ const LoginScreen = ({ navigation }) => {
                       {
                         width: '100%',
                         backgroundColor: colors.card,
-                        borderColor: colors.border,
+                        borderColor: focusedInput === 'email' ? '#14B8A6' : colors.border,
+                        borderWidth: 1,
                         flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse',
                         justifyContent: 'space-between',
                         alignItems: 'center',
@@ -173,7 +170,11 @@ const LoginScreen = ({ navigation }) => {
                       <TextInput
                         value={values.email}
                         onChangeText={handleChange('email')}
-                        onBlur={handleBlur('email')}
+                        onBlur={() => {
+                          handleBlur('email');
+                          setFocusedInput(null);
+                        }}
+                        onFocus={() => setFocusedInput('email')}
                         placeholder={t('emailPlaceholder')}
                         placeholderTextColor="#9CA3AF"
                         keyboardType="email-address"
@@ -211,29 +212,23 @@ const LoginScreen = ({ navigation }) => {
                       {
                         width: '100%',
                         backgroundColor: colors.card,
-                        borderColor: colors.border,
-                        flexDirection: 'row',
+                        borderColor: focusedInput === 'password' ? '#14B8A6' : colors.border,
+                        flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse',
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         paddingHorizontal: 12
                       },
                       errors.password && touched.password && styles.inputError
                     ]}>
-                      {currentLanguage === 'ur' && (
-                        <TouchableOpacity 
-                          onPress={() => setSecure(!secure)} 
-                          style={styles.eyeIcon}
-                        >
-                         {secure ? <Eye /> : <Eye />}
-                          
-                          
-                        </TouchableOpacity>
-                      )}
                       <Password />
                       <TextInput
                         value={values.password}
                         onChangeText={handleChange('password')}
-                        onBlur={handleBlur('password')}
+                        onBlur={() => {
+                          handleBlur('password');
+                          setFocusedInput(null);
+                        }}
+                        onFocus={() => setFocusedInput('password')}
                         placeholder={t('passwordPlaceholder')}
                         placeholderTextColor="#9CA3AF"
                         secureTextEntry={secure}
@@ -249,14 +244,15 @@ const LoginScreen = ({ navigation }) => {
                           }
                         ]}
                       />
-                      {currentLanguage === 'en' && (
                         <TouchableOpacity 
                           onPress={() => setSecure(!secure)} 
-                          style={styles.eyeIcon}
+                          style={[
+                            styles.eyeIcon,
+                            currentLanguage === 'en' ? { right: 12 } : { left: 12 }
+                          ]}
                         >
-                          <Text>{secure ? '👁️' : '👁️‍🗨️'}</Text>
+                          {secure ? <EyeOff width={20} height={20} color="#9CA3AF" /> : <Eye width={20} height={20} color="#9CA3AF" />}
                         </TouchableOpacity>
-                      )}
                     </View>
                     {errors.password && touched.password && (
                       <Text style={styles.errorText}>{errors.password}</Text>
@@ -362,7 +358,8 @@ const LoginScreen = ({ navigation }) => {
                     activeOpacity={0.7}
                     onPress={() => console.log('Facebook')}
                   >
-                    <Facebook />
+                    {isDarkMode === false ? <Facebook /> : <FacebookDark />}
+                    
                     <Text style={[styles.socialButtonText, { color: colors.text }]}>{t('continueWithFacebook')}</Text>
                   </TouchableOpacity>
                 </View>
@@ -490,7 +487,6 @@ const styles = StyleSheet.create({
     
   },
   inputContainer: {
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     borderWidth: 1,
@@ -506,8 +502,8 @@ const styles = StyleSheet.create({
   },
   eyeIcon: {
     position: 'absolute',
-    right: 1,
-    top: 12,
+    top: getResponsiveValue(12, 12, 12),
+    zIndex: 1,
   },
   termsContainer: {
     flexDirection: 'row',
