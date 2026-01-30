@@ -26,7 +26,6 @@
   "city": "شہر",
   "province": "صوبہ",
   "firmName": "فرم کا نام",
-  "profession": "پیشہ",
   "confirmPassword": "پاس ورڈ کی تصدیق کریں",
   "alreadyHaveAccount": "پہلے سے ہی ایک اکاؤنٹ ہے؟",
   "signInInstead": "اس کی بجائے سائن ان کریں",
@@ -69,6 +68,24 @@
       "passwordNumberOrSpecial": "پاس ورڈ میں کم از کم ایک نمبر یا خاص حرف",
       "passwordMatch": "پاس ورڈ مماثل ہونا چاہیے"
     }
+  },
+  "profession": {
+    "lawyer": "وکیل",
+    "judge": "جج",
+    "legalConsultant": "قانونی مشاور",
+    "legalAssistant": "قانونی اسسٹنٹ",
+    "lawStudent": "قانونی طالب علم",
+    "paralegal": "پارالیگل",
+    "corporateCounsel": "کارپوریٹ کونسل",
+    "publicProsecutor": "عوامی پروسیکیوٹر",
+    "legalResearcher": "قانونی محقق",
+    "legalWriter": "قانونی مصنف",
+    "notary": "نوٹری",
+    "arbitrator": "آربیٹریٹر",
+    "mediationExpert": "میڈیئیشن ماہر",
+    "complianceOfficer": "کمپلائنس آفیسر",
+    "legalTech": "قانونی ٹیک پروفیشنل",
+    "other": "دیگر"
   },
   "signup": {
     "selectAccountType": "اپنے اکاؤنٹ کی قسم منتخب کریں",

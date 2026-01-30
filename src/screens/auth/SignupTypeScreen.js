@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { ThemeContext } from '../../context/ThemeContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Logo from '../../assets/svg/logo';
@@ -230,7 +229,11 @@ const SignupTypeScreen = () => {
 
     const handleContinue = () => {
         if (selectedType) {
-            navigation.navigate('SignupCreateAccount', { userType: selectedType });
+            if (selectedType === 'lawFirm') {
+                navigation.navigate('LawFirmProfile');
+            } else {
+                navigation.navigate('SignupCreateAccount', { userType: selectedType });
+            }
         }
     };
 

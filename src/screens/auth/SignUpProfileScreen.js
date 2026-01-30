@@ -317,8 +317,21 @@ const SignUpProfileScreen = ({ navigation, route }) => {
   // Use translations for options
   const professionOptions = [
     { label: t('profession.lawyer'), value: 'Lawyer' },
-    { label: t('profession.assistant'), value: 'Assistant' },
-    { label: t('profession.student'), value: 'Student' },
+    { label: t('profession.judge'), value: 'Judge' },
+    { label: t('profession.legalConsultant'), value: 'Legal Consultant' },
+    { label: t('profession.legalAssistant'), value: 'Legal Assistant' },
+    { label: t('profession.lawStudent'), value: 'Law Student' },
+    { label: t('profession.paralegal'), value: 'Paralegal' },
+    { label: t('profession.corporateCounsel'), value: 'Corporate Counsel' },
+    { label: t('profession.publicProsecutor'), value: 'Public Prosecutor' },
+    { label: t('profession.legalResearcher'), value: 'Legal Researcher' },
+    { label: t('profession.legalWriter'), value: 'Legal Writer' },
+    { label: t('profession.notary'), value: 'Notary' },
+    { label: t('profession.arbitrator'), value: 'Arbitrator' },
+    { label: t('profession.mediationExpert'), value: 'Mediation Expert' },
+    { label: t('profession.complianceOfficer'), value: 'Compliance Officer' },
+    { label: t('profession.legalTech'), value: 'Legal Tech Professional' },
+    { label: t('profession.other'), value: 'Other' },
   ];
 
 
@@ -482,40 +495,82 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                   </View>
                 </View>
 
-                {/* Phone Number and CNIC Row */}
-                <View style={styles.row}>
-                  {/* Phone Number */}
+                {/* Phone Number */}
+                <View style={styles.inputGroup}>
+                  <Text style={[styles.label, { color: colors.text, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{t('form.phoneNumber')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
                   <View style={[
-                    accountType === 'public' ? styles.fullInputWrapper : styles.halfInputWrapper, 
-                    accountType === 'public' ? {} : { marginRight: 8 }
+                    styles.inputContainer,
+                    {
+                      backgroundColor: colors.card,
+                      borderColor: errors.phone && touched.phone ? colors.error : focusedInput === 'phone' ? '#14B8A6' : colors.border,
+                      flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      paddingHorizontal: 12
+                    }
                   ]}>
-                    <Text style={[styles.label, { color: colors.text, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{t('form.phoneNumber')}<Text style={[styles.required, { color: colors.error }]}>*</Text></Text>
+                    <PhoneIcon style={{ marginRight: currentLanguage === 'en' ? getResponsiveValue(8, 9, 10) : 0, marginLeft: currentLanguage === 'en' ? 0 : getResponsiveValue(8, 9, 10) }} />
+                    <TextInput
+                      value={values.phone}
+                      onChangeText={handleChange('phone')}
+                      onBlur={() => {
+                        handleBlur('phone');
+                        setFocusedInput(null);
+                      }}
+                      onFocus={() => setFocusedInput('phone')}
+                      placeholder="+92 300 1234567"
+                      placeholderTextColor={colors.secondary}
+                      keyboardType="phone-pad"
+                      style={[styles.textInput, {
+                        color: colors.text, 
+                        backgroundColor: 'transparent', 
+                        fontSize: 12,
+                        flex: 1,
+                        textAlign: currentLanguage === 'en' ? 'left' : 'right',
+                        writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl',
+                        marginLeft: currentLanguage === 'en' ? 8 : 8,
+                        marginRight: currentLanguage === 'en' ? 8 : 20
+                      }]}
+                    />
+                  </View>
+                  {errors.phone && touched.phone && (
+                    <Text style={[styles.errorText, { color: colors.error, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{errors.phone}</Text>
+                  )}
+                </View>
+
+                {/* CNIC / Bar Council - Only show for non-public users */}
+                {accountType !== 'public' && (
+                  <View style={styles.inputGroup}>
+                    <Text style={[styles.label, { color: colors.text, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>
+                      {t('cnicBarCouncil')}
+                      <Text style={[styles.required, { color: colors.error }]}>*</Text>
+                    </Text>
                     <View style={[
                       styles.inputContainer,
                       {
                         backgroundColor: colors.card,
-                        borderColor: errors.phone && touched.phone ? colors.error : focusedInput === 'phone' ? '#14B8A6' : colors.border,
+                        borderColor: errors.cnic && touched.cnic ? colors.error : focusedInput === 'cnic' ? '#14B8A6' : colors.border,
                         flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse',
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         paddingHorizontal: 12
                       }
                     ]}>
-                      <PhoneIcon style={{ marginRight: currentLanguage === 'en' ? getResponsiveValue(8, 9, 10) : 0, marginLeft: currentLanguage === 'en' ? 0 : getResponsiveValue(8, 9, 10) }} />
                       <TextInput
-                        value={values.phone}
-                        onChangeText={handleChange('phone')}
+                        value={values.cnic}
+                        onChangeText={handleChange('cnic')}
                         onBlur={() => {
-                          handleBlur('phone');
+                          handleBlur('cnic');
                           setFocusedInput(null);
                         }}
-                        onFocus={() => setFocusedInput('phone')}
-                        placeholder="+92 300 1234567"
+                        onFocus={() => setFocusedInput('cnic')}
+                        placeholder="1234578900"
                         placeholderTextColor={colors.secondary}
-                        keyboardType="phone-pad"
+                        keyboardType="default"
+                        autoCapitalize="characters"
                         style={[styles.textInput, {
-                          color: colors.text, 
-                          backgroundColor: 'transparent', 
+                          color: colors.text,
+                          backgroundColor: 'transparent',
                           fontSize: 12,
                           flex: 1,
                           textAlign: currentLanguage === 'en' ? 'left' : 'right',
@@ -525,60 +580,11 @@ const SignUpProfileScreen = ({ navigation, route }) => {
                         }]}
                       />
                     </View>
-                    {errors.phone && touched.phone && (
-                      <Text style={[styles.errorText, { color: colors.error, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{errors.phone}</Text>
+                    {errors.cnic && touched.cnic && (
+                      <Text style={[styles.errorText, { color: colors.error, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{errors.cnic}</Text>
                     )}
                   </View>
-
-                  {/* CNIC / Bar Council - Only show for non-public users */}
-                  {accountType !== 'public' && (
-                    <View style={[styles.halfInputWrapper, { marginLeft: 8 }]}>
-                      <Text style={[styles.label, { color: colors.text, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>
-                        {t('cnicBarCouncil')}
-                        <Text style={[styles.required, { color: colors.error }]}>*</Text>
-                      </Text>
-                      <View style={[
-                        styles.inputContainer,
-                        {
-                          backgroundColor: colors.card,
-                          borderColor: errors.cnic && touched.cnic ? colors.error : focusedInput === 'cnic' ? '#14B8A6' : colors.border,
-                          flexDirection: currentLanguage === 'en' ? 'row' : 'row-reverse',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          paddingHorizontal: 12
-                        }
-                      ]}>
-                        <TextInput
-                          value={values.cnic}
-                          onChangeText={handleChange('cnic')}
-                          onBlur={() => {
-                            handleBlur('cnic');
-                            setFocusedInput(null);
-                          }}
-                          onFocus={() => setFocusedInput('cnic')}
-                          placeholder="1234578900"
-                          placeholderTextColor={colors.secondary}
-                          keyboardType="default"
-                          autoCapitalize="characters"
-                          style={[styles.textInput, {
-                            color: colors.text,
-                            backgroundColor: 'transparent',
-                            fontSize: 12,
-                            flex: 1,
-                            textAlign: currentLanguage === 'en' ? 'left' : 'right',
-                            writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl',
-                            marginLeft: currentLanguage === 'en' ? 8 : 8,
-                            marginRight: currentLanguage === 'en' ? 8 : 20
-                          }]}
-                        />
-                      </View>
-                      {errors.cnic && touched.cnic && (
-                        <Text style={[styles.errorText, { color: colors.error, textAlign: currentLanguage === 'en' ? 'left' : 'right', writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl' }]}>{errors.cnic}</Text>
-                      )}
-                    </View>
-                  )}
-                </View>
-
+                )}
 
                 {/* Country Picker */}
                 <View style={[styles.inputGroup, { marginTop: 10 }]}>

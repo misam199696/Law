@@ -67,10 +67,23 @@
   "privacyPolicy": "Privacy Policy",
   "terms": "Terms",
   "and": "and",
-  "professionTypes": {
+  "profession": {
     "lawyer": "Lawyer",
-    "assistant": "Legal Assistant",
-    "student": "Law Student"
+    "judge": "Judge",
+    "legalConsultant": "Legal Consultant",
+    "legalAssistant": "Legal Assistant",
+    "lawStudent": "Law Student",
+    "paralegal": "Paralegal",
+    "corporateCounsel": "Corporate Counsel",
+    "publicProsecutor": "Public Prosecutor",
+    "legalResearcher": "Legal Researcher",
+    "legalWriter": "Legal Writer",
+    "notary": "Notary",
+    "arbitrator": "Arbitrator",
+    "mediationExpert": "Mediation Expert",
+    "complianceOfficer": "Compliance Officer",
+    "legalTech": "Legal Tech Professional",
+    "other": "Other"
   },
   "source": {
     "google": "Google Search",
