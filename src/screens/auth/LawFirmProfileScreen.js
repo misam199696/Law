@@ -2,13 +2,16 @@ import React, { useState, useContext, useEffect } from 'react';
 import {
     View,
     Text,
-    StyleSheet,
-    SafeAreaView,
-    Dimensions,
-    useColorScheme,
-    TouchableOpacity,
     TextInput,
-    ScrollView
+    TouchableOpacity,
+    ScrollView,
+    SafeAreaView,
+    StyleSheet,
+    Dimensions,
+    Image,
+    Alert,
+    PermissionsAndroid,
+    Platform
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from '../../context/ThemeContext';
@@ -30,7 +33,8 @@ import Clock from '../../assets/svg/clock';
 import Calender from '../../assets/svg/calender';
 import Graph from '../../assets/svg/graph';
 import Documents2 from '../../assets/svg/documents2';
-
+import { useColorScheme } from 'react-native';
+import { launchImageLibrary, MediaType } from 'react-native-image-picker';
 
 const { width, height } = Dimensions.get('window');
 const isSmallScreen = width <= 375; // iPhone SE and similar small screens
@@ -77,6 +81,9 @@ const LawFirmProfileScreen = () => {
     // State for managing Firm Description
     const [firmDescription, setFirmDescription] = useState('');
 
+    // State for managing Firm Logo
+    const [firmLogo, setFirmLogo] = useState(null);
+
     // Load saved language on component mount
     useEffect(() => {
         const loadLanguage = async () => {
@@ -92,6 +99,48 @@ const LawFirmProfileScreen = () => {
         };
         loadLanguage();
     }, []);
+
+    // Function to handle image selection
+    const handleChoosePhoto = () => {
+        const options = {
+            mediaType: 'photo',
+            includeBase64: false,
+            maxHeight: 2000,
+            maxWidth: 2000,
+            quality: 0.8,
+        };
+
+        launchImageLibrary(options, (response) => {
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+                Alert.alert('Error', 'Failed to pick image. Please try again.');
+            } else {
+                const source = response.assets[0];
+                setFirmLogo(source);
+            }
+        });
+    };
+
+    // Function to handle image deletion
+    const handleDeletePhoto = () => {
+        Alert.alert(
+            'Delete Logo',
+            'Are you sure you want to delete the firm logo?',
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Delete',
+                    onPress: () => setFirmLogo(null),
+                    style: 'destructive',
+                },
+            ]
+        );
+    };
 
     const dynamicStyles = StyleSheet.create({
         safeArea: {
@@ -186,6 +235,92 @@ const LawFirmProfileScreen = () => {
             fontSize: getResponsiveValue(10, 12, 14),
             fontWeight: '600',
             color: '#14B8A6',
+        },
+        firmLogoHeader: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginBottom: getResponsiveValue(15, 20, 25),
+        },
+        firmLogoNumber: {
+            color: '#14B8A6',
+            fontSize: getResponsiveValue(15, 16, 18),
+            fontWeight: '600',
+            marginRight: getResponsiveValue(8, 10, 12),
+        },
+        firmLogoTitle: {
+            fontSize: getResponsiveValue(12, 14, 16),
+            fontWeight: '600',
+            color: colors.text,
+            marginLeft: getResponsiveValue(8, 10, 12),
+        },
+        logoContainer: {
+            alignItems: 'center',
+            marginBottom: getResponsiveValue(15, 20, 25),
+            width: "100%"
+        },
+        logoImage: {
+            width: getResponsiveValue(100, 120, 140),
+            height: getResponsiveValue(100, 120, 140),
+            borderRadius: getResponsiveValue(12, 14, 16),
+            
+            borderWidth: 2,
+            borderColor: colors.border,
+        },
+        logoPlaceholder: {
+            width: "100%",
+            // height: getResponsiveValue(100, 120, 140),
+            borderRadius: getResponsiveValue(12, 14, 16),
+            paddingVertical: getResponsiveValue(20, 25, 30),
+           backgroundColor: colors.background,
+            borderWidth: 2,
+            borderColor: colors.border,
+            borderStyle: 'dashed',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        logoWithDeleteContainer: {
+            position: 'relative',
+            alignItems: 'center',
+        },
+        deleteOverlayButton: {
+            position: 'absolute',
+            top: getResponsiveValue(-5, -8, -10),
+            right: getResponsiveValue(-5, -8, -10),
+            backgroundColor: "#efececff",
+            borderRadius: getResponsiveValue(12, 14, 16),
+            width: getResponsiveValue(24, 28, 32),
+            height: getResponsiveValue(24, 28, 32),
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderWidth: 2,
+            borderColor: '#FFFFFF',
+        },
+        logoButtonsContainer: {
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        logoButton: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: colors.background,
+            borderWidth: 1,
+            borderColor: colors.border,
+            borderRadius: getResponsiveValue(8, 10, 12),
+            paddingHorizontal: getResponsiveValue(12, 14, 16),
+            paddingVertical: getResponsiveValue(8, 10, 12),
+            marginHorizontal: getResponsiveValue(5, 6, 7),
+        },
+        logoButtonText: {
+            fontSize: getResponsiveValue(10, 12, 14),
+            fontWeight: '500',
+            color: colors.text,
+        },
+        deleteButton: {
+            borderColor: '#EF4444',
+        },
+        deleteButtonText: {
+            color: '#EF4444',
         },
         firmLogoSection: {
             flexDirection: 'column',
@@ -761,7 +896,6 @@ const LawFirmProfileScreen = () => {
             flexDirection: isSmallScreen ? 'column' : 'row',
             justifyContent: 'space-between',
             marginBottom: getResponsiveValue(15, 20, 25),
-            gap: isSmallScreen ? getResponsiveValue(10, 12, 15) : getResponsiveValue(8, 10, 12),
         },
         firmStatCard: {
             flex: isSmallScreen ? undefined : 1,
@@ -770,7 +904,8 @@ const LawFirmProfileScreen = () => {
             borderColor: colors.border,
             borderRadius: getResponsiveValue(8, 10, 12),
             padding: getResponsiveValue(5, 8, 10),
-            marginHorizontal: isSmallScreen ? 0 : undefined,
+            marginHorizontal: isSmallScreen ? 0 : getResponsiveValue(4, 5, 6),
+            marginBottom: isSmallScreen ? getResponsiveValue(10, 12, 15) : 0,
             shadowColor: '#000',
             shadowOffset: {
                 width: 0,
@@ -859,20 +994,41 @@ const LawFirmProfileScreen = () => {
                     </View>
 
                     {/* Firm Logo Section */}
-                    <View style={dynamicStyles.firmLogoSection}>
-                        <View style={dynamicStyles.firmLogoHeader}>
-                            <Camera width={getResponsiveValue(18, 20, 22)} height={getResponsiveValue(18, 20, 22)} />
-                            <Text style={dynamicStyles.firmLogoTitle}>Firm Logo</Text>
-                        </View>
+                <View style={dynamicStyles.firmLogoSection}>
+                    <View style={dynamicStyles.firmLogoHeader}>
+                        <Camera width={getResponsiveValue(18, 20, 22)} height={getResponsiveValue(18, 20, 22)} />
+                        <Text style={dynamicStyles.firmLogoTitle}>Firm Logo</Text>
+                    </View>
 
-                        <TouchableOpacity style={dynamicStyles.uploadArea}>
-                            <View style={dynamicStyles.uploadIconContainer}>
+                    <View style={dynamicStyles.logoContainer}>
+                        {firmLogo ? (
+                            <View style={dynamicStyles.logoWithDeleteContainer}>
+                                <Image source={{ uri: firmLogo.uri }} style={dynamicStyles.logoImage} />
+                                <TouchableOpacity
+                                    style={dynamicStyles.deleteOverlayButton}
+                                    onPress={handleDeletePhoto}
+                                >
+                                    <Camera width={getResponsiveValue(12, 14, 16)} height={getResponsiveValue(12, 14, 16)} fill="#FFFFFF" />
+                                </TouchableOpacity>
+                            </View>
+                        ) : (
+                            <TouchableOpacity
+                                style={dynamicStyles.logoPlaceholder}
+                                onPress={handleChoosePhoto}
+                            >
+                                <View style={dynamicStyles.uploadIconContainer}>
                                 <Upload width={getResponsiveValue(20, 35, 40)} height={getResponsiveValue(30, 35, 40)} />
                             </View>
-                            <Text style={dynamicStyles.uploadTitle}>Upload Logo</Text>
-                            <Text style={dynamicStyles.uploadSubtitle}>Recommended: Square image, max 2MB</Text>
-                        </TouchableOpacity>
+                                <Text style={[dynamicStyles.uploadTitle, { marginTop: getResponsiveValue(8, 10, 12) }]}>
+                                    Upload Logo
+                                </Text>
+                                <Text style={[dynamicStyles.uploadSubtitle, { marginTop: getResponsiveValue(4, 6, 8) }]}>
+                                    Recommended: Square image, max 5MB
+                                </Text>
+                            </TouchableOpacity>
+                        )}
                     </View>
+                </View>
 
                     {/* Firm Details Section */}
                     <View style={dynamicStyles.firmDetailsSection}>
@@ -945,6 +1101,8 @@ const LawFirmProfileScreen = () => {
                         />
                     </View>
                 </View>
+
+                
 
                 {/* Practice Areas Section */}
                 <View style={dynamicStyles.practiceAreasSection}>
