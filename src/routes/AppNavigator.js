@@ -12,6 +12,7 @@ import SplashScreen from '../screens/SplashScreen';
 import SignupCreateAccount from '../screens/auth/SignupCreateAccount';
 import ForgetPasswordScreen from '../screens/auth/ForgetPasswordScreen';
 import NewCredentialScreen from '../screens/auth/NewCredentialScreen';
+import LawFirmProfileScreen from '../screens/auth/LawFirmProfileScreen';
 import TabNavigator from '../components/TabNavigator';
 
 const Stack = createNativeStackNavigator();
@@ -97,6 +98,15 @@ const AppNavigator = () => {
           component={NewCredentialScreen}
           options={{ 
             title: 'New Credentials',
+            headerShown: false,
+            headerBackTitle: 'Back'
+          }}
+        />
+        <Stack.Screen 
+          name="LawFirmProfile" 
+          component={LawFirmProfileScreen}
+          options={{ 
+            title: 'Law Firm Profile',
             headerShown: false,
             headerBackTitle: 'Back'
           }}
