@@ -216,13 +216,15 @@ const LawFirmProfileScreen = () => {
             fontSize: getResponsiveValue(25, 26, 28),
             fontWeight: '700',
             color: colors.text,
-            textAlign: 'center',
+            textAlign: currentLanguage === 'ur' ? 'center' : 'center',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
             marginBottom: getResponsiveValue(12, 15, 18),
         },
         descriptionText: {
             fontSize: getResponsiveValue(12, 14, 16),
             color: colors.secondary,
-            textAlign: 'center',
+            textAlign: currentLanguage === 'ur' ? 'center' : 'center',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
             lineHeight: getResponsiveValue(20, 22, 24),
             paddingHorizontal: getResponsiveValue(5, 10, 15),
             marginBottom: getResponsiveValue(20, 25, 30),
@@ -264,6 +266,8 @@ const LawFirmProfileScreen = () => {
             color: colors.text,
             marginBottom: getResponsiveValue(2, 3, 4),
             marginLeft: getResponsiveValue(5, 10, 15),
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         separator: {
             width: 1,
@@ -275,6 +279,8 @@ const LawFirmProfileScreen = () => {
             fontSize: getResponsiveValue(10, 12, 14),
             fontWeight: '600',
             color: '#14B8A6',
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         firmLogoHeader: {
             flexDirection: 'row',
@@ -292,6 +298,8 @@ const LawFirmProfileScreen = () => {
             fontWeight: '600',
             color: colors.text,
             marginLeft: getResponsiveValue(8, 10, 12),
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         logoContainer: {
             alignItems: 'center',
@@ -415,11 +423,14 @@ const LawFirmProfileScreen = () => {
             fontWeight: '600',
             color: colors.text,
             marginBottom: getResponsiveValue(5, 8, 10),
+            textAlign: currentLanguage === 'ur' ? 'center' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         uploadSubtitle: {
             fontSize: getResponsiveValue(5, 9, 12),
             color: colors.secondary,
-            textAlign: 'center',
+            textAlign: currentLanguage === 'ur' ? 'center' : 'center',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         firmDetailsSection: {
             flexDirection: 'column',
@@ -464,12 +475,16 @@ const LawFirmProfileScreen = () => {
             fontWeight: '600',
             color: colors.text,
             marginLeft: getResponsiveValue(8, 10, 12),
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         inputLabel: {
             fontSize: getResponsiveValue(10, 12, 14),
             fontWeight: '500',
             color: colors.text,
             marginBottom: getResponsiveValue(5, 8, 10),
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         textInput: (inputName) => ({
             borderWidth: 1,
@@ -481,6 +496,8 @@ const LawFirmProfileScreen = () => {
             color: colors.text,
             backgroundColor: colors.background,
             marginBottom: getResponsiveValue(15, 20, 25),
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         }),
         practiceAreasSection: {
             flexDirection: 'column',
@@ -518,12 +535,16 @@ const LawFirmProfileScreen = () => {
             fontWeight: '600',
             color: colors.text,
             marginLeft: getResponsiveValue(8, 10, 12),
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         practiceAreasSubtitle: {
             fontSize: getResponsiveValue(10, 12, 14),
             fontWeight: '500',
             color: colors.text,
             marginBottom: getResponsiveValue(15, 20, 25),
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         practiceAreasContainer: {
             flexDirection: 'row',
@@ -544,6 +565,8 @@ const LawFirmProfileScreen = () => {
         practiceAreaButtonText: (isSelected) => ({
             fontSize: getResponsiveValue(12, 14, 16),
             color: isSelected ? '#14B8A6' : colors.text,
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         }),
         firmStatisticsSection: {
             flexDirection: 'column',
@@ -581,6 +604,8 @@ const LawFirmProfileScreen = () => {
             fontWeight: '600',
             color: colors.text,
             marginLeft: getResponsiveValue(8, 10, 12),
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         bookingFeeHeader: {
             flexDirection: 'row',
@@ -593,6 +618,8 @@ const LawFirmProfileScreen = () => {
             color: colors.text,
             marginLeft: getResponsiveValue(8, 10, 12),
             flex: 1,
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         consultationSection: {
             backgroundColor: '#F0FDFB',
@@ -611,6 +638,8 @@ const LawFirmProfileScreen = () => {
             color: colors.text,
             marginLeft: getResponsiveValue(8, 10, 12),
             flex: 1,
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         checkboxContainer: {
             flexDirection: 'row',
@@ -644,6 +673,8 @@ const LawFirmProfileScreen = () => {
             fontSize: getResponsiveValue(12, 14, 16),
             color: colors.text,
             lineHeight: getResponsiveValue(18, 20, 22),
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         inviteLawyersSection: {
             flexDirection: 'column',
@@ -681,12 +712,16 @@ const LawFirmProfileScreen = () => {
             fontWeight: '600',
             color: colors.text,
             marginLeft: getResponsiveValue(8, 10, 12),
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         inviteLawyersDescription: {
             fontSize: getResponsiveValue(10, 12, 14),
             color: colors.secondary,
             lineHeight: getResponsiveValue(12, 14, 16),
             marginBottom: getResponsiveValue(5, 10, 15),
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         infoMessageContainer: {
             flexDirection: 'row',
@@ -733,6 +768,8 @@ const LawFirmProfileScreen = () => {
             fontWeight: '600',
             color: colors.text,
             marginLeft: getResponsiveValue(8, 10, 12),
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         dayScheduleContainer: {
             flexDirection: 'row',
@@ -747,6 +784,8 @@ const LawFirmProfileScreen = () => {
             fontWeight: '500',
             color: colors.text,
             flex: 1,
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         timeInputsContainer: {
             flexDirection: 'row',
@@ -771,7 +810,8 @@ const LawFirmProfileScreen = () => {
         timeInputText: {
             fontSize: getResponsiveValue(12, 14, 16),
             color: colors.text,
-            textAlign: 'center',
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         timeInputIcon: {
             marginLeft: getResponsiveValue(4, 6, 8),
@@ -780,6 +820,8 @@ const LawFirmProfileScreen = () => {
             fontSize: getResponsiveValue(10, 12, 14),
             color: colors.secondary,
             marginHorizontal: getResponsiveValue(8, 10, 12),
+            textAlign: currentLanguage === 'ur' ? 'center' : 'center',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         dayToggle: {
             width: getResponsiveValue(40, 45, 50),
@@ -842,6 +884,8 @@ const LawFirmProfileScreen = () => {
             fontWeight: '600',
             color: colors.text,
             marginLeft: getResponsiveValue(8, 10, 12),
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         firmDescriptionTextInput: {
             borderWidth: 1,
@@ -855,6 +899,8 @@ const LawFirmProfileScreen = () => {
             minHeight: getResponsiveValue(80, 100, 120),
             textAlignVertical: 'top',
             marginBottom: getResponsiveValue(15, 20, 25),
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         writingTipsContainer: {
             backgroundColor: colors.background,
@@ -866,6 +912,8 @@ const LawFirmProfileScreen = () => {
             fontWeight: '600',
             color: colors.text,
             marginBottom: getResponsiveValue(8, 10, 12),
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         tipItem: {
             flexDirection: 'row',
@@ -889,6 +937,8 @@ const LawFirmProfileScreen = () => {
             color: colors.secondary,
             flex: 1,
             lineHeight: getResponsiveValue(14, 16, 18),
+            textAlign: currentLanguage === 'ur' ? 'right' : 'left',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         buttonsContainer: {
             flexDirection: 'row',
@@ -937,11 +987,15 @@ const LawFirmProfileScreen = () => {
             fontSize: getResponsiveValue(12, 14, 16),
             fontWeight: '600',
             color: colors.text,
+            textAlign: currentLanguage === 'ur' ? 'center' : 'center',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         submitButtonText: {
             fontSize: getResponsiveValue(12, 14, 16),
             fontWeight: '600',
             color: '#FFFFFF',
+            textAlign: currentLanguage === 'ur' ? 'center' : 'center',
+            writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr',
         },
         firmStatsCardsContainer: {
             flexDirection: isSmallScreen ? 'column' : 'row',
@@ -1027,9 +1081,9 @@ const LawFirmProfileScreen = () => {
                         <View style={dynamicStyles.profileIconContainer}>
                             <Documents width={getResponsiveValue(5, 25, 35)} height={getResponsiveValue(10, 25, 35)} />
                         </View>
-                        <Text style={dynamicStyles.mainTitle}>Complete Your Profile</Text>
+                        <Text style={dynamicStyles.mainTitle}>{t('lawFirmProfile.completeProfile')}</Text>
                         <Text style={dynamicStyles.descriptionText}>
-                            Join Pakistan's largest legal marketplace and connect with clients looking for your expertise
+                            {t('lawFirmProfile.joinMarketplace')}
                         </Text>
 
                         <TouchableOpacity style={dynamicStyles.profileCard}>
@@ -1037,10 +1091,10 @@ const LawFirmProfileScreen = () => {
                                 <Star width={getResponsiveValue(18, 22, 26)} height={getResponsiveValue(18, 22, 26)} />
                             </View>
                             <View style={dynamicStyles.cardTextContainer}>
-                                <Text style={dynamicStyles.cardTitle}>Complete Your Profile</Text>
+                                <Text style={dynamicStyles.cardTitle}>{t('lawFirmProfile.completeProfile')}</Text>
                             </View>
                             <View style={dynamicStyles.separator} />
-                            <Text style={dynamicStyles.statusText}>Almost there!</Text>
+                            <Text style={dynamicStyles.statusText}>{t('lawFirmProfile.almostThere')}</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -1048,7 +1102,7 @@ const LawFirmProfileScreen = () => {
                 <View style={dynamicStyles.firmLogoSection}>
                     <View style={dynamicStyles.firmLogoHeader}>
                         <Camera width={getResponsiveValue(18, 20, 22)} height={getResponsiveValue(18, 20, 22)} />
-                        <Text style={dynamicStyles.firmLogoTitle}>Firm Logo</Text>
+                        <Text style={dynamicStyles.firmLogoTitle}>{t('lawFirmProfile.firmLogo')}</Text>
                     </View>
 
                     <View style={dynamicStyles.logoContainer}>
@@ -1071,10 +1125,10 @@ const LawFirmProfileScreen = () => {
                                 <Upload width={getResponsiveValue(20, 35, 40)} height={getResponsiveValue(30, 35, 40)} />
                             </View>
                                 <Text style={[dynamicStyles.uploadTitle, { marginTop: getResponsiveValue(8, 10, 12) }]}>
-                                    Upload Logo
+                                    {t('lawFirmProfile.uploadLogo')}
                                 </Text>
                                 <Text style={[dynamicStyles.uploadSubtitle, { marginTop: getResponsiveValue(4, 6, 8) }]}>
-                                    Recommended: Square image, max 5MB
+                                    {t('lawFirmProfile.recommendedImage')}
                                 </Text>
                             </TouchableOpacity>
                         )}
@@ -1086,24 +1140,24 @@ const LawFirmProfileScreen = () => {
                         <View style={dynamicStyles.firmDetailsHeader}>
                             <Text style={dynamicStyles.firmDetailsNumber}>1</Text>
                             <FirmDetails width={[getResponsiveValue(18, 20, 22)]} height={getResponsiveValue(18, 20, 22)} />
-                            <Text style={dynamicStyles.firmDetailsTitle}>Firm Details</Text>
+                            <Text style={dynamicStyles.firmDetailsTitle}>{t('lawFirmProfile.firmDetails')}</Text>
                         </View>
 
                         {/* Firm Name Input */}
-                        <Text style={dynamicStyles.inputLabel}>Firm Name</Text>
+                        <Text style={dynamicStyles.inputLabel}>{t('lawFirmProfile.firmName')}</Text>
                         <TextInput
                             style={dynamicStyles.textInput('firmName')}
-                            placeholder="e.g., Smith & Associates Law Firm"
+                            placeholder={t('lawFirmProfile.firmNamePlaceholder')}
                             placeholderTextColor={colors.secondary}
                             onFocus={() => setFocusedInput('firmName')}
                             onBlur={() => setFocusedInput(null)}
                         />
 
                         {/* Firm Phone Input */}
-                        <Text style={dynamicStyles.inputLabel}>Firm Phone</Text>
+                        <Text style={dynamicStyles.inputLabel}>{t('lawFirmProfile.firmPhone')}</Text>
                         <TextInput
                             style={dynamicStyles.textInput('firmPhone')}
-                            placeholder="+92 300 1234567"
+                            placeholder={t('lawFirmProfile.firmPhonePlaceholder')}
                             placeholderTextColor={colors.secondary}
                             keyboardType="phone-pad"
                             onFocus={() => setFocusedInput('firmPhone')}
@@ -1111,40 +1165,40 @@ const LawFirmProfileScreen = () => {
                         />
 
                         {/* Firm Address Input */}
-                        <Text style={dynamicStyles.inputLabel}>Firm Address</Text>
+                        <Text style={dynamicStyles.inputLabel}>{t('lawFirmProfile.firmAddress')}</Text>
                         <TextInput
                             style={dynamicStyles.textInput('firmAddress')}
-                            placeholder="123 Legal Street, Lahore, Pakistan"
+                            placeholder={t('lawFirmProfile.firmAddressPlaceholder')}
                             placeholderTextColor={colors.secondary}
                             onFocus={() => setFocusedInput('firmAddress')}
                             onBlur={() => setFocusedInput(null)}
                         />
 
                         {/* Registration No / Bar Council Input */}
-                        <Text style={dynamicStyles.inputLabel}>Registration No / Bar Council *</Text>
+                        <Text style={dynamicStyles.inputLabel}>{t('lawFirmProfile.registrationNo')}</Text>
                         <TextInput
                             style={dynamicStyles.textInput('registrationNo')}
-                            placeholder="ABC123"
+                            placeholder={t('lawFirmProfile.registrationNoPlaceholder')}
                             placeholderTextColor={colors.secondary}
                             onFocus={() => setFocusedInput('registrationNo')}
                             onBlur={() => setFocusedInput(null)}
                         />
 
                         {/* City Input */}
-                        <Text style={dynamicStyles.inputLabel}>City</Text>
+                        <Text style={dynamicStyles.inputLabel}>{t('lawFirmProfile.city')}</Text>
                         <TextInput
                             style={dynamicStyles.textInput('city')}
-                            placeholder="Select City"
+                            placeholder={t('lawFirmProfile.cityPlaceholder')}
                             placeholderTextColor={colors.secondary}
                             onFocus={() => setFocusedInput('city')}
                             onBlur={() => setFocusedInput(null)}
                         />
 
                         {/* Website Input */}
-                        <Text style={dynamicStyles.inputLabel}>Website</Text>
+                        <Text style={dynamicStyles.inputLabel}>{t('lawFirmProfile.website')}</Text>
                         <TextInput
                             style={dynamicStyles.textInput('website')}
-                            placeholder="www.com"
+                            placeholder={t('lawFirmProfile.websitePlaceholder')}
                             placeholderTextColor={colors.secondary}
                             keyboardType="url"
                             onFocus={() => setFocusedInput('website')}
@@ -1160,22 +1214,22 @@ const LawFirmProfileScreen = () => {
                     <View style={dynamicStyles.practiceAreasHeader}>
                         <Text style={dynamicStyles.practiceAreasNumber}>2</Text>
                         <Justice width={getResponsiveValue(18, 20, 22)} height={getResponsiveValue(18, 20, 22)} />
-                        <Text style={dynamicStyles.practiceAreasTitle}>Practice Areas</Text>
+                        <Text style={dynamicStyles.practiceAreasTitle}>{t('lawFirmProfile.practiceAreas')}</Text>
                     </View>
 
-                    <Text style={dynamicStyles.practiceAreasSubtitle}>Select Your Practice Areas</Text>
+                    <Text style={dynamicStyles.practiceAreasSubtitle}>{t('lawFirmProfile.selectPracticeAreas')}</Text>
 
                     <View style={dynamicStyles.practiceAreasContainer}>
                         {[
-                            'Criminal Law',
-                            'Insurance Law',
-                            'Environmental Law',
-                            'Intellectual Property',
-                            'Tax Law',
-                            'Labor & Employment',
-                            'Corporate Law',
-                            'Human Rights Law',
-                            'Family Law'
+                            t('lawFirmProfile.criminalLaw'),
+                            t('lawFirmProfile.insuranceLaw'),
+                            t('lawFirmProfile.environmentalLaw'),
+                            t('lawFirmProfile.intellectualProperty'),
+                            t('lawFirmProfile.taxLaw'),
+                            t('lawFirmProfile.laborEmployment'),
+                            t('lawFirmProfile.corporateLaw'),
+                            t('lawFirmProfile.humanRightsLaw'),
+                            t('lawFirmProfile.familyLaw')
                         ].map((area) => {
                             const isSelected = selectedPracticeAreas.includes(area);
                             return (
@@ -1204,7 +1258,7 @@ const LawFirmProfileScreen = () => {
                     <View style={dynamicStyles.firmStatisticsHeader}>
                         <Text style={dynamicStyles.firmStatisticsNumber}>3</Text>
                         <Justice width={getResponsiveValue(18, 20, 22)} height={getResponsiveValue(18, 20, 22)} />
-                        <Text style={dynamicStyles.firmStatisticsTitle}>Firm Statistics</Text>
+                        <Text style={dynamicStyles.firmStatisticsTitle}>{t('lawFirmProfile.firmStatistics')}</Text>
                     </View>
 
                     {/* Stat Cards Container */}
@@ -1213,7 +1267,7 @@ const LawFirmProfileScreen = () => {
                         <View style={dynamicStyles.firmStatCard}>
                             <View style={dynamicStyles.firmStatCardHeader}>
                                 <Calender width={getResponsiveValue(12, 14, 16)} height={getResponsiveValue(16, 18, 20)} />
-                                <Text style={dynamicStyles.firmStatCardTitle}>Established Year *</Text>
+                                <Text style={dynamicStyles.firmStatCardTitle}>{t('lawFirmProfile.establishedYear')}</Text>
                             </View>
                             <TextInput
                                 style={dynamicStyles.firmStatCardInput('establishedYear')}
@@ -1235,7 +1289,7 @@ const LawFirmProfileScreen = () => {
                         <View style={dynamicStyles.firmStatCard}>
                             <View style={dynamicStyles.firmStatCardHeader}>
                                 <Graph width={getResponsiveValue(12, 14, 16)} height={getResponsiveValue(16, 18, 20)} />
-                                <Text style={dynamicStyles.firmStatCardTitle}>Cases Handled</Text>
+                                <Text style={dynamicStyles.firmStatCardTitle}>{t('lawFirmProfile.casesHandled')}</Text>
                             </View>
                             <TextInput
                                 style={dynamicStyles.firmStatCardInput('casesHandled')}
@@ -1253,7 +1307,7 @@ const LawFirmProfileScreen = () => {
                         <View style={dynamicStyles.firmStatCard}>
                             <View style={dynamicStyles.firmStatCardHeader}>
                                 <Peoples width={getResponsiveValue(12, 14, 16)} height={getResponsiveValue(16, 18, 20)} />
-                                <Text style={dynamicStyles.firmStatCardTitle}>Team Size</Text>
+                                <Text style={dynamicStyles.firmStatCardTitle}>{t('lawFirmProfile.teamSize')}</Text>
                             </View>
                             <TextInput
                                 style={dynamicStyles.firmStatCardInput('teamSize')}
@@ -1274,7 +1328,7 @@ const LawFirmProfileScreen = () => {
                         <View>
                             <View style={dynamicStyles.bookingFeeHeader}>
                                 <Dollar width={getResponsiveValue(24, 22, 24)} height={getResponsiveValue(24, 22, 24)} />
-                                <Text style={dynamicStyles.bookingFeeTitle}>Firm Booking Fee (PKR) *</Text>
+                                <Text style={dynamicStyles.bookingFeeTitle}>{t('lawFirmProfile.firmBookingFee')}</Text>
                             </View>
                             <TextInput
                                 style={dynamicStyles.textInput('bookingFee')}
@@ -1305,10 +1359,10 @@ const LawFirmProfileScreen = () => {
                                 <View style={{ flex: 1, backgroundColor: colors.background }}>
                                     <View style={dynamicStyles.consultationHeader}>
                                         <Gift width={getResponsiveValue(12, 14, 16)} height={getResponsiveValue(12, 14, 16)} />
-                                        <Text style={dynamicStyles.consultationTitle}>Offer Free 15-Minute Consultation</Text>
+                                        <Text style={dynamicStyles.consultationTitle}>{t('lawFirmProfile.offerFreeConsultation')}</Text>
                                     </View>
                                     <Text style={dynamicStyles.inviteLawyersDescription}>
-                                        Attract more clients by offering complimentary initial consultations!
+                                        {t('lawFirmProfile.attractClients')}
                                     </Text>
                                 </View>
                             </View>
@@ -1322,17 +1376,16 @@ const LawFirmProfileScreen = () => {
                         <View style={dynamicStyles.inviteLawyersHeader}>
                             <Text style={dynamicStyles.inviteLawyersNumber}>4</Text>
                             <Peoples width={getResponsiveValue(18, 20, 22)} height={getResponsiveValue(18, 20, 22)} />
-                            <Text style={dynamicStyles.inviteLawyersTitle}>Invite Associated Lawyers</Text>
+                            <Text style={dynamicStyles.inviteLawyersTitle}>{t('lawFirmProfile.inviteLawyers')}</Text>
                         </View>
                         
                         <Text style={dynamicStyles.inviteLawyersDescription}>
-                            Send invitations to lawyers who will be part of your firm. They'll receive an
-                            email to join your team.
+                            {t('lawFirmProfile.inviteDescription')}
                         </Text>
                         
                         <TextInput
                             style={dynamicStyles.textInput('lawyerName')}
-                            placeholder="Lawyer's name"
+                            placeholder={t('lawFirmProfile.lawyerName')}
                             placeholderTextColor={colors.secondary}
                             onFocus={() => setFocusedInput('lawyerName')}
                             onBlur={() => setFocusedInput(null)}
@@ -1340,7 +1393,7 @@ const LawFirmProfileScreen = () => {
                         
                         <TextInput
                             style={dynamicStyles.textInput('lawyerEmail')}
-                            placeholder="lawyer@email.com"
+                            placeholder={t('lawFirmProfile.lawyerEmail')}
                             placeholderTextColor={colors.secondary}
                             keyboardType="email-address"
                             onFocus={() => setFocusedInput('lawyerEmail')}
@@ -1350,7 +1403,7 @@ const LawFirmProfileScreen = () => {
                         <View style={dynamicStyles.infoMessageContainer}>
                             <Explain width={getResponsiveValue(10, 12, 14)} height={getResponsiveValue(10, 12, 14)} />
                             <Text style={dynamicStyles.inviteLawyersDescription}>
-                                  Invitations will be sent via email once you submit the form. Lawyers can join your firm by clicking the link in the email.
+                                  {t('lawFirmProfile.invitationNote')}
                             </Text>
                         </View>
                     </View>
@@ -1360,12 +1413,12 @@ const LawFirmProfileScreen = () => {
                         <View style={dynamicStyles.operatingHoursHeader}>
                             <Text style={dynamicStyles.operatingHoursNumber}>5</Text>
                             <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} />
-                            <Text style={dynamicStyles.operatingHoursTitle}>Operating Hours</Text>
+                            <Text style={dynamicStyles.operatingHoursTitle}>{t('lawFirmProfile.operatingHours')}</Text>
                         </View>
                         
                         {/* Monday */}
                         <View style={dynamicStyles.dayScheduleContainer}>
-                            <Text style={dynamicStyles.dayName}>Monday</Text>
+                            <Text style={dynamicStyles.dayName}>{t('lawFirmProfile.monday')}</Text>
                             <View style={dynamicStyles.timeInputsContainer}>
                                 <TouchableOpacity
                                     style={dynamicStyles.timeInput}
@@ -1374,7 +1427,7 @@ const LawFirmProfileScreen = () => {
                                     <Text style={dynamicStyles.timeInputText}>{operatingHours.monday.open}</Text>
                                     <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
                                 </TouchableOpacity>
-                                <Text style={dynamicStyles.timeSeparator}>to</Text>
+                                <Text style={dynamicStyles.timeSeparator}>{t('lawFirmProfile.to')}</Text>
                                 <TouchableOpacity
                                     style={dynamicStyles.timeInput}
                                     onPress={() => showTimePickerModal('monday', 'close')}
@@ -1402,7 +1455,7 @@ const LawFirmProfileScreen = () => {
 
                         {/* Tuesday */}
                         <View style={dynamicStyles.dayScheduleContainer}>
-                            <Text style={dynamicStyles.dayName}>Tuesday</Text>
+                            <Text style={dynamicStyles.dayName}>{t('lawFirmProfile.tuesday')}</Text>
                             <View style={dynamicStyles.timeInputsContainer}>
                                 <TouchableOpacity
                                     style={dynamicStyles.timeInput}
@@ -1411,7 +1464,7 @@ const LawFirmProfileScreen = () => {
                                     <Text style={dynamicStyles.timeInputText}>{operatingHours.tuesday.open}</Text>
                                     <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
                                 </TouchableOpacity>
-                                <Text style={dynamicStyles.timeSeparator}>to</Text>
+                                <Text style={dynamicStyles.timeSeparator}>{t('lawFirmProfile.to')}</Text>
                                 <TouchableOpacity
                                     style={dynamicStyles.timeInput}
                                     onPress={() => showTimePickerModal('tuesday', 'close')}
@@ -1439,7 +1492,7 @@ const LawFirmProfileScreen = () => {
 
                         {/* Wednesday */}
                         <View style={dynamicStyles.dayScheduleContainer}>
-                            <Text style={dynamicStyles.dayName}>Wednesday</Text>
+                            <Text style={dynamicStyles.dayName}>{t('lawFirmProfile.wednesday')}</Text>
                             <View style={dynamicStyles.timeInputsContainer}>
                                 <TouchableOpacity
                                     style={dynamicStyles.timeInput}
@@ -1448,7 +1501,7 @@ const LawFirmProfileScreen = () => {
                                     <Text style={dynamicStyles.timeInputText}>{operatingHours.wednesday.open}</Text>
                                     <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
                                 </TouchableOpacity>
-                                <Text style={dynamicStyles.timeSeparator}>to</Text>
+                                <Text style={dynamicStyles.timeSeparator}>{t('lawFirmProfile.to')}</Text>
                                 <TouchableOpacity
                                     style={dynamicStyles.timeInput}
                                     onPress={() => showTimePickerModal('wednesday', 'close')}
@@ -1476,7 +1529,7 @@ const LawFirmProfileScreen = () => {
 
                         {/* Thursday */}
                         <View style={dynamicStyles.dayScheduleContainer}>
-                            <Text style={dynamicStyles.dayName}>Thursday</Text>
+                            <Text style={dynamicStyles.dayName}>{t('lawFirmProfile.thursday')}</Text>
                             <View style={dynamicStyles.timeInputsContainer}>
                                 <TouchableOpacity
                                     style={dynamicStyles.timeInput}
@@ -1485,7 +1538,7 @@ const LawFirmProfileScreen = () => {
                                     <Text style={dynamicStyles.timeInputText}>{operatingHours.thursday.open}</Text>
                                     <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
                                 </TouchableOpacity>
-                                <Text style={dynamicStyles.timeSeparator}>to</Text>
+                                <Text style={dynamicStyles.timeSeparator}>{t('lawFirmProfile.to')}</Text>
                                 <TouchableOpacity
                                     style={dynamicStyles.timeInput}
                                     onPress={() => showTimePickerModal('thursday', 'close')}
@@ -1513,7 +1566,7 @@ const LawFirmProfileScreen = () => {
 
                         {/* Friday */}
                         <View style={dynamicStyles.dayScheduleContainer}>
-                            <Text style={dynamicStyles.dayName}>Friday</Text>
+                            <Text style={dynamicStyles.dayName}>{t('lawFirmProfile.friday')}</Text>
                             <View style={dynamicStyles.timeInputsContainer}>
                                 <TouchableOpacity
                                     style={dynamicStyles.timeInput}
@@ -1522,7 +1575,7 @@ const LawFirmProfileScreen = () => {
                                     <Text style={dynamicStyles.timeInputText}>{operatingHours.friday.open}</Text>
                                     <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
                                 </TouchableOpacity>
-                                <Text style={dynamicStyles.timeSeparator}>to</Text>
+                                <Text style={dynamicStyles.timeSeparator}>{t('lawFirmProfile.to')}</Text>
                                 <TouchableOpacity
                                     style={dynamicStyles.timeInput}
                                     onPress={() => showTimePickerModal('friday', 'close')}
@@ -1550,7 +1603,7 @@ const LawFirmProfileScreen = () => {
 
                         {/* Saturday */}
                         <View style={dynamicStyles.dayScheduleContainer}>
-                            <Text style={dynamicStyles.dayName}>Saturday</Text>
+                            <Text style={dynamicStyles.dayName}>{t('lawFirmProfile.saturday')}</Text>
                             <View style={dynamicStyles.timeInputsContainer}>
                                 <TouchableOpacity
                                     style={dynamicStyles.timeInput}
@@ -1559,7 +1612,7 @@ const LawFirmProfileScreen = () => {
                                     <Text style={dynamicStyles.timeInputText}>{operatingHours.saturday.open}</Text>
                                     <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
                                 </TouchableOpacity>
-                                <Text style={dynamicStyles.timeSeparator}>to</Text>
+                                <Text style={dynamicStyles.timeSeparator}>{t('lawFirmProfile.to')}</Text>
                                 <TouchableOpacity
                                     style={dynamicStyles.timeInput}
                                     onPress={() => showTimePickerModal('saturday', 'close')}
@@ -1587,7 +1640,7 @@ const LawFirmProfileScreen = () => {
 
                         {/* Sunday */}
                         <View style={dynamicStyles.dayScheduleContainer}>
-                            <Text style={dynamicStyles.dayName}>Sunday</Text>
+                            <Text style={dynamicStyles.dayName}>{t('lawFirmProfile.sunday')}</Text>
                             <View style={dynamicStyles.timeInputsContainer}>
                                 <TouchableOpacity
                                     style={dynamicStyles.timeInput}
@@ -1596,7 +1649,7 @@ const LawFirmProfileScreen = () => {
                                     <Text style={dynamicStyles.timeInputText}>{operatingHours.sunday.open}</Text>
                                     <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
                                 </TouchableOpacity>
-                                <Text style={dynamicStyles.timeSeparator}>to</Text>
+                                <Text style={dynamicStyles.timeSeparator}>{t('lawFirmProfile.to')}</Text>
                                 <TouchableOpacity
                                     style={dynamicStyles.timeInput}
                                     onPress={() => showTimePickerModal('sunday', 'close')}
@@ -1628,13 +1681,13 @@ const LawFirmProfileScreen = () => {
                         <View style={dynamicStyles.firmDescriptionHeader}>
                             <Text style={dynamicStyles.firmDescriptionNumber}>6</Text>
                             <Documents2 width={getResponsiveValue(18, 20, 22)} height={getResponsiveValue(18, 20, 22)} />
-                            <Text style={dynamicStyles.firmDescriptionTitle}>Firm Description</Text>
+                            <Text style={dynamicStyles.firmDescriptionTitle}>{t('lawFirmProfile.firmDescription')}</Text>
                         </View>
                         
                         <TextInput
                             style={dynamicStyles.firmDescriptionTextInput}
                             multiline
-                            placeholder="Write about your firm"
+                            placeholder={t('lawFirmProfile.writeAboutFirm')}
                             placeholderTextColor={colors.secondary}
                             value={firmDescription}
                             onChangeText={setFirmDescription}
@@ -1642,21 +1695,21 @@ const LawFirmProfileScreen = () => {
                         />
                         
                         <View style={dynamicStyles.writingTipsContainer}>
-                            <Text style={dynamicStyles.writingTipsTitle}>Writing Tips:</Text>
+                            <Text style={dynamicStyles.writingTipsTitle}>{t('lawFirmProfile.writingTips')}</Text>
                             
                             <View style={dynamicStyles.tipItem}>
                                 <Text style={dynamicStyles.tipNumber}>1</Text>
-                                <Text style={dynamicStyles.tipText}>Highlight your unique approach to client service</Text>
+                                <Text style={dynamicStyles.tipText}>{t('lawFirmProfile.tip1')}</Text>
                             </View>
                             
                             <View style={dynamicStyles.tipItem}>
                                 <Text style={dynamicStyles.tipNumber}>2</Text>
-                                <Text style={dynamicStyles.tipText}>Mention years of experience and notable achievements</Text>
+                                <Text style={dynamicStyles.tipText}>{t('lawFirmProfile.tip2')}</Text>
                             </View>
                             
                             <View style={dynamicStyles.tipItem}>
                                 <Text style={dynamicStyles.tipNumber}>3</Text>
-                                <Text style={dynamicStyles.tipText}>Describe your firm's mission and values</Text>
+                                <Text style={dynamicStyles.tipText}>{t('lawFirmProfile.tip3')}</Text>
                             </View>
                         </View>
                     </View>
@@ -1670,7 +1723,7 @@ const LawFirmProfileScreen = () => {
                                 console.log('Save as Draft pressed');
                             }}
                         >
-                            <Text style={dynamicStyles.saveDraftButtonText}>Save as Draft</Text>
+                            <Text style={dynamicStyles.saveDraftButtonText}>{t('lawFirmProfile.saveAsDraft')}</Text>
                         </TouchableOpacity>
                         
                         <TouchableOpacity 
@@ -1680,7 +1733,7 @@ const LawFirmProfileScreen = () => {
                                 console.log('Submit pressed');
                             }}
                         >
-                            <Text style={dynamicStyles.submitButtonText}>Save Profile</Text>
+                            <Text style={dynamicStyles.submitButtonText}>{t('lawFirmProfile.saveProfile')}</Text>
                         </TouchableOpacity>
                     </View>
             </ScrollView>
