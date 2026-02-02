@@ -35,6 +35,7 @@ import Graph from '../../assets/svg/graph';
 import Documents2 from '../../assets/svg/documents2';
 import { useColorScheme } from 'react-native';
 import { launchImageLibrary, MediaType } from 'react-native-image-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const { width, height } = Dimensions.get('window');
 const isSmallScreen = width <= 375; // iPhone SE and similar small screens
@@ -81,8 +82,13 @@ const LawFirmProfileScreen = () => {
     // State for managing Firm Description
     const [firmDescription, setFirmDescription] = useState('');
 
-    // State for managing Firm Logo
+    // State for firm logo management
     const [firmLogo, setFirmLogo] = useState(null);
+
+    // State for time picker
+    const [showTimePicker, setShowTimePicker] = useState(false);
+    const [currentTimeField, setCurrentTimeField] = useState('');
+    const [tempTime, setTempTime] = useState(new Date());
 
     // Load saved language on component mount
     useEffect(() => {
@@ -140,6 +146,40 @@ const LawFirmProfileScreen = () => {
                 },
             ]
         );
+    };
+
+    // Time picker functions
+    const showTimePickerModal = (day, field) => {
+        const currentTime = operatingHours[day][field];
+        const [hours, minutes] = currentTime.split(':');
+        const date = new Date();
+        date.setHours(parseInt(hours), parseInt(minutes));
+        setTempTime(date);
+        setCurrentTimeField(`${day}_${field}`);
+        setShowTimePicker(true);
+    };
+
+    const handleTimeChange = (event, selectedTime) => {
+        setShowTimePicker(false);
+        
+        if (Platform.OS === 'ios' && event.type === 'dismissed') {
+            return;
+        }
+        
+        if (event.type === 'set' && selectedTime) {
+            const hours = selectedTime.getHours().toString().padStart(2, '0');
+            const minutes = selectedTime.getMinutes().toString().padStart(2, '0');
+            const timeString = `${hours}:${minutes}`;
+            
+            const [day, field] = currentTimeField.split('_');
+            setOperatingHours(prev => ({
+                ...prev,
+                [day]: {
+                    ...prev[day],
+                    [field]: timeString
+                }
+            }));
+        }
     };
 
     const dynamicStyles = StyleSheet.create({
@@ -714,16 +754,27 @@ const LawFirmProfileScreen = () => {
             flex: 2,
         },
         timeInput: {
+            flex: 1,
             borderWidth: 1,
             borderColor: colors.border,
             borderRadius: getResponsiveValue(6, 8, 10),
-            paddingHorizontal: getResponsiveValue(8, 10, 12),
-            paddingVertical: getResponsiveValue(6, 8, 10),
-            fontSize: getResponsiveValue(10, 12, 14),
+            paddingHorizontal: getResponsiveValue(10, 12, 14),
+            paddingVertical: getResponsiveValue(8, 10, 12),
+            fontSize: getResponsiveValue(12, 14, 16),
             color: colors.text,
             backgroundColor: colors.background,
-            width: getResponsiveValue(60, 70, 80),
             textAlign: 'center',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        timeInputText: {
+            fontSize: getResponsiveValue(12, 14, 16),
+            color: colors.text,
+            textAlign: 'center',
+        },
+        timeInputIcon: {
+            marginLeft: getResponsiveValue(4, 6, 8),
         },
         timeSeparator: {
             fontSize: getResponsiveValue(10, 12, 14),
@@ -1316,25 +1367,21 @@ const LawFirmProfileScreen = () => {
                         <View style={dynamicStyles.dayScheduleContainer}>
                             <Text style={dynamicStyles.dayName}>Monday</Text>
                             <View style={dynamicStyles.timeInputsContainer}>
-                                <TextInput
+                                <TouchableOpacity
                                     style={dynamicStyles.timeInput}
-                                    value={operatingHours.monday.open}
-                                    onChangeText={(text) => setOperatingHours(prev => ({
-                                        ...prev,
-                                        monday: { ...prev.monday, open: text }
-                                    }))}
-                                    placeholder="09:00"
-                                />
+                                    onPress={() => showTimePickerModal('monday', 'open')}
+                                >
+                                    <Text style={dynamicStyles.timeInputText}>{operatingHours.monday.open}</Text>
+                                    <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
+                                </TouchableOpacity>
                                 <Text style={dynamicStyles.timeSeparator}>to</Text>
-                                <TextInput
+                                <TouchableOpacity
                                     style={dynamicStyles.timeInput}
-                                    value={operatingHours.monday.close}
-                                    onChangeText={(text) => setOperatingHours(prev => ({
-                                        ...prev,
-                                        monday: { ...prev.monday, close: text }
-                                    }))}
-                                    placeholder="17:00"
-                                />
+                                    onPress={() => showTimePickerModal('monday', 'close')}
+                                >
+                                    <Text style={dynamicStyles.timeInputText}>{operatingHours.monday.close}</Text>
+                                    <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
+                                </TouchableOpacity>
                             </View>
                             <TouchableOpacity
                                 style={[
@@ -1357,25 +1404,21 @@ const LawFirmProfileScreen = () => {
                         <View style={dynamicStyles.dayScheduleContainer}>
                             <Text style={dynamicStyles.dayName}>Tuesday</Text>
                             <View style={dynamicStyles.timeInputsContainer}>
-                                <TextInput
+                                <TouchableOpacity
                                     style={dynamicStyles.timeInput}
-                                    value={operatingHours.tuesday.open}
-                                    onChangeText={(text) => setOperatingHours(prev => ({
-                                        ...prev,
-                                        tuesday: { ...prev.tuesday, open: text }
-                                    }))}
-                                    placeholder="09:00"
-                                />
+                                    onPress={() => showTimePickerModal('tuesday', 'open')}
+                                >
+                                    <Text style={dynamicStyles.timeInputText}>{operatingHours.tuesday.open}</Text>
+                                    <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
+                                </TouchableOpacity>
                                 <Text style={dynamicStyles.timeSeparator}>to</Text>
-                                <TextInput
+                                <TouchableOpacity
                                     style={dynamicStyles.timeInput}
-                                    value={operatingHours.tuesday.close}
-                                    onChangeText={(text) => setOperatingHours(prev => ({
-                                        ...prev,
-                                        tuesday: { ...prev.tuesday, close: text }
-                                    }))}
-                                    placeholder="17:00"
-                                />
+                                    onPress={() => showTimePickerModal('tuesday', 'close')}
+                                >
+                                    <Text style={dynamicStyles.timeInputText}>{operatingHours.tuesday.close}</Text>
+                                    <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
+                                </TouchableOpacity>
                             </View>
                             <TouchableOpacity
                                 style={[
@@ -1398,25 +1441,21 @@ const LawFirmProfileScreen = () => {
                         <View style={dynamicStyles.dayScheduleContainer}>
                             <Text style={dynamicStyles.dayName}>Wednesday</Text>
                             <View style={dynamicStyles.timeInputsContainer}>
-                                <TextInput
+                                <TouchableOpacity
                                     style={dynamicStyles.timeInput}
-                                    value={operatingHours.wednesday.open}
-                                    onChangeText={(text) => setOperatingHours(prev => ({
-                                        ...prev,
-                                        wednesday: { ...prev.wednesday, open: text }
-                                    }))}
-                                    placeholder="09:00"
-                                />
+                                    onPress={() => showTimePickerModal('wednesday', 'open')}
+                                >
+                                    <Text style={dynamicStyles.timeInputText}>{operatingHours.wednesday.open}</Text>
+                                    <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
+                                </TouchableOpacity>
                                 <Text style={dynamicStyles.timeSeparator}>to</Text>
-                                <TextInput
+                                <TouchableOpacity
                                     style={dynamicStyles.timeInput}
-                                    value={operatingHours.wednesday.close}
-                                    onChangeText={(text) => setOperatingHours(prev => ({
-                                        ...prev,
-                                        wednesday: { ...prev.wednesday, close: text }
-                                    }))}
-                                    placeholder="17:00"
-                                />
+                                    onPress={() => showTimePickerModal('wednesday', 'close')}
+                                >
+                                    <Text style={dynamicStyles.timeInputText}>{operatingHours.wednesday.close}</Text>
+                                    <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
+                                </TouchableOpacity>
                             </View>
                             <TouchableOpacity
                                 style={[
@@ -1439,25 +1478,21 @@ const LawFirmProfileScreen = () => {
                         <View style={dynamicStyles.dayScheduleContainer}>
                             <Text style={dynamicStyles.dayName}>Thursday</Text>
                             <View style={dynamicStyles.timeInputsContainer}>
-                                <TextInput
+                                <TouchableOpacity
                                     style={dynamicStyles.timeInput}
-                                    value={operatingHours.thursday.open}
-                                    onChangeText={(text) => setOperatingHours(prev => ({
-                                        ...prev,
-                                        thursday: { ...prev.thursday, open: text }
-                                    }))}
-                                    placeholder="09:00"
-                                />
+                                    onPress={() => showTimePickerModal('thursday', 'open')}
+                                >
+                                    <Text style={dynamicStyles.timeInputText}>{operatingHours.thursday.open}</Text>
+                                    <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
+                                </TouchableOpacity>
                                 <Text style={dynamicStyles.timeSeparator}>to</Text>
-                                <TextInput
+                                <TouchableOpacity
                                     style={dynamicStyles.timeInput}
-                                    value={operatingHours.thursday.close}
-                                    onChangeText={(text) => setOperatingHours(prev => ({
-                                        ...prev,
-                                        thursday: { ...prev.thursday, close: text }
-                                    }))}
-                                    placeholder="17:00"
-                                />
+                                    onPress={() => showTimePickerModal('thursday', 'close')}
+                                >
+                                    <Text style={dynamicStyles.timeInputText}>{operatingHours.thursday.close}</Text>
+                                    <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
+                                </TouchableOpacity>
                             </View>
                             <TouchableOpacity
                                 style={[
@@ -1480,25 +1515,21 @@ const LawFirmProfileScreen = () => {
                         <View style={dynamicStyles.dayScheduleContainer}>
                             <Text style={dynamicStyles.dayName}>Friday</Text>
                             <View style={dynamicStyles.timeInputsContainer}>
-                                <TextInput
+                                <TouchableOpacity
                                     style={dynamicStyles.timeInput}
-                                    value={operatingHours.friday.open}
-                                    onChangeText={(text) => setOperatingHours(prev => ({
-                                        ...prev,
-                                        friday: { ...prev.friday, open: text }
-                                    }))}
-                                    placeholder="09:00"
-                                />
+                                    onPress={() => showTimePickerModal('friday', 'open')}
+                                >
+                                    <Text style={dynamicStyles.timeInputText}>{operatingHours.friday.open}</Text>
+                                    <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
+                                </TouchableOpacity>
                                 <Text style={dynamicStyles.timeSeparator}>to</Text>
-                                <TextInput
+                                <TouchableOpacity
                                     style={dynamicStyles.timeInput}
-                                    value={operatingHours.friday.close}
-                                    onChangeText={(text) => setOperatingHours(prev => ({
-                                        ...prev,
-                                        friday: { ...prev.friday, close: text }
-                                    }))}
-                                    placeholder="17:00"
-                                />
+                                    onPress={() => showTimePickerModal('friday', 'close')}
+                                >
+                                    <Text style={dynamicStyles.timeInputText}>{operatingHours.friday.close}</Text>
+                                    <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
+                                </TouchableOpacity>
                             </View>
                             <TouchableOpacity
                                 style={[
@@ -1521,25 +1552,21 @@ const LawFirmProfileScreen = () => {
                         <View style={dynamicStyles.dayScheduleContainer}>
                             <Text style={dynamicStyles.dayName}>Saturday</Text>
                             <View style={dynamicStyles.timeInputsContainer}>
-                                <TextInput
+                                <TouchableOpacity
                                     style={dynamicStyles.timeInput}
-                                    value={operatingHours.saturday.open}
-                                    onChangeText={(text) => setOperatingHours(prev => ({
-                                        ...prev,
-                                        saturday: { ...prev.saturday, open: text }
-                                    }))}
-                                    placeholder="09:00"
-                                />
+                                    onPress={() => showTimePickerModal('saturday', 'open')}
+                                >
+                                    <Text style={dynamicStyles.timeInputText}>{operatingHours.saturday.open}</Text>
+                                    <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
+                                </TouchableOpacity>
                                 <Text style={dynamicStyles.timeSeparator}>to</Text>
-                                <TextInput
+                                <TouchableOpacity
                                     style={dynamicStyles.timeInput}
-                                    value={operatingHours.saturday.close}
-                                    onChangeText={(text) => setOperatingHours(prev => ({
-                                        ...prev,
-                                        saturday: { ...prev.saturday, close: text }
-                                    }))}
-                                    placeholder="17:00"
-                                />
+                                    onPress={() => showTimePickerModal('saturday', 'close')}
+                                >
+                                    <Text style={dynamicStyles.timeInputText}>{operatingHours.saturday.close}</Text>
+                                    <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
+                                </TouchableOpacity>
                             </View>
                             <TouchableOpacity
                                 style={[
@@ -1562,25 +1589,21 @@ const LawFirmProfileScreen = () => {
                         <View style={dynamicStyles.dayScheduleContainer}>
                             <Text style={dynamicStyles.dayName}>Sunday</Text>
                             <View style={dynamicStyles.timeInputsContainer}>
-                                <TextInput
+                                <TouchableOpacity
                                     style={dynamicStyles.timeInput}
-                                    value={operatingHours.sunday.open}
-                                    onChangeText={(text) => setOperatingHours(prev => ({
-                                        ...prev,
-                                        sunday: { ...prev.sunday, open: text }
-                                    }))}
-                                    placeholder="09:00"
-                                />
+                                    onPress={() => showTimePickerModal('sunday', 'open')}
+                                >
+                                    <Text style={dynamicStyles.timeInputText}>{operatingHours.sunday.open}</Text>
+                                    <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
+                                </TouchableOpacity>
                                 <Text style={dynamicStyles.timeSeparator}>to</Text>
-                                <TextInput
+                                <TouchableOpacity
                                     style={dynamicStyles.timeInput}
-                                    value={operatingHours.sunday.close}
-                                    onChangeText={(text) => setOperatingHours(prev => ({
-                                        ...prev,
-                                        sunday: { ...prev.sunday, close: text }
-                                    }))}
-                                    placeholder="17:00"
-                                />
+                                    onPress={() => showTimePickerModal('sunday', 'close')}
+                                >
+                                    <Text style={dynamicStyles.timeInputText}>{operatingHours.sunday.close}</Text>
+                                    <Clock width={getResponsiveValue(14, 16, 18)} height={getResponsiveValue(14, 16, 18)} style={dynamicStyles.timeInputIcon} />
+                                </TouchableOpacity>
                             </View>
                             <TouchableOpacity
                                 style={[
@@ -1661,6 +1684,17 @@ const LawFirmProfileScreen = () => {
                         </TouchableOpacity>
                     </View>
             </ScrollView>
+            
+            {/* Time Picker Modal */}
+            {showTimePicker && (
+                <DateTimePicker
+                    value={tempTime}
+                    mode="time"
+                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                    onChange={handleTimeChange}
+                    style={Platform.OS === 'ios' ? { width: 320 } : {}}
+                />
+            )}
         </SafeAreaView>
     );
 };
