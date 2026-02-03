@@ -13,6 +13,7 @@ import SignupCreateAccount from '../screens/auth/SignupCreateAccount';
 import ForgetPasswordScreen from '../screens/auth/ForgetPasswordScreen';
 import NewCredentialScreen from '../screens/auth/NewCredentialScreen';
 import LawFirmProfileScreen from '../screens/auth/LawFirmProfileScreen';
+import ProfileSettingsScreen from '../screens/ProfileSettingsScreen';
 import TabNavigator from '../components/TabNavigator';
 
 const Stack = createNativeStackNavigator();
@@ -126,6 +127,15 @@ const AppNavigator = () => {
           component={OTPVerificationScreen}
           options={{ 
             title: 'OTP Verification',
+            headerShown: false,
+            headerBackTitle: 'Back'
+          }}
+        />
+        <Stack.Screen 
+          name="ProfileSettings" 
+          component={ProfileSettingsScreen}
+          options={{ 
+            title: 'Profile Settings',
             headerShown: false,
             headerBackTitle: 'Back'
           }}

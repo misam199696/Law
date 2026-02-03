@@ -224,5 +224,31 @@
     "tip3": "Describe your firm's mission and values",
     "saveAsDraft": "Save as Draft",
     "saveProfile": "Save Profile"
+  },
+  "profileSettings": {
+    "title": "Profile Settings",
+    "changePhoto": "Change Photo",
+    "personalInfo": "Personal Information",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter your full name",
+    "email": "Email Address",
+    "emailPlaceholder": "Enter your email address",
+    "phone": "Phone Number",
+    "phonePlaceholder": "Enter your phone number",
+    "address": "Address",
+    "addressPlaceholder": "Enter your address",
+    "bio": "Bio",
+    "bioPlaceholder": "Tell us about yourself",
+    "settings": "Settings",
+    "notifications": "Push Notifications",
+    "notificationsDesc": "Receive notifications about your cases and updates",
+    "language": "Language",
+    "appLanguage": "App Language",
+    "languageDesc": "Choose your preferred language",
+    "saveProfile": "Save Profile",
+    "logout": "Logout",
+    "logoutConfirm": "Are you sure you want to logout?",
+    "saveSuccess": "Success",
+    "profileUpdated": "Your profile has been updated successfully"
   }
 }
