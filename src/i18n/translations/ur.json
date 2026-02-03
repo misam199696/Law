@@ -220,5 +220,31 @@
     "tip3": "اپنی فرم کے مقصد اور اقدار کی وضاحت کریں",
     "saveAsDraft": "ڈرافٹ کے طور پر محفوظ کریں",
     "saveProfile": "پروفائل محفوظ کریں"
+  },
+  "profileSettings": {
+    "title": "پروفائل سیٹنگز",
+    "changePhoto": "تصویر تبدیل کریں",
+    "personalInfo": "ذاتی معلومات",
+    "fullName": "پورا نام",
+    "fullNamePlaceholder": "اپنا پورا نام درج کریں",
+    "email": "ای میل پتہ",
+    "emailPlaceholder": "اپنا ای میل پتہ درج کریں",
+    "phone": "فون نمبر",
+    "phonePlaceholder": "اپنا فون نمبر درج کریں",
+    "address": "پتہ",
+    "addressPlaceholder": "اپنا پتہ درج کریں",
+    "bio": "تعارف",
+    "bioPlaceholder": "اپنے بارے میں بتائیں",
+    "settings": "سیٹنگز",
+    "notifications": "پش نوٹیفیکیشنز",
+    "notificationsDesc": "اپنے کیسز اور اپ ڈیٹس کے بارے میں نوٹیفیکیشنز حاصل کریں",
+    "language": "زبان",
+    "appLanguage": "ایپ کی زبان",
+    "languageDesc": "اپنی پسندیدہ زبان منتخب کریں",
+    "saveProfile": "پروفائل محفوظ کریں",
+    "logout": "لاگ آؤٹ",
+    "logoutConfirm": "کیا آپ واقعی لاگ آؤٹ ہونا چاہتے ہیں؟",
+    "saveSuccess": "کامیابی",
+    "profileUpdated": "آپ کا پروفائل کامیابی سے اپ ڈیٹ ہو گیا ہے"
   }
 }

@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, View, Text } from 'react-native';
 import Header from './Header';
 import { useTheme } from '../context/ThemeContext';
+import { useNavigation } from '@react-navigation/native';
 
 // Import SVG icons
 import Home from '../assets/svg/home';
@@ -23,13 +24,14 @@ const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
   const { isDarkMode, colors } = useTheme();
+  const navigation = useNavigation();
   
   const handleNotificationPress = () => {
     console.log('Notification pressed');
   };
 
   const handleProfilePress = () => {
-    console.log('Profile pressed');
+    navigation.navigate('ProfileSettings');
   };
 
   return (
