@@ -118,6 +118,18 @@
     "privacyPolicyAndTerms": "Privacy Policy & Terms",
     "agreeToTerms": "I agree to the"
   },
+  "profileSwitch": {
+    "switchProfile": "Switch Profile",
+    "chooseProfileType": "Choose your profile type",
+    "publicUser": "Public User",
+    "publicUserDesc": "Ideal for users who need legal help and assistance",
+    "individualUser": "Individual User",
+    "individualUserDesc": "For legal professionals and individual practitioners",
+    "lawFirm": "Law Firm",
+    "lawFirmDesc": "For established law firms and legal organizations",
+    "selectLawFirm": "Select Law Firm",
+    "switchButton": "Switch Profile"
+  },
   "otpVerification": {
     "title": "Verification Login",
     "subtitle": "We've sent a 6-digit code to",

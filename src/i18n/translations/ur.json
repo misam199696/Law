@@ -114,6 +114,18 @@
     "privacyPolicyAndTerms": "رازداری کی پالیسی اور شرائط",
     "agreeToTerms": "میں اس سے متفق ہوں"
   },
+  "profileSwitch": {
+    "switchProfile": "پروفائل تبدیل کریں",
+    "chooseProfileType": "اپنی پروفائل کی قسم منتخب کریں",
+    "publicUser": "عوامی صارف",
+    "publicUserDesc": "قانونی مدد اور امداد کی ضرورت والے صارفین کے لیے موزوں",
+    "individualUser": "انفرادی صارف",
+    "individualUserDesc": "قانونی پیشہ وران اور انفرادی پریکٹیشنرز کے لیے",
+    "lawFirm": "لا فرم",
+    "lawFirmDesc": "مقررہ لا فرموں اور قانونی تنظیموں کے لیے",
+    "selectLawFirm": "لا فرم منتخب کریں",
+    "switchButton": "پروفائل تبدیل کریں"
+  },
   "otpVerification": {
      "title": "او ٹی پی کی تصدیق",
     "subtitle": "ہم نے 6 ہندسوں کا کوڈ بھیجا ہے",

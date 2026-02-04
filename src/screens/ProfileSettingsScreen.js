@@ -14,6 +14,17 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
+import LawFirmSVG from '../assets/svg/lawFirmSVG';
+import { SvgWithCss, SvgWithCssUri } from 'react-native-svg';
+import SwitchSVG from '../assets/svg/switchSVG';
+import FreeTrialSVG from '../assets/svg/freeTrial';
+import SettingSVG from '../assets/svg/setting';
+import FeedbackSVG from '../assets/svg/feedbackSVG';
+import DarkModeSVG from '../assets/svg/darkModeSVG';
+import LanguageSVG from '../assets/svg/languageSVG';
+import MembershipPlansSVG from '../assets/svg/membershipPlansSVG';
+import LogoutSVG from '../assets/svg/logoutSVG';
+import ProfileSelectionModal from '../components/ProfileSelectionModal';
 
 const { width, height } = Dimensions.get('window');
 const isSmallScreen = width <= 375; // iPhone SE and similar small screens
@@ -30,6 +41,8 @@ const ProfileSettingsScreen = ({ navigation }) => {
   const { isDarkMode, colors, toggleTheme } = useTheme();
   const { currentLanguage, changeLanguage } = useLanguage();
   const [darkMode, setDarkMode] = useState(isDarkMode);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [currentProfile, setCurrentProfile] = useState('public-user');
   const insets = useSafeAreaInsets();
 
   // Sync local state with theme context
@@ -39,12 +52,24 @@ const ProfileSettingsScreen = ({ navigation }) => {
 
   const handleThemeToggle = () => {
     toggleTheme();
-    setDarkMode(!isDarkMode);
+    setDarkMode(!darkMode);
   };
 
   const handleLanguageToggle = () => {
     const newLanguage = currentLanguage === 'en' ? 'ur' : 'en';
     changeLanguage(newLanguage);
+  };
+
+  const handleProfileSelect = (profile) => {
+    setCurrentProfile(profile.id);
+    // Here you can add logic to handle profile switching
+    console.log('Switched to profile:', profile.name);
+  };
+
+  const handleSwitchProfilePress = () => {
+    console.log('Switch Profile button pressed!');
+    setShowProfileModal(true);
+    console.log('showProfileModal set to:', true);
   };
 
   // Dynamic styles
@@ -88,23 +113,34 @@ const ProfileSettingsScreen = ({ navigation }) => {
             />
 
             <View style={{ flex: 1 }}>
-              <Text style={[styles.name, { color: colors.text, textAlign: currentLanguage === 'ur' ? 'right' : 'left', writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr' }]}>Adreson</Text>
-              <Text style={[styles.email, { color: colors.secondary, textAlign: currentLanguage === 'ur' ? 'right' : 'left', writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr' }]}>Xipoc@gamil.com</Text>
+              <Text style={[styles.name, { color: colors.text }]}>Adreson</Text>
+              <Text style={[styles.email, { color: colors.secondary }]}>Xipoc@gamil.com</Text>
+               {/* Profile Buttons */}
+              <View style={styles.profileButtonsContainer}>
+                <TouchableOpacity style={[styles.pillButton, { borderColor: colors.primary }]}>
+                  <LawFirmSVG width={getResponsiveValue(18, 20, 22)} height={getResponsiveValue(14, 16, 18)} />
+                  <Text style={[styles.pillText, { color: colors.primary }]}> Law Firm</Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity 
+                  style={[styles.SwitchButton, { backgroundColor: colors.card }]} 
+                  onPress={handleSwitchProfilePress}
+                  activeOpacity={0.7}
+                >
+                  <SwitchSVG width={getResponsiveValue(18, 20, 22)} height={getResponsiveValue(14, 16, 18)} fill={colors.text}/>
+                  <Text style={[styles.freeTrialText, { color: colors.text }]}> Switch Profile</Text>
+                </TouchableOpacity>
+              </View>
+             
             </View>
           </View>
 
-          {/* Law Firm Button */}
-          <TouchableOpacity style={[styles.pillButton, { borderColor: colors.primary }]}>
-            <Icon name="credit-card" size={getResponsiveValue(16, 18, 20)} color={colors.primary} />
-            <Text style={[styles.pillText, { color: colors.primary }]}> Law Firm</Text>
-          </TouchableOpacity>
-
           {/* Subscription Card */}
           <View style={styles.subscription}>
-            <Icon name="check-circle" size={getResponsiveValue(20, 22, 24)} color="#2EC4B6" />
+            <FreeTrialSVG width={getResponsiveValue(20, 22, 24)} height={getResponsiveValue(16, 18, 20)} />
             <View style={{ marginLeft: getResponsiveValue(8, 10, 12) }}>
-              <Text style={[styles.subTitle, { color: '#2EC4B6', textAlign: currentLanguage === 'ur' ? 'right' : 'left', writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr' }]}>Free Trial</Text>
-              <Text style={[styles.subDesc, { color: '#2EC4B6', textAlign: currentLanguage === 'ur' ? 'right' : 'left', writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr' }]}>Active Subscription</Text>
+              <Text style={[styles.subTitle, { color: '#2EC4B6' }]}>Free Trial</Text>
+              <Text style={[styles.subDesc, { color: '#2EC4B6' }]}>Active Subscription</Text>
             </View>
           </View>
 
@@ -116,9 +152,9 @@ const ProfileSettingsScreen = ({ navigation }) => {
           <MenuItem icon="feedback" label="Send Feedback" />
 
           <View style={styles.menuRow}>
-            <View style={[styles.menuLeft, { flexDirection: currentLanguage === 'ur' ? 'row-reverse' : 'row' }]}>
-              <Icon name="dark-mode" size={getResponsiveValue(20, 22, 24)} color={colors.text} />
-              <Text style={[styles.menuText, { color: colors.text, textAlign: currentLanguage === 'ur' ? 'right' : 'left', writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr' }]}>Dark Mode</Text>
+            <View style={styles.menuLeft}>
+              <DarkModeSVG width={getResponsiveValue(20, 22, 24)} height={getResponsiveValue(20, 22, 24)} />
+              <Text style={[styles.menuText, { color: colors.text }]}>Dark Mode</Text>
             </View>
             <Switch 
               value={darkMode} 
@@ -130,11 +166,9 @@ const ProfileSettingsScreen = ({ navigation }) => {
           </View>
 
           <View style={styles.menuRow}>
-            <View style={[styles.menuLeft, { flexDirection: currentLanguage === 'ur' ? 'row-reverse' : 'row' }]}>
-              <Icon name="language" size={getResponsiveValue(20, 22, 24)} color={colors.text} />
-              <Text style={[styles.menuText, { color: colors.text, textAlign: currentLanguage === 'ur' ? 'right' : 'left', writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr' }]}>
-                Language
-              </Text>
+            <View style={styles.menuLeft}>
+              <LanguageSVG width={getResponsiveValue(20, 22, 24)} height={getResponsiveValue(20, 22, 24)} />
+              <Text style={[styles.menuText, { color: colors.text }]}>Language</Text>
             </View>
             <Switch 
               value={currentLanguage === 'ur'} 
@@ -155,25 +189,45 @@ const ProfileSettingsScreen = ({ navigation }) => {
             style={styles.logoutRow}
             onPress={() => navigation.replace('Login')}
           >
-            <Icon name="logout" size={getResponsiveValue(20, 22, 24)} color="#EF4444" />
-            <Text style={[styles.logoutText, { textAlign: currentLanguage === 'ur' ? 'right' : 'left', writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr' }]}>logout</Text>
+            <LogoutSVG width={getResponsiveValue(20, 22, 24)} height={getResponsiveValue(20, 22, 24)} />
+            <Text style={[styles.logoutText]}>logout</Text>
           </TouchableOpacity>
 
         </View>
       </ScrollView>
+      
+      {/* Profile Selection Modal */}
+      <ProfileSelectionModal
+        isVisible={showProfileModal}
+        currentProfile={currentProfile}
+        onSelect={handleProfileSelect}
+        onClose={() => setShowProfileModal(false)}
+      />
     </SafeAreaView>
   );
 };
 
 const MenuItem = ({ icon, label }) => {
   const { colors } = useTheme();
-  const { currentLanguage } = useLanguage();
-  
+
+  const renderIcon = () => {
+    if (icon === 'settings') {
+      return <SettingSVG width={getResponsiveValue(18, 20, 22)} height={getResponsiveValue(18, 20, 22)} />;
+    }
+    if (icon === 'feedback') {
+      return <FeedbackSVG width={getResponsiveValue(18, 20, 22)} height={getResponsiveValue(18, 20, 22)} />;
+    }
+    if (icon === 'attach-money') {
+      return <MembershipPlansSVG width={getResponsiveValue(18, 20, 22)} height={getResponsiveValue(18, 20, 22)} />;
+    }
+    return <Icon name={icon} size={getResponsiveValue(20, 22, 24)} color={colors.text} />;
+  };
+
   return (
     <TouchableOpacity style={styles.menuRow}>
-      <View style={[styles.menuLeft, { flexDirection: currentLanguage === 'ur' ? 'row-reverse' : 'row' }]}>
-        <Icon name={icon} size={getResponsiveValue(20, 22, 24)} color={colors.text} />
-        <Text style={[styles.menuText, { color: colors.text, textAlign: currentLanguage === 'ur' ? 'right' : 'left', writingDirection: currentLanguage === 'ur' ? 'rtl' : 'ltr' }]}>{label}</Text>
+      <View style={styles.menuLeft}>
+        {renderIcon()}
+        <Text style={[styles.menuText, { color: colors.text }]}>{label}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -194,12 +248,13 @@ const styles = StyleSheet.create({
     marginBottom: getResponsiveValue(16, 20, 24),
   },
   avatar: {
-    width: getResponsiveValue(60, 65, 70),
-    height: getResponsiveValue(60, 65, 70),
-    borderRadius: getResponsiveValue(30, 32, 35),
+    width: getResponsiveValue(80, 90, 100),
+    height: getResponsiveValue(80, 90, 100),
+    borderRadius: getResponsiveValue(40, 45, 50),
     borderWidth: getResponsiveValue(2, 2.5, 3),
     borderColor: '#00B4C6',
     marginRight: getResponsiveValue(12, 14, 16),
+    marginBottom: getResponsiveValue(20, 24, 28),
   },
   name: {
     fontSize: getResponsiveValue(16, 17, 18),
@@ -211,19 +266,37 @@ const styles = StyleSheet.create({
     marginTop: getResponsiveValue(2, 3, 4),
   },
 
+  profileButtonsContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginTop: getResponsiveValue(8, 10, 12),
+  },
   pillButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'center',
-    marginTop: getResponsiveValue(12, 16, 20),
+    alignSelf: 'flex-start',
     borderWidth: 1,
     borderRadius: getResponsiveValue(18, 20, 22),
-    paddingHorizontal: getResponsiveValue(16, 18, 20),
+    paddingHorizontal: getResponsiveValue(12, 16, 18),
     paddingVertical: getResponsiveValue(6, 7, 8),
+  },
+  SwitchButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    paddingHorizontal: getResponsiveValue(12, 16, 18),
+    paddingVertical: getResponsiveValue(6, 7, 8),
+    minWidth: getResponsiveValue(80, 90, 100),
+    minHeight: getResponsiveValue(32, 36, 40),
   },
   pillText: {
     fontWeight: '500',
     fontSize: getResponsiveValue(12, 13, 14),
+  },
+
+  freeTrialText: {
+    fontWeight: '500',
+    fontSize: getResponsiveValue(8, 10, 12),
   },
 
   subscription: {
