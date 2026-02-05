@@ -44,13 +44,11 @@ const OTPVerificationScreen = ({ navigation, route }) => {
 
   const handleVerifyOTP = () => {
     // TODO: Implement OTP verification logic
-    if (isLoginFlow) {
-      // Navigate to Home for login flow
-      navigation.navigate('Home');
-    } else {
-      // Navigate to SignupProfile for signup flow
-      navigation.navigate('SignupProfile', { accountType: route.params?.accountType });
-    }
+    // Navigate to Home for both login and signup flows
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Home' }],
+    });
   };
 
   const handleResendOTP = () => {
@@ -94,18 +92,16 @@ console.log("currentLanguage//////////",currentLanguage);
     if (isOtpComplete) {
       // Add a small delay to show the completed OTP before navigation
       const timer = setTimeout(() => {
-        if (isLoginFlow) {
-          // Navigate to Home for login flow
-          navigation.navigate('Home');
-        } else {
-          // Navigate to SignupProfile for signup flow
-          navigation.navigate('SignupProfile', { accountType: route.params?.accountType });
-        }
+        // Navigate to Home for both login and signup flows
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Home' }],
+        });
       }, 500);
       
       return () => clearTimeout(timer);
     }
-  }, [isOtpComplete, navigation, isLoginFlow, route.params?.accountType]);
+  }, [isOtpComplete, navigation]);
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>

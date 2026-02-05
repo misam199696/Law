@@ -128,7 +128,7 @@ const ProfileSettingsScreen = ({ navigation }) => {
                   activeOpacity={0.7}
                 >
                   <SwitchSVG width={getResponsiveValue(18, 20, 22)} height={getResponsiveValue(14, 16, 18)} fill={colors.text}/>
-                  <Text style={[styles.freeTrialText, { color: colors.text }]}> Switch Profile</Text>
+                  <Text style={[styles.freeTrialText, { color: colors.text }]}> Upgrade Profile </Text>
                 </TouchableOpacity>
               </View>
              
@@ -148,7 +148,7 @@ const ProfileSettingsScreen = ({ navigation }) => {
           <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
           {/* Menu Items */}
-          <MenuItem icon="settings" label="Profile Settings" />
+          <MenuItem icon="settings" label="Profile Settings" onPress={() => navigation.navigate('SignupProfile')} />
           <MenuItem icon="feedback" label="Send Feedback" />
 
           <View style={styles.menuRow}>
@@ -207,7 +207,7 @@ const ProfileSettingsScreen = ({ navigation }) => {
   );
 };
 
-const MenuItem = ({ icon, label }) => {
+const MenuItem = ({ icon, label, onPress }) => {
   const { colors } = useTheme();
 
   const renderIcon = () => {
@@ -224,7 +224,7 @@ const MenuItem = ({ icon, label }) => {
   };
 
   return (
-    <TouchableOpacity style={styles.menuRow}>
+    <TouchableOpacity style={styles.menuRow} onPress={onPress}>
       <View style={styles.menuLeft}>
         {renderIcon()}
         <Text style={[styles.menuText, { color: colors.text }]}>{label}</Text>

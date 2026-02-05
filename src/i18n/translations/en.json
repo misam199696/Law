@@ -119,7 +119,7 @@
     "agreeToTerms": "I agree to the"
   },
   "profileSwitch": {
-    "switchProfile": "Switch Profile",
+    "switchProfile": "Upgrade Profile",
     "chooseProfileType": "Choose your profile type",
     "publicUser": "Public User",
     "publicUserDesc": "Ideal for users who need legal help and assistance",
@@ -128,7 +128,7 @@
     "lawFirm": "Law Firm",
     "lawFirmDesc": "For established law firms and legal organizations",
     "selectLawFirm": "Select Law Firm",
-    "switchButton": "Switch Profile"
+    "switchButton": "Upgrade Profile"
   },
   "otpVerification": {
     "title": "Verification Login",
