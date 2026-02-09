@@ -86,16 +86,17 @@ const SignupCreateAccount = ({ navigation, route }) => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      console.log('Login attempt with:', values);
+      console.log('Signup attempt with:', values);
       // In a real app, you would verify credentials here first
       // Then navigate to OTP verification
       navigation.navigate('OTPVerification', {
         phoneNumber: values.email, // Using email as phone number for demo
-        accountType: selectedType
+        accountType: selectedType,
+        isLoginFlow: false // This is signup flow, not login
       });
     } catch (error) {
-      console.error('Login error:', error);
-      Alert.alert('Error', 'Failed to sign in. Please try again.');
+      console.error('Signup error:', error);
+      Alert.alert('Error', 'Failed to sign up. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -142,7 +143,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
   const dynamicStyles = StyleSheet.create({
     card: {
       height: getResponsiveValue(44, 48, 50),
-      width: getResponsiveValue(140, 152, 164),
+      width: '100%',
       borderRadius: getResponsiveValue(10, 11, 12),
       padding: getResponsiveValue(8, 9, 10),
       borderWidth: 1,
@@ -361,7 +362,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
                 </View>
 
                 {/* Sign In Button */}
-                <View style={{ alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row-reverse', height: getResponsiveValue(54, 57, 60), width:'100%' }}>
+                <View style={{ alignItems: 'center', width:'100%' }}>
                   <TouchableOpacity
                     style={[
                       styles.submitButton,
@@ -371,12 +372,15 @@ const SignupCreateAccount = ({ navigation, route }) => {
                     disabled={isSubmitting}
                   >
                     <Text style={styles.submitButtonText}>
-                      {isSubmitting ? t('signingIn') : t('signIn')}
+                      {isSubmitting ? t('signingUp') : t('signUp')}
                     </Text>
                   </TouchableOpacity>
 
-                  {/* Custom Account Type Dropdown */}
-                  <View style={styles.cardsContainer}>
+                 
+                </View>
+
+                 {/* Custom Account Type Dropdown */}
+                  {/* <View style={styles.cardsContainer}>
                     <TouchableOpacity
                       style={[
                         dynamicStyles.card,
@@ -410,7 +414,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
                       </View>
                     </TouchableOpacity>
 
-                    {/* Custom Dropdown List */}
+                   
                     {showDropdown && (
                       <View style={[
                         styles.customDropdown,
@@ -449,8 +453,7 @@ const SignupCreateAccount = ({ navigation, route }) => {
                         ))}
                       </View>
                     )}
-                  </View>
-                </View>
+                  </View> */}
 
                 {/* Divider */}
                 <View style={styles.dividerContainer}>
@@ -643,7 +646,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#12B7A6',
     borderRadius: 12,
     height: getResponsiveValue(46, 48, 50),
-    width: '50%',
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 12,

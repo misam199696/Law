@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Header from './Header';
 import { useTheme } from '../context/ThemeContext';
 import { useNavigation } from '@react-navigation/native';
+import CustomTabBar from './CustomTabBar';
 
 // Import SVG icons
 import Home from '../assets/svg/home';
@@ -26,13 +27,13 @@ const TabNavigator = () => {
   const { isDarkMode, colors } = useTheme();
   const navigation = useNavigation();
   
-  const handleNotificationPress = () => {
+  const handleNotificationPress = useCallback(() => {
     console.log('Notification pressed');
-  };
+  }, []);
 
-  const handleProfilePress = () => {
+  const handleProfilePress = useCallback(() => {
     navigation.navigate('ProfileSettings');
-  };
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -41,94 +42,42 @@ const TabNavigator = () => {
         onProfilePress={handleProfilePress}
       />
       <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let IconComponent;
-
-          switch (route.name) {
-            case 'Home':
-              IconComponent = Home;
-              break;
-            case 'Tools':
-              IconComponent = Tools;
-              break;
-            case 'Library':
-              IconComponent = Book;
-              break;
-            case 'Voice':
-              IconComponent = Voice;
-              break;
-            case 'Documents':
-              IconComponent = Documents;
-              break;
-            case 'Settings':
-              IconComponent = Settings;
-              break;
-            default:
-              IconComponent = Home;
-          }
-
-          return <IconComponent width={size} height={size} stroke={color} strokeWidth={1.5} fill="none" color={color} />;
-        },
-        tabBarActiveTintColor: '#11B7B1', // Active icon color - matching brand color
-        tabBarInactiveTintColor: isDarkMode ? '#FFFFFF' : '#9CA3AF', // Inactive icon color based on theme
-        tabBarStyle: {
-          backgroundColor: isDarkMode ? '#2B2B31' : '#FFFFFF', // Background color based on theme
-          borderTopWidth: 0,// Remove top border
-          height: 80,
-          paddingBottom: 5,
-          paddingTop: 10,
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          elevation: 10,
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: -2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 4,
-        },
-        tabBarItemStyle: {
-          paddingVertical: 5,
-        },
-        tabBarLabelStyle: {
-          fontSize: 11,
-          marginTop: 2,
-        },
-        headerShown: false,
-      })}
-    >
-      <Tab.Screen 
-        name="Home" 
-        component={HomeScreen}
-        options={{ tabBarLabel: '' }}
-      />
-      <Tab.Screen 
-        name="Tools" 
-        component={ToolsScreen}
-        options={{ tabBarLabel: '' }}
-      />
-      <Tab.Screen 
-        name="Library" 
-        component={LibraryScreen}
-        options={{ tabBarLabel: '' }}
-      />
-      <Tab.Screen 
-        name="Voice" 
-        component={VoiceScreen}
-        options={{ tabBarLabel: '' }}
-      />
-      <Tab.Screen 
-        name="Documents" 
-        component={DocumentsScreen}
-        options={{ tabBarLabel: '' }}
-      />
-      <Tab.Screen 
-        name="Settings" 
-        component={SettingsScreen}
-        options={{ tabBarLabel: '' }}
-      />
-    </Tab.Navigator>
+        tabBar={(props) => <CustomTabBar {...props} />}
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Tab.Screen 
+          name="Home" 
+          component={HomeScreen}
+          options={{ tabBarLabel: '' }}
+        />
+        <Tab.Screen 
+          name="Tools" 
+          component={ToolsScreen}
+          options={{ tabBarLabel: '' }}
+        />
+        <Tab.Screen 
+          name="Library" 
+          component={LibraryScreen}
+          options={{ tabBarLabel: '' }}
+        />
+        <Tab.Screen 
+          name="Voice" 
+          component={VoiceScreen}
+          options={{ tabBarLabel: '' }}
+        />
+        <Tab.Screen 
+          name="Documents" 
+          component={DocumentsScreen}
+          options={{ tabBarLabel: '' }}
+        />
+        <Tab.Screen 
+          name="Settings" 
+          component={SettingsScreen}
+          options={{ tabBarLabel: '' }}
+        />
+      </Tab.Navigator>
     </View>
   );
 };

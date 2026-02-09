@@ -160,7 +160,7 @@ const ForgetPasswordScreen = ({ navigation, route }) => {
                 <View style={styles.inputGroup}>
                   <Text style={[styles.label, { 
                     color: colors.text,
-                    alignSelf: currentLanguage === 'en' ? 'left' : 'right',
+                     textAlign: currentLanguage === 'en' ? 'left' : 'right',
                     writingDirection: currentLanguage === 'en' ? 'ltr' : 'rtl'
                   }]}>
                     {t('form.email')} <Text style={styles.required}>*</Text>

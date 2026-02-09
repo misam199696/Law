@@ -1,6 +1,6 @@
 import * as React from "react";
 import Svg, { Path } from "react-native-svg";
-const Home = (props) => (
+const Home = ({ stroke = "currentColor", strokeWidth = 1.66667, ...props }) => (
   <Svg
     width={20}
     height={20}
@@ -11,15 +11,15 @@ const Home = (props) => (
   >
     <Path
       d="M2.5 7.49935L10 1.66602L17.5 7.49935V16.666C17.5 17.108 17.3244 17.532 17.0118 17.8445C16.6993 18.1571 16.2754 18.3327 15.8333 18.3327H4.16667C3.72464 18.3327 3.30072 18.1571 2.98816 17.8445C2.67559 17.532 2.5 17.108 2.5 16.666V7.49935Z"
-      stroke="currentColor"
-      strokeWidth={1.66667}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <Path
       d="M7.5 18.3333V10H12.5V18.3333"
-      stroke="currentColor"
-      strokeWidth={1.66667}
+      stroke={stroke}
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
     />
